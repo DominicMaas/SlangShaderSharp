@@ -1,3 +1,7 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="scripts/generate-bindings.ps1" />
+  </Folder>
   <Project Path="SlangShaderSharp/SlangShaderSharp.csproj" />
+  <Project Path="tests/SlangShaderSharp.Tests/SlangShaderSharp.Tests.csproj" />
 </Solution>
