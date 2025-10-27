@@ -51,14 +51,7 @@ module.FindEntryPointByName("computeMain", out var entryPoint).ShouldBe(0);
 
 // 5. Compose Modules + Entry Points
 
-ComWrappers.TryGetComInstance(module, out nint modulePointer).ShouldBeTrue();
-ComWrappers.TryGetComInstance(entryPoint, out nint entryPointPointer).ShouldBeTrue();
-
-var pointers = stackalloc nint[2];
-pointers[0] = modulePointer;
-pointers[1] = entryPointPointer;
-
-session.CreateCompositeComponentType(pointers, 2, out var composedProgram, out _).ShouldBe(0);
+session.CreateCompositeComponentType([module, entryPoint], out var composedProgram, out _).ShouldBe(0);
 
 // 6. Link
 

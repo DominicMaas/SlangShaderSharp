@@ -115,3 +115,53 @@ public unsafe partial interface ISession
 
     // etc.
 }
+
+public static class ISessionExtensions
+{
+    extension(ISession session)
+    {
+        /// <summary>
+        ///     Combine multiple component types to create a composite component type.
+        ///
+        ///     The `componentTypes` array must contain `componentTypeCount` pointers
+        ///     to component types that were loaded or created using the same session.
+        ///
+        ///     The shader parameters and specialization parameters of the composite will
+        ///     be the union of those in `componentTypes`. The relative order of child
+        ///     component types is significant, and will affect the order in which
+        ///     parameters are reflected and laid out.
+        ///
+        ///     The entry-point functions of the composite will be the union of those in
+        ///     `componentTypes`, and will follow the ordering of `componentTypes`.
+        ///
+        ///     The requirements of the composite component type will be a subset of
+        ///     those in `componentTypes`. If an entry in `componentTypes` has a requirement
+        ///     that can be satisfied by another entry, then the composition will
+        ///     satisfy the requirement and it will not appear as a requirement of
+        ///     the composite. If multiple entries in `componentTypes` have a requirement
+        ///     for the same type, then only the first such requirement will be retained
+        ///     on the composite. The relative ordering of requirements on the composite
+        ///     will otherwise match that of `componentTypes`.
+        ///
+        ///     If any diagnostics are generated during creation of the composite, they
+        ///     will be written to `outDiagnostics`. If an error is encountered, the
+        ///     function will return null.
+        ///
+        ///     It is an error to create a composite component type that recursively
+        ///     aggregates a single module more than once.
+        /// </summary>
+        public unsafe int CreateCompositeComponentType(ReadOnlySpan<IComponentType> componentTypes, out IComponentType compositeComponentType, out ISlangBlob? diagnostics)
+        {
+            var pointers = stackalloc nint[componentTypes.Length];
+            for (int i = 0; i < componentTypes.Length; i++)
+            {
+                if (!ComWrappers.TryGetComInstance(componentTypes[i], out nint pointer))
+                    throw new InvalidOperationException("Failed to get COM pointer for component type.");
+
+                pointers[i] = pointer;
+            }
+
+            return session.CreateCompositeComponentType(pointers, componentTypes.Length, out compositeComponentType, out diagnostics);
+        }
+    }
+}
