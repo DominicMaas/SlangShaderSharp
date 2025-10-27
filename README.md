@@ -31,7 +31,7 @@ globalSession.CreateSession(sessionDesc, out var session).ShouldBe(0);
 
 // 3. Load module
 
-var shader = """
+var module = session.LoadModuleFromSource("test", "test.slang", Slang.CreateBlob("""
     StructuredBuffer<float> buffer0;
     StructuredBuffer<float> buffer1;
     RWStructuredBuffer<float> result;
@@ -43,9 +43,7 @@ var shader = """
         uint index = threadId.x;
         result[index] = buffer0[index] + buffer1[index];
     }
-    """u8;
-using var shaderSrc = new MyTestSource(shader);
-var module = session.LoadModuleFromSource("test", "test.slang", shaderSrc, out _);
+    """u8), out _);
 
 // 4. Query Entry Points
 

@@ -5,7 +5,7 @@ namespace SlangShaderSharp;
 
 [GeneratedComInterface]
 [Guid("5bc42be8-5c50-4929-9e5e-d15e7c24015f")]
-public partial interface IComponentType
+public unsafe partial interface IComponentType
 {
     /// <summary>
     ///     Get the runtime session that this component type belongs to.
@@ -60,14 +60,29 @@ public partial interface IComponentType
     [PreserveSig]
     int GetEntryPointCode(int entryPointIndex, int targetIndex, out ISlangBlob outCode, out ISlangBlob outDiagnostics);
 
+    /// <summary>
+    ///     Get the compilation result as a file system.
+    ///
+    ///     Has the same requirements as getEntryPointCode.
+    ///
+    ///     The result is not written to the actual OS file system, but is made available as an
+    ///     in memory representation.
+    /// </summary>
     [PreserveSig]
-    int GetResultAsFileSystem();
+    int GetResultAsFileSystem(int entryPointIndex, int targetIndex, out ISlangMutableFileSystem fileSystem);
 
+    /// <summary>
+    ///     Compute a hash for the entry point at `entryPointIndex` for the chosen `targetIndex`.
+    ///
+    ///     This computes a hash based on all the dependencies for this component type as well as the
+    ///     target settings affecting the compiler backend. The computed hash is used as a key for caching
+    ///     the output of the compiler backend to implement shader caching.
+    /// </summary>
     [PreserveSig]
     public void GetEntryPointHash(int entryPointIndex, int targetIndex, out ISlangBlob hash);
 
     [PreserveSig]
-    public int Specialize();
+    public int Specialize(nint* specializationArgs, int specializationArgCount, out IComponentType specializedComponentType, out ISlangBlob? diagnostics);
 
     [PreserveSig]
     public int Link(out IComponentType lLinkedComponentType, out ISlangBlob? diagnostics);

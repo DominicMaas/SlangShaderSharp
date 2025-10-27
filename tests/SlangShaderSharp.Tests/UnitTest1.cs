@@ -1,6 +1,5 @@
 ﻿using Shouldly;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 
 namespace SlangShaderSharp.Tests;
@@ -66,7 +65,7 @@ public class UnitTest1
 
         // 3. Load module
 
-        var shader = """
+        var module = session.LoadModuleFromSource("test", "test.slang", Slang.CreateBlob("""
             StructuredBuffer<float> buffer0;
             StructuredBuffer<float> buffer1;
             RWStructuredBuffer<float> result;
@@ -78,9 +77,7 @@ public class UnitTest1
                 uint index = threadId.x;
                 result[index] = buffer0[index] + buffer1[index];
             }
-            """u8;
-        using var shaderSrc = new MyTestSource(shader);
-        var module = session.LoadModuleFromSource("test", "test.slang", shaderSrc, out _);
+            """u8), out _);
 
         // 4. Query Entry Points
 
@@ -107,39 +104,5 @@ public class UnitTest1
 
         var codeSpan = new ReadOnlySpan<byte>(spirvCode.GetBufferPointer(), (int)spirvCode.GetBufferSize());
         var codeString = Encoding.UTF8.GetString(codeSpan);
-    }
-}
-
-/// <summary>
-///     TODO: Gotta be a better way
-/// </summary>
-[GeneratedComClass]
-public partial class MyTestSource : ISlangBlob, IDisposable
-{
-    private readonly byte[] _data;
-    private GCHandle _handle;
-
-    public MyTestSource(ReadOnlySpan<byte> data)
-    {
-        _data = data.ToArray();
-        _handle = GCHandle.Alloc(_data, GCHandleType.Pinned);
-    }
-
-    public unsafe void* GetBufferPointer()
-    {
-        return (void*)_handle.AddrOfPinnedObject();
-    }
-
-    public nuint GetBufferSize()
-    {
-        return (nuint)_data.Length;
-    }
-
-    public void Dispose()
-    {
-        if (_handle.IsAllocated)
-        {
-            _handle.Free();
-        }
     }
 }

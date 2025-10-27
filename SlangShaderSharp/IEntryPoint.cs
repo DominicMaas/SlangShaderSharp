@@ -5,7 +5,7 @@ namespace SlangShaderSharp;
 
 [GeneratedComInterface]
 [Guid("8f241361-f5bd-4ca0-a3ac-02f7fa2402b8")]
-public partial interface IEntryPoint : IComponentType
+public unsafe partial interface IEntryPoint : IComponentType
 {
     [PreserveSig]
     public nint GetFunctionReflection();

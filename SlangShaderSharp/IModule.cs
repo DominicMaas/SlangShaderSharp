@@ -19,7 +19,7 @@ namespace SlangShaderSharp;
 /// </summary>
 [GeneratedComInterface]
 [Guid("0c720e64-8722-4d31-8990-638a98b1c279")]
-public partial interface IModule : IComponentType
+public unsafe partial interface IModule : IComponentType
 {
     /// <summary>
     ///     Find and an entry point by name.
