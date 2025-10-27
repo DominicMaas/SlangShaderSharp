@@ -34,5 +34,5 @@ public partial interface IGlobalSession
     [PreserveSig]
     SlangProfileID FindProfile([MarshalAs(UnmanagedType.LPStr)] string name);
 
-    nint IModule LoadModule([MarshalAs(UnmanagedType.LPStr)] string moduleName);
+    //nint IModule LoadModule([MarshalAs(UnmanagedType.LPStr)] string moduleName);
 }

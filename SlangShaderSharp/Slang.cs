@@ -14,7 +14,7 @@ internal partial class Slang
     /// <param name="outGlobalSession">The created global session.</param>
     [LibraryImport("slang.dll", EntryPoint = "slang_createGlobalSession")]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    public static partial int CreateGlobalSession(long apiVersion, out IntPtr outGlobalSession);
+    public static partial int CreateGlobalSession(long apiVersion, out IGlobalSession globalSession);
 
     /// <summary>
     ///     Cleanup all global allocations used by Slang, to prevent memory leak detectors from
