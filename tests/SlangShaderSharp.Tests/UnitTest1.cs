@@ -93,6 +93,8 @@ public class UnitTest1
 
         composedProgram.GetEntryPointCode(0, 0, out var wgslCode, out _).ShouldBe(0);
 
-        var str = wgslCode.AsString;
+        // Output
+
+        _ = wgslCode.AsString;
     }
 }

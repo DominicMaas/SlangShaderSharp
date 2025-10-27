@@ -14,14 +14,13 @@ Slang.CreateGlobalSession(0, out var globalSession);
 
 var sessionDesc = new SessionDesc
 {
-    structureSize = (nuint)Marshal.SizeOf<SessionDesc>(),
+    structureSize = (nuint)sizeof(SessionDesc),
 };
 
 var targetDesc = new TargetDesc
 {
-    structureSize = (nuint)Marshal.SizeOf<TargetDesc>(),
-    format = SlangCompileTarget.SLANG_SPIRV,
-    profile = globalSession.FindProfile("spirv_1_5"),
+    structureSize = (nuint)sizeof(TargetDesc),
+    format = SlangCompileTarget.SLANG_WGSL,
 };
 
 sessionDesc.targets = &targetDesc;
@@ -59,8 +58,9 @@ composedProgram.Link(out var linkedProgram, out _).ShouldBe(0);
 
 // 7. Get Target Kernel Code
 
-composedProgram.GetEntryPointCode(0, 0, out var spirvCode, out _).ShouldBe(0);
+composedProgram.GetEntryPointCode(0, 0, out var wgslCode, out _).ShouldBe(0);
 
-var codeSpan = new ReadOnlySpan<byte>(spirvCode.GetBufferPointer(), (int)spirvCode.GetBufferSize());
-var codeString = Encoding.UTF8.GetString(codeSpan);
+// Output
+
+_ = wgslCode.AsString;
 ```
