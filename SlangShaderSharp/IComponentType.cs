@@ -38,7 +38,9 @@ public unsafe partial interface IComponentType
     ///     the same when it is used in a composition.
     /// </summary>
     [PreserveSig]
-    ShaderReflection GetLayout(int targetIndex, out ISlangBlob diagnostics);
+    ShaderReflection GetLayout(
+        int targetIndex,
+        out ISlangBlob? diagnostics);
 
     /// <summary>
     ///     Get the number of (unspecialized) specialization parameters for the component type.
@@ -58,7 +60,11 @@ public unsafe partial interface IComponentType
     ///     (if non-null) will be filled in with a blob of messages diagnosing the error.
     /// </summary>
     [PreserveSig]
-    int GetEntryPointCode(int entryPointIndex, int targetIndex, out ISlangBlob outCode, out ISlangBlob outDiagnostics);
+    int GetEntryPointCode(
+        int entryPointIndex,
+        int targetIndex,
+        out ISlangBlob outCode,
+        out ISlangBlob? outDiagnostics);
 
     /// <summary>
     ///     Get the compilation result as a file system.
@@ -69,7 +75,10 @@ public unsafe partial interface IComponentType
     ///     in memory representation.
     /// </summary>
     [PreserveSig]
-    int GetResultAsFileSystem(int entryPointIndex, int targetIndex, out ISlangMutableFileSystem fileSystem);
+    int GetResultAsFileSystem(
+        int entryPointIndex,
+        int targetIndex,
+        out ISlangMutableFileSystem fileSystem);
 
     /// <summary>
     ///     Compute a hash for the entry point at `entryPointIndex` for the chosen `targetIndex`.
@@ -79,29 +88,104 @@ public unsafe partial interface IComponentType
     ///     the output of the compiler backend to implement shader caching.
     /// </summary>
     [PreserveSig]
-    public void GetEntryPointHash(int entryPointIndex, int targetIndex, out ISlangBlob hash);
+    void GetEntryPointHash(
+        int entryPointIndex,
+        int targetIndex,
+        out ISlangBlob hash);
+
+    /// <summary>
+    ///     Specialize the component by binding its specialization parameters to concrete arguments.
+    ///
+    ///     The `specializationArgs` array must have `specializationArgCount` entries, and
+    ///     this must match the number of specialization parameters on this component type.
+    ///
+    ///      If any diagnostics (error or warnings) are produced, they will be written to `diagnostics`.
+    /// </summary>
+    [PreserveSig]
+    int Specialize(
+        nint* specializationArgs,
+        int specializationArgCount,
+        out IComponentType specializedComponentType,
+        out ISlangBlob? diagnostics);
+
+    /// <summary>
+    ///     Link this component type against all of its unsatisfied dependencies.
+    ///
+    ///     A component type may have unsatisfied dependencies. For example, a module
+    ///     depends on any other modules it `import`s, and an entry point depends
+    ///     on the module that defined it.
+    ///
+    ///     A user can manually satisfy dependencies by creating a composite
+    ///     component type, and when doing so they retain full control over
+    ///     the relative ordering of shader parameters in the resulting layout.
+    ///
+    ///     It is an error to try to generate/access compiled kernel code for
+    ///     a component type with unresolved dependencies, so if dependencies
+    ///     remain after whatever manual composition steps an application
+    ///     cares to perform, the `link()` function can be used to automatically
+    ///     compose in any remaining dependencies.The order of parameters
+    ///     (and hence the global layout) that results will be deterministic,
+    ///     but is not currently documented.
+    /// </summary>
+    [PreserveSig]
+    int Link(
+        out IComponentType lLinkedComponentType,
+        out ISlangBlob? diagnostics);
+
+    /// <summary>
+    ///     Get entry point 'callable' functions accessible through the ISlangSharedLibrary interface.
+    ///
+    ///     The functions remain in scope as long as the ISlangSharedLibrary interface is in scope.
+    ///     NOTE! Requires a compilation target of SLANG_HOST_CALLABLE.
+    /// </summary>
+    /// <param name="entryPointIndex">The index of the entry point to get code for.</param>
+    /// <param name="targetIndex">The index of the target to get code for (default: zero).</param>
+    /// <param name="sharedLibrary">A pointer to a ISharedLibrary interface which functions can be queried on.</param>
+    /// <returns>A `SlangResult` to indicate success or failure.</returns>
+    [PreserveSig]
+    int GetEntryPointHostCallable(int entryPointIndex,
+        int targetIndex,
+        out ISlangSharedLibrary sharedLibrary,
+        out ISlangBlob? diagnostics);
+
+    /// <summary>
+    ///     Get a new ComponentType object that represents a renamed entry point.
+    ///
+    ///     The current object must be a single EntryPoint, or a CompositeComponentType or
+    ///     SpecializedComponentType that contains one EntryPoint component.
+    /// </summary>
+    [PreserveSig]
+    int RenameEntryPoint(
+        [MarshalAs(UnmanagedType.LPUTF8Str)] string newName,
+        out IComponentType entryPoint);
+
+    /// <summary>
+    ///     Link and specify additional compiler options when generating code
+    ///     from the linked program.
+    /// </summary>
+    [PreserveSig]
+    int LinkWithOptions(
+        out IComponentType linkedComponentType,
+        uint compilerOptionEntryCount,
+        CompilerOptionEntry* compilerOptionEntries,
+        out ISlangBlob? diagnostics);
 
     [PreserveSig]
-    public int Specialize(nint* specializationArgs, int specializationArgCount, out IComponentType specializedComponentType, out ISlangBlob? diagnostics);
+    int GetTargetCode(
+        int targetIndex,
+        out ISlangBlob code,
+        out ISlangBlob? diagnostics);
 
     [PreserveSig]
-    public int Link(out IComponentType lLinkedComponentType, out ISlangBlob? diagnostics);
+    int GetTargetMetadata(
+        int targetIndex,
+        out IMetadata metadata,
+        out ISlangBlob? diagnostics);
 
     [PreserveSig]
-    int GetEntryPointHostCallable();
-
-    [PreserveSig]
-    int RenameEntryPoint();
-
-    [PreserveSig]
-    int LinkWithOptions();
-
-    [PreserveSig]
-    int GetTargetCode(int targetIndex, out ISlangBlob code, out ISlangBlob? diagnostics);
-
-    [PreserveSig]
-    int GetTargetMetadata(int targetIndex, out IMetadata metadata, out ISlangBlob? diagnostics);
-
-    [PreserveSig]
-    int GetEntryPointMetadata(int entryPointIndex, int targetIndex, out IMetadata metadata, out ISlangBlob? diagnostics);
+    int GetEntryPointMetadata(
+        int entryPointIndex,
+        int targetIndex,
+        out IMetadata metadata,
+        out ISlangBlob? diagnostics);
 }

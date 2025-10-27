@@ -13,11 +13,15 @@ namespace SlangShaderSharp;
 public unsafe partial interface ICompileResult : ISlangCastable
 {
     [PreserveSig]
-    public uint GetItemCount();
+    uint GetItemCount();
 
     [PreserveSig]
-    public int GetItemData(uint index, out ISlangBlob blob);
+    int GetItemData(
+        uint index,
+        out ISlangBlob blob);
 
     [PreserveSig]
-    public int GetMetadata(uint index, out IMetadata metadata);
+    int GetMetadata(
+        uint index,
+        out IMetadata metadata);
 }

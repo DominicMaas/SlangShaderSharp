@@ -12,7 +12,11 @@ public unsafe partial interface IMetadata : ISlangCastable
     ///     in the compiled shader.
     /// </summary>
     [PreserveSig]
-    public int IsParameterLocationUsed(SlangParameterCategory category, uint spaceIndex, uint registerIndex, [MarshalAs(UnmanagedType.Bool)] out bool used);
+    int IsParameterLocationUsed(
+        SlangParameterCategory category,
+        uint spaceIndex,
+        uint registerIndex,
+        [MarshalAs(UnmanagedType.Bool)] out bool used);
 
     /// <summary>
     ///     Returns the debug build identifier for a base and debug spirv pair.
@@ -20,5 +24,5 @@ public unsafe partial interface IMetadata : ISlangCastable
     /// <returns></returns>
     [PreserveSig]
     [return: MarshalAs(UnmanagedType.LPStr)]
-    public string GetDebugBuildIdentifier();
+    string GetDebugBuildIdentifier();
 }

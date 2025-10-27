@@ -3,6 +3,8 @@ using System.Runtime.InteropServices.Marshalling;
 
 namespace SlangShaderSharp;
 
+// TODO: Missing implementations
+
 /// <summary>
 ///     A global session for interaction with the Slang library.
 ///
@@ -22,7 +24,9 @@ public partial interface IGlobalSession
     ///     Create a new session for loading and compiling code.
     /// </summary>
     [PreserveSig]
-    int CreateSession(SessionDesc description, out ISession sesion);
+    int CreateSession(
+        SessionDesc description,
+        out ISession sesion);
 
     /// <summary>
     ///     Look up the internal ID of a profile by its `name`.

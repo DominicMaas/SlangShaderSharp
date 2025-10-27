@@ -85,5 +85,33 @@ public unsafe partial interface ISession
     [PreserveSig]
     int CreateCompositeComponentType(nint* componentTypes, long componentTypeCount, out IComponentType compositeComponentType, out ISlangBlob? diagnostics);
 
+    // specializeType
 
+    // getTypeLayout
+
+    // getContainerType
+
+    // getDynamicType
+
+    // getTypeRTTIMangledName
+
+    // getTypeConformanceWitnessMangledName
+
+    // getTypeConformanceWitnessSequentialID
+
+    // createCompileRequest
+
+    // createTypeConformanceComponentType
+
+    // loadModuleFromIRBlob
+
+    // getLoadedModuleCount
+
+    // getLoadedModule
+
+    // isBinaryModuleUpToDate
+
+    // loadModuleFromSourceString
+
+    // etc.
 }

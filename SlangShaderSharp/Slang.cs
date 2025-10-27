@@ -1,5 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text;
 
 [assembly: DisableRuntimeMarshalling]
 
@@ -7,15 +8,9 @@ namespace SlangShaderSharp;
 
 internal partial class Slang
 {
-    /// <summary>
-    ///     Create a blob from binary data.
-    /// </summary>
-    /// <param name="data">Pointer to the binary data to store in the blob. Must not be null.</param>
-    /// <param name="size">Size of the data in bytes. Must be greater than 0.</param>
-    /// <returns>The created blob on success, or nullptr on failure.</returns>
     [LibraryImport("slang.dll", EntryPoint = "slang_createBlob")]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    public static unsafe partial ISlangBlob CreateBlob(void* data, nuint size);
+    private static unsafe partial ISlangBlob CreateBlob(void* data, nuint size);
 
     /// <summary>
     ///     Create a blob from binary data.
@@ -30,6 +25,13 @@ internal partial class Slang
             return CreateBlob(p, (nuint)data.Length);
         }
     }
+
+    /// <summary>
+    ///     Create a blob from binary data.
+    /// </summary>
+    /// <param name="data">Binary data to store in the blob. Must not be null or empty.</param>
+    /// <returns>The created blob on success, or nullptr on failure.</returns>
+    public static unsafe ISlangBlob CreateBlob(string data) => CreateBlob(Encoding.UTF8.GetBytes(data));
 
     /// <summary>
     ///     Create a global session, with the built-in core module.

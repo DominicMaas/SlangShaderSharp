@@ -25,6 +25,6 @@ public static class ISlangBlobExtensions
     extension(ISlangBlob blob)
     {
         public unsafe ReadOnlySpan<byte> Buffer => new(blob.GetBufferPointer(), (int)blob.GetBufferSize());
-        private unsafe string AsString() => Encoding.UTF8.GetString((byte*)blob.GetBufferPointer(), (int)blob.GetBufferSize());
+        public unsafe string AsString => Encoding.UTF8.GetString((byte*)blob.GetBufferPointer(), (int)blob.GetBufferSize());
     }
 }

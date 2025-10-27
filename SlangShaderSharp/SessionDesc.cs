@@ -61,3 +61,18 @@ public unsafe struct SessionDesc
     /// </summary>
     public bool skipSPIRVValidation;
 }
+
+public struct SessionDescription
+{
+    public TargetDescription[] Targets;
+    public SessionFlags Flags;
+    public SlangMatrixLayoutMode DefaultMatrixLayoutMode;
+    public string[] SearchPaths;
+    public PreprocessorMacroDesc[] PreprocessorMacros;
+    public nint FileSystem;
+    public bool EnableEffectAnnotations;
+    public bool AllowGLSLSyntax;
+    public CompilerOptionEntry[] CompilerOptionEntries;
+    public bool SkipSPIRVValidation;
+}
+
