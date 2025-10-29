@@ -55,6 +55,14 @@ public class ModuleReflectionTests
         var reflectionModule = module.GetModuleReflection();
         reflectionModule.ShouldNotBe(DeclReflection.Null);
 
-        var name = reflectionModule.GetName();
+        reflectionModule.GetName().ShouldBe("test");
+        reflectionModule.GetKind().ShouldBe(DeclReflection.Kind.Module);
+
+        reflectionModule.Count.ShouldBe(4);
+
+        reflectionModule[0].GetName().ShouldBe("buffer0");
+        reflectionModule[1].GetName().ShouldBe("buffer1");
+        reflectionModule[2].GetName().ShouldBe("result");
+        reflectionModule[3].GetName().ShouldBe("computeMain");
     }
 }
