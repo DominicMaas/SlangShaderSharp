@@ -4,6 +4,6 @@
     <File Path="README.md" />
     <File Path="scripts/generate-bindings.ps1" />
   </Folder>
-  <Project Path="SlangShaderSharp/SlangShaderSharp.csproj" />
-  <Project Path="tests/SlangShaderSharp.Tests/SlangShaderSharp.Tests.csproj" />
+  <Project Path="src/SlangShaderSharp.csproj" />
+  <Project Path="tests/SlangShaderSharp.Tests.csproj" />
 </Solution>
