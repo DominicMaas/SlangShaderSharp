@@ -38,6 +38,7 @@ public unsafe partial interface IComponentType
     ///     the same when it is used in a composition.
     /// </summary>
     [PreserveSig]
+    [return: MarshalUsing(typeof(ShaderReflectionMarshaller))]
     ShaderReflection GetLayout(
         int targetIndex,
         out ISlangBlob? diagnostics);

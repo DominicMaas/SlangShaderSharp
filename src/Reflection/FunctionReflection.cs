@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace SlangShaderSharp;
 
@@ -20,3 +21,11 @@ public readonly struct FunctionReflection(nint value) : IEquatable<FunctionRefle
     public override int GetHashCode() => unchecked((int)_value);
     public override string ToString() => $"0x{_value:x}";
 }
+
+[CustomMarshaller(typeof(FunctionReflection), MarshalMode.Default, typeof(FunctionReflectionMarshaller))]
+internal static class FunctionReflectionMarshaller
+{
+    public static nint ConvertToUnmanaged(FunctionReflection managed) => managed;
+    public static FunctionReflection ConvertToManaged(nint unmanaged) => (FunctionReflection)unmanaged;
+}
+

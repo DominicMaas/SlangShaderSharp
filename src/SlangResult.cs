@@ -3,7 +3,7 @@ using System.Runtime.InteropServices.Marshalling;
 
 namespace SlangShaderSharp;
 
-[DebuggerDisplay("{_value}")]
+[DebuggerDisplay("{_result}")]
 public readonly struct SlangResult(int value) : IEquatable<SlangResult>
 {
     private readonly int _result = value;
@@ -43,7 +43,7 @@ public readonly struct SlangResult(int value) : IEquatable<SlangResult>
 }
 
 [CustomMarshaller(typeof(SlangResult), MarshalMode.Default, typeof(SlangResultMarshaller))]
-public static class SlangResultMarshaller
+internal static class SlangResultMarshaller
 {
     public static int ConvertToUnmanaged(SlangResult managed) => managed;
     public static SlangResult ConvertToManaged(int unmanaged) => (SlangResult)unmanaged;

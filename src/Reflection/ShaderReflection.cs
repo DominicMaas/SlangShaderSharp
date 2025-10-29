@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace SlangShaderSharp;
 
@@ -19,4 +20,11 @@ public readonly struct ShaderReflection(nint value) : IEquatable<ShaderReflectio
     public override bool Equals(object? obj) => obj is ShaderReflection other && Equals(other);
     public override int GetHashCode() => unchecked((int)_value);
     public override string ToString() => $"0x{_value:x}";
+}
+
+[CustomMarshaller(typeof(ShaderReflection), MarshalMode.Default, typeof(ShaderReflectionMarshaller))]
+internal static class ShaderReflectionMarshaller
+{
+    public static nint ConvertToUnmanaged(ShaderReflection managed) => managed;
+    public static ShaderReflection ConvertToManaged(nint unmanaged) => (ShaderReflection)unmanaged;
 }

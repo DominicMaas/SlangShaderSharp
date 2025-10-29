@@ -117,6 +117,7 @@ public unsafe partial interface IModule : IComponentType
     string GetDependencyFilePath(int index);
 
     [PreserveSig]
+    [return: MarshalUsing(typeof(DeclReflectionMarshaller))]
     DeclReflection GetModuleReflection();
 
     /// <summary>
