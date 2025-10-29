@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using SlangShaderSharp.Internal;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
 namespace SlangShaderSharp;
@@ -71,21 +72,21 @@ public unsafe partial interface IModule : IComponentType
     ///     Get the name of the module.
     /// </summary>
     [PreserveSig]
-    [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+    [return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]
     string GetName();
 
     /// <summary>
     ///      Get the path of the module.
     /// </summary>
     [PreserveSig]
-    [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+    [return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]
     string GetFilePath();
 
     /// <summary>
     ///      Get the unique identity of the module.
     /// </summary>
     [PreserveSig]
-    [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+    [return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]
     string GetUniqueIdentity();
 
     /// <summary>
@@ -113,7 +114,7 @@ public unsafe partial interface IModule : IComponentType
     ///      Get the path to a file this module depends on.
     /// </summary>
     [PreserveSig]
-    [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+    [return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]
     string GetDependencyFilePath(int index);
 
     [PreserveSig]

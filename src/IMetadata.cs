@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using SlangShaderSharp.Internal;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
 namespace SlangShaderSharp;
@@ -24,6 +25,6 @@ public unsafe partial interface IMetadata : ISlangCastable
     /// </summary>
     /// <returns></returns>
     [PreserveSig]
-    [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+    [return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]
     string GetDebugBuildIdentifier();
 }

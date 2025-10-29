@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using SlangShaderSharp.Internal;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using System.Text;
@@ -90,6 +91,6 @@ internal partial class Slang
     /// </summary>
     [LibraryImport("slang", EntryPoint = "slang_getLastInternalErrorMessage")]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+    [return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]
     public static partial string GetLastInternalErrorMessage();
 }

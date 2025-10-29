@@ -47,6 +47,9 @@ public class ModuleReflectionTests
 
         module.ShouldNotBeNull(moduleLoadError?.AsString ?? "Unknown Error");
 
+        module.GetName().ShouldBe("test");
+        module.GetFilePath().ShouldBe("test.slang");
+
         // 4. Get Module Reflection
 
         var reflectionModule = module.GetModuleReflection();
