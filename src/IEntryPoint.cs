@@ -8,5 +8,5 @@ namespace SlangShaderSharp;
 public unsafe partial interface IEntryPoint : IComponentType
 {
     [PreserveSig]
-    nint GetFunctionReflection();
+    FunctionReflection GetFunctionReflection();
 }

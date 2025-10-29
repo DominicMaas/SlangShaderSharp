@@ -28,7 +28,8 @@ public unsafe partial interface IModule : IComponentType
     ///     `IModule::findAndCheckEntryPoint` instead.
     /// </summary>
     [PreserveSig]
-    int FindEntryPointByName(
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult FindEntryPointByName(
         [MarshalAs(UnmanagedType.LPUTF8Str)] string name,
         out IEntryPoint entryPoint);
 
@@ -46,7 +47,8 @@ public unsafe partial interface IModule : IComponentType
     /// </summary>
     /// <returns></returns>
     [PreserveSig]
-    int GetDefinedEntryPoint(
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult GetDefinedEntryPoint(
         int index,
         out IEntryPoint entryPoint);
 
@@ -54,14 +56,16 @@ public unsafe partial interface IModule : IComponentType
     ///     Get a serialized representation of the checked module.
     /// </summary>
     [PreserveSig]
-    int Serialize(out ISlangBlob serializedBlob);
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult Serialize(out ISlangBlob serializedBlob);
 
     /// <summary>
     ///     Write the serialized representation of this module to a file.
     /// </summary>
     /// <returns></returns>
     [PreserveSig]
-    int WriteToFile([MarshalAs(UnmanagedType.LPUTF8Str)] string fileName);
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult WriteToFile([MarshalAs(UnmanagedType.LPUTF8Str)] string fileName);
 
     /// <summary>
     ///     Get the name of the module.
@@ -89,7 +93,8 @@ public unsafe partial interface IModule : IComponentType
     ///      not marked with the `[shader("...")]` attribute.
     /// </summary>
     [PreserveSig]
-    int FindAndCheckEntryPoint(
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult FindAndCheckEntryPoint(
         [MarshalAs(UnmanagedType.LPUTF8Str)] string name,
         SlangStage stage,
         out IEntryPoint entryPoint,
@@ -120,5 +125,6 @@ public unsafe partial interface IModule : IComponentType
     /// <param name="disassembledBlob"></param>
     /// <returns></returns>
     [PreserveSig]
-    int Disassemble(out ISlangBlob disassembledBlob);
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult Disassemble(out ISlangBlob disassembledBlob);
 }

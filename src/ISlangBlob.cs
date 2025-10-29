@@ -17,7 +17,7 @@ public unsafe partial interface ISlangBlob
     void* GetBufferPointer();
 
     [PreserveSig]
-    public nuint GetBufferSize();
+    nuint GetBufferSize();
 }
 
 public static class ISlangBlobExtensions

@@ -44,13 +44,19 @@ public unsafe partial interface ISession
     ///     Load a module as it would be by code using `import`.
     /// </summary>
     [PreserveSig]
-    IModule? LoadModule([MarshalAs(UnmanagedType.LPUTF8Str)] string moduleName, out ISlangBlob diagnostics);
+    IModule? LoadModule(
+        [MarshalAs(UnmanagedType.LPUTF8Str)] string moduleName,
+        out ISlangBlob? diagnostics);
 
     /// <summary>
     ///     Load a module from Slang source code.
     /// </summary>
     [PreserveSig]
-    IModule? LoadModuleFromSource([MarshalAs(UnmanagedType.LPUTF8Str)] string moduleName, [MarshalAs(UnmanagedType.LPUTF8Str)] string path, ISlangBlob source, out ISlangBlob? diagnostics);
+    IModule? LoadModuleFromSource(
+        [MarshalAs(UnmanagedType.LPUTF8Str)] string moduleName,
+        [MarshalAs(UnmanagedType.LPUTF8Str)] string path,
+        ISlangBlob source,
+        out ISlangBlob? diagnostics);
 
     /// <summary>
     ///     Combine multiple component types to create a composite component type.
@@ -83,7 +89,12 @@ public unsafe partial interface ISession
     ///     aggregates a single module more than once.
     /// </summary>
     [PreserveSig]
-    int CreateCompositeComponentType(nint* componentTypes, long componentTypeCount, out IComponentType compositeComponentType, out ISlangBlob? diagnostics);
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult CreateCompositeComponentType(
+        nint* componentTypes,
+        long componentTypeCount,
+        out IComponentType compositeComponentType,
+        out ISlangBlob? diagnostics);
 
     // specializeType
 
@@ -150,7 +161,7 @@ public static class ISessionExtensions
         ///     It is an error to create a composite component type that recursively
         ///     aggregates a single module more than once.
         /// </summary>
-        public unsafe int CreateCompositeComponentType(ReadOnlySpan<IComponentType> componentTypes, out IComponentType compositeComponentType, out ISlangBlob? diagnostics)
+        public unsafe SlangResult CreateCompositeComponentType(ReadOnlySpan<IComponentType> componentTypes, out IComponentType compositeComponentType, out ISlangBlob? diagnostics)
         {
             var pointers = stackalloc nint[componentTypes.Length];
             for (int i = 0; i < componentTypes.Length; i++)

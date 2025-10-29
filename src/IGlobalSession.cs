@@ -24,7 +24,8 @@ public partial interface IGlobalSession
     ///     Create a new session for loading and compiling code.
     /// </summary>
     [PreserveSig]
-    int CreateSession(
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult CreateSession(
         SessionDesc description,
         out ISession sesion);
 

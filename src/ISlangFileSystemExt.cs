@@ -16,4 +16,5 @@ namespace SlangShaderSharp;
 [Guid("5fb632d2-979d-4481-9fee-663c3f1449e1")]
 public partial interface ISlangFileSystemExt : ISlangFileSystem
 {
+    // TODO
 }

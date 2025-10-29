@@ -1,5 +1,8 @@
 ﻿namespace SlangShaderSharp;
 
+/// <summary>
+///     All compiler option names supported by Slang.
+/// </summary>
 public enum CompilerOptionName
 {
     MacroDefine,

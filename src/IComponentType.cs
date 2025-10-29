@@ -60,7 +60,8 @@ public unsafe partial interface IComponentType
     ///     (if non-null) will be filled in with a blob of messages diagnosing the error.
     /// </summary>
     [PreserveSig]
-    int GetEntryPointCode(
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult GetEntryPointCode(
         int entryPointIndex,
         int targetIndex,
         out ISlangBlob outCode,
@@ -75,7 +76,8 @@ public unsafe partial interface IComponentType
     ///     in memory representation.
     /// </summary>
     [PreserveSig]
-    int GetResultAsFileSystem(
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult GetResultAsFileSystem(
         int entryPointIndex,
         int targetIndex,
         out ISlangMutableFileSystem fileSystem);
@@ -102,7 +104,8 @@ public unsafe partial interface IComponentType
     ///      If any diagnostics (error or warnings) are produced, they will be written to `diagnostics`.
     /// </summary>
     [PreserveSig]
-    int Specialize(
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult Specialize(
         nint* specializationArgs,
         int specializationArgCount,
         out IComponentType specializedComponentType,
@@ -128,7 +131,8 @@ public unsafe partial interface IComponentType
     ///     but is not currently documented.
     /// </summary>
     [PreserveSig]
-    int Link(
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult Link(
         out IComponentType lLinkedComponentType,
         out ISlangBlob? diagnostics);
 
@@ -143,7 +147,8 @@ public unsafe partial interface IComponentType
     /// <param name="sharedLibrary">A pointer to a ISharedLibrary interface which functions can be queried on.</param>
     /// <returns>A `SlangResult` to indicate success or failure.</returns>
     [PreserveSig]
-    int GetEntryPointHostCallable(int entryPointIndex,
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult GetEntryPointHostCallable(int entryPointIndex,
         int targetIndex,
         out ISlangSharedLibrary sharedLibrary,
         out ISlangBlob? diagnostics);
@@ -155,7 +160,8 @@ public unsafe partial interface IComponentType
     ///     SpecializedComponentType that contains one EntryPoint component.
     /// </summary>
     [PreserveSig]
-    int RenameEntryPoint(
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult RenameEntryPoint(
         [MarshalAs(UnmanagedType.LPUTF8Str)] string newName,
         out IComponentType entryPoint);
 
@@ -164,26 +170,30 @@ public unsafe partial interface IComponentType
     ///     from the linked program.
     /// </summary>
     [PreserveSig]
-    int LinkWithOptions(
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult LinkWithOptions(
         out IComponentType linkedComponentType,
         uint compilerOptionEntryCount,
         CompilerOptionEntry* compilerOptionEntries,
         out ISlangBlob? diagnostics);
 
     [PreserveSig]
-    int GetTargetCode(
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult GetTargetCode(
         int targetIndex,
         out ISlangBlob code,
         out ISlangBlob? diagnostics);
 
     [PreserveSig]
-    int GetTargetMetadata(
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult GetTargetMetadata(
         int targetIndex,
         out IMetadata metadata,
         out ISlangBlob? diagnostics);
 
     [PreserveSig]
-    int GetEntryPointMetadata(
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult GetEntryPointMetadata(
         int entryPointIndex,
         int targetIndex,
         out IMetadata metadata,

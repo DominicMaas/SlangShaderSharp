@@ -16,12 +16,14 @@ public unsafe partial interface ICompileResult : ISlangCastable
     uint GetItemCount();
 
     [PreserveSig]
-    int GetItemData(
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult GetItemData(
         uint index,
         out ISlangBlob blob);
 
     [PreserveSig]
-    int GetMetadata(
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult GetMetadata(
         uint index,
         out IMetadata metadata);
 }

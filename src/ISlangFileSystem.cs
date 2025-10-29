@@ -33,5 +33,8 @@ public partial interface ISlangFileSystem
     /// <param name="outBlob">A destination pointer to receive the blob of the file contents.</param>
     /// <returns>A `SlangResult` to indicate success or failure in loading the file.</returns>
     [PreserveSig]
-    public int LoadFile([MarshalAs(UnmanagedType.LPStr)] string path, out ISlangBlob outBlob);
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult LoadFile(
+        [MarshalAs(UnmanagedType.LPStr)] string path,
+        out ISlangBlob outBlob);
 }

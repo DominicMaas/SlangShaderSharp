@@ -18,13 +18,15 @@ namespace SlangShaderSharp;
 public partial interface IComponentType2
 {
     [PreserveSig]
-    int GetTargetCompileResult(
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult GetTargetCompileResult(
         int targetIndex,
         out ICompileResult compileResult,
         out ISlangBlob? diagnostics);
 
     [PreserveSig]
-    int GetEntryPointCompileResult(
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult GetEntryPointCompileResult(
         int entryPointIndex,
         int targetIndex,
         out ICompileResult compileResult,

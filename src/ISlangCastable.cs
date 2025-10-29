@@ -17,5 +17,5 @@ public partial interface ISlangCastable
     ///     Can simulate a 'generated' interface as long as kept in scope by cast from.
     /// </summary>
     [PreserveSig]
-    public unsafe void* CastAs(Guid guid);
+    unsafe void* CastAs(Guid guid);
 }

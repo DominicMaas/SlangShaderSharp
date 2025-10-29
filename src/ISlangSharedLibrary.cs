@@ -19,7 +19,7 @@ public unsafe partial interface ISlangSharedLibrary : ISlangCastable
     /// <param name="name">name The name of the function</param>
     /// <returns>The function pointer related to the name or nullptr if not found</returns>
     [PreserveSig]
-    public nint FindFuncByName([MarshalAs(UnmanagedType.LPUTF8Str)] string name);
+    nint FindFuncByName([MarshalAs(UnmanagedType.LPUTF8Str)] string name);
 
     /// <summary>
     ///     Get a symbol by name. If the library is unloaded will only return nullptr.

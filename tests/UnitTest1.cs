@@ -33,7 +33,8 @@ public class UnitTest1
         sessionDesc.targets = &targetDesc;
         sessionDesc.targetCount = 1;
 
-        globalSession.CreateSession(sessionDesc, out _).ShouldBe(0);
+        globalSession.CreateSession(sessionDesc, out var session).Succeeded.ShouldBeTrue();
+        session.ShouldNotBeNull();
     }
 
     [Fact]
@@ -59,7 +60,7 @@ public class UnitTest1
         sessionDesc.targets = &targetDesc;
         sessionDesc.targetCount = 1;
 
-        globalSession.CreateSession(sessionDesc, out var session).ShouldBe(0);
+        globalSession.CreateSession(sessionDesc, out var session).Succeeded.ShouldBeTrue();
 
         // 3. Load module
 
@@ -81,19 +82,19 @@ public class UnitTest1
 
         // 4. Query Entry Points
 
-        module.FindEntryPointByName("computeMain", out var entryPoint).ShouldBe(0);
+        module.FindEntryPointByName("computeMain", out var entryPoint).Succeeded.ShouldBeTrue();
 
         // 5. Compose Modules + Entry Points
 
-        session.CreateCompositeComponentType([module, entryPoint], out var composedProgram, out _).ShouldBe(0);
+        session.CreateCompositeComponentType([module, entryPoint], out var composedProgram, out _).Succeeded.ShouldBeTrue();
 
         // 6. Link
 
-        composedProgram.Link(out var linkedProgram, out _).ShouldBe(0);
+        composedProgram.Link(out var linkedProgram, out _).Succeeded.ShouldBeTrue();
 
         // 7. Get Target Kernel Code
 
-        composedProgram.GetEntryPointCode(0, 0, out var wgslCode, out _).ShouldBe(0);
+        composedProgram.GetEntryPointCode(0, 0, out var wgslCode, out _).Succeeded.ShouldBeTrue();
 
         // Output
 

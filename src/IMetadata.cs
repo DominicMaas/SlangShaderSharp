@@ -12,7 +12,8 @@ public unsafe partial interface IMetadata : ISlangCastable
     ///     in the compiled shader.
     /// </summary>
     [PreserveSig]
-    int IsParameterLocationUsed(
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult IsParameterLocationUsed(
         SlangParameterCategory category,
         uint spaceIndex,
         uint registerIndex,
@@ -23,6 +24,6 @@ public unsafe partial interface IMetadata : ISlangCastable
     /// </summary>
     /// <returns></returns>
     [PreserveSig]
-    [return: MarshalAs(UnmanagedType.LPStr)]
+    [return: MarshalAs(UnmanagedType.LPUTF8Str)]
     string GetDebugBuildIdentifier();
 }

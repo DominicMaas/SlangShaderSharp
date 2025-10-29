@@ -14,5 +14,5 @@ public unsafe partial interface ISlangClonable : ISlangCastable
     ///     an ICastable interface which other interfaces/types are accessible from via castAs
     /// </summary>
     [PreserveSig]
-    public void* Clone(Guid guid);
+    void* Clone(Guid guid);
 }

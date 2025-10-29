@@ -15,7 +15,11 @@ public unsafe partial interface ISlangMutableFileSystem : ISlangFileSystemExt
     /// <param name="size">The size of the data in bytes</param>
     /// <returns>SLANG_OK if successful (SLANG_E_NOT_IMPLEMENTED if not implemented, or some other error code)</returns>
     [PreserveSig]
-    public int SaveFile([MarshalAs(UnmanagedType.LPUTF8Str)] string path, void* data, nuint size);
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult SaveFile(
+        [MarshalAs(UnmanagedType.LPUTF8Str)] string path,
+        void* data,
+        nuint size);
 
     /// <summary>
     ///     Write data in the form of a blob to the specified path.
@@ -30,5 +34,29 @@ public unsafe partial interface ISlangMutableFileSystem : ISlangFileSystemExt
     /// <param name="dataBlob">The data to be saved</param>
     /// <returns>SLANG_OK if successful (SLANG_E_NOT_IMPLEMENTED if not implemented, or some other error code)</returns>
     [PreserveSig]
-    public int SaveFileBlob([MarshalAs(UnmanagedType.LPUTF8Str)] string path, nint dataBlob);
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult SaveFileBlob(
+        [MarshalAs(UnmanagedType.LPUTF8Str)] string path,
+        nint dataBlob);
+
+    /// <summary>
+    ///     Remove the entry in the path (directory of file). Will only delete an empty directory,
+    ///     if not empty will return an error.
+    /// </summary>
+    /// <param name="path">The path to remove</param>
+    /// <returns>SLANG_OK if successful</returns>
+    [PreserveSig]
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult Remove([MarshalAs(UnmanagedType.LPUTF8Str)] string path);
+
+    /// <summary>
+    ///     Create a directory.
+    ///
+    ///     The path to the directory must exist
+    /// </summary>
+    /// <param name="path">To the directory to create. The parent path *must* exist otherwise will return an error.</param>
+    /// <returns>SLANG_OK if successful</returns>
+    [PreserveSig]
+    [return: MarshalUsing(typeof(SlangResultMarshaller))]
+    SlangResult CreateDirectory([MarshalAs(UnmanagedType.LPUTF8Str)] string path);
 }
