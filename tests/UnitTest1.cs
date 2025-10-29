@@ -11,6 +11,8 @@ public class UnitTest1
         Slang.CreateGlobalSession(0, out var globalSession);
 
         ((int)globalSession.FindProfile("glsl_450")).ShouldBe(1441792);
+
+        Slang.Shutdown();
     }
 
     [Fact]
@@ -35,6 +37,8 @@ public class UnitTest1
 
         globalSession.CreateSession(sessionDesc, out var session).Succeeded.ShouldBeTrue();
         session.ShouldNotBeNull();
+
+        Slang.Shutdown();
     }
 
     [Fact]
@@ -99,5 +103,9 @@ public class UnitTest1
         // Output
 
         _ = wgslCode.AsString;
+
+        // Done
+
+        Slang.Shutdown();
     }
 }

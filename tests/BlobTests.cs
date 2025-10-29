@@ -7,7 +7,7 @@ public class BlobTests
     [Fact]
     public void TestCreateString()
     {
-        Slang.CreateGlobalSession(0, out var globalSession);
+        Slang.CreateGlobalSession(0, out _);
 
         var blob = Slang.CreateBlob("Hello World!");
         blob.AsString.ShouldBe("Hello World!");
