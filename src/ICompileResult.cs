@@ -23,7 +23,5 @@ public unsafe partial interface ICompileResult : ISlangCastable
 
     [PreserveSig]
     [return: MarshalUsing(typeof(SlangResultMarshaller))]
-    SlangResult GetMetadata(
-        uint index,
-        out IMetadata metadata);
+    SlangResult GetMetadata(out IMetadata metadata);
 }
