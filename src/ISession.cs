@@ -44,13 +44,13 @@ public unsafe partial interface ISession
     ///     Load a module as it would be by code using `import`.
     /// </summary>
     [PreserveSig]
-    IModule LoadModule([MarshalAs(UnmanagedType.LPUTF8Str)] string moduleName, out ISlangBlob diagnostics);
+    IModule? LoadModule([MarshalAs(UnmanagedType.LPUTF8Str)] string moduleName, out ISlangBlob diagnostics);
 
     /// <summary>
     ///     Load a module from Slang source code.
     /// </summary>
     [PreserveSig]
-    IModule LoadModuleFromSource([MarshalAs(UnmanagedType.LPUTF8Str)] string moduleName, [MarshalAs(UnmanagedType.LPUTF8Str)] string path, ISlangBlob source, out ISlangBlob? diagnostics);
+    IModule? LoadModuleFromSource([MarshalAs(UnmanagedType.LPUTF8Str)] string moduleName, [MarshalAs(UnmanagedType.LPUTF8Str)] string path, ISlangBlob source, out ISlangBlob? diagnostics);
 
     /// <summary>
     ///     Combine multiple component types to create a composite component type.

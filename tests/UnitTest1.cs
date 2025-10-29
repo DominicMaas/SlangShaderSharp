@@ -75,7 +75,9 @@ public class UnitTest1
                 uint index = threadId.x;
                 result[index] = buffer0[index] + buffer1[index];
             }
-            """u8), out _);
+            """u8), out var moduleLoadError);
+
+        module.ShouldNotBeNull(moduleLoadError?.AsString ?? "Unknown Error");
 
         // 4. Query Entry Points
 

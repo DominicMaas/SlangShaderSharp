@@ -112,7 +112,7 @@ public unsafe partial interface IModule : IComponentType
     string GetDependencyFilePath(int index);
 
     [PreserveSig]
-    nint GetModuleReflection();
+    DeclReflection GetModuleReflection();
 
     /// <summary>
     ///     Disassemble a module.
