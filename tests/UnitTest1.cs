@@ -46,7 +46,7 @@ public class UnitTest1
     {
         // 1. Create Global Session
 
-        Slang.CreateGlobalSession(0, out var globalSession);
+        Slang.CreateGlobalSession(0, out var globalSession).Succeeded.ShouldBeTrue();
 
         // 2. Create Session
 
@@ -94,7 +94,7 @@ public class UnitTest1
 
         // 6. Link
 
-        composedProgram.Link(out var linkedProgram, out _).Succeeded.ShouldBeTrue();
+        composedProgram.Link(out _, out var linkError).Succeeded.ShouldBeTrue(linkError?.AsString ?? "Unknown Error");
 
         // 7. Get Target Kernel Code
 
