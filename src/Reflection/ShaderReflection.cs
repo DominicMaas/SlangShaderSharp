@@ -3,28 +3,37 @@ using System.Runtime.InteropServices.Marshalling;
 
 namespace SlangShaderSharp;
 
-[DebuggerDisplay("{_value}")]
-public readonly struct ShaderReflection(nint value) : IEquatable<ShaderReflection>
+[DebuggerDisplay("{Handle}")]
+[NativeMarshalling(typeof(ShaderReflectionMarshaller))]
+public readonly struct ShaderReflection : IEquatable<ShaderReflection>
 {
-    private readonly nint _value = value;
+    internal readonly nint Handle;
 
-    public static ShaderReflection Null => default;
+    [Obsolete("Use ShaderReflection.Null instead.")]
+    public ShaderReflection()
+    {
+        Handle = 0;
+    }
 
-    public static implicit operator nint(ShaderReflection value) => value._value;
-    public static explicit operator ShaderReflection(nint value) => new(value);
+    internal ShaderReflection(nint value)
+    {
+        Handle = value;
+    }
 
-    public static bool operator ==(ShaderReflection left, ShaderReflection right) => left._value == right._value;
+    public static ShaderReflection Null => new(0);
+
+    public static bool operator ==(ShaderReflection left, ShaderReflection right) => left.Handle == right.Handle;
     public static bool operator !=(ShaderReflection left, ShaderReflection right) => !(left == right);
 
-    public bool Equals(ShaderReflection other) => _value == other._value;
+    public bool Equals(ShaderReflection other) => Handle == other.Handle;
     public override bool Equals(object? obj) => obj is ShaderReflection other && Equals(other);
-    public override int GetHashCode() => unchecked((int)_value);
-    public override string ToString() => $"0x{_value:x}";
+    public override int GetHashCode() => unchecked((int)Handle);
+    public override string ToString() => $"0x{Handle:x}";
 }
 
 [CustomMarshaller(typeof(ShaderReflection), MarshalMode.Default, typeof(ShaderReflectionMarshaller))]
 internal static class ShaderReflectionMarshaller
 {
-    public static nint ConvertToUnmanaged(ShaderReflection managed) => managed;
-    public static ShaderReflection ConvertToManaged(nint unmanaged) => (ShaderReflection)unmanaged;
+    public static nint ConvertToUnmanaged(ShaderReflection managed) => managed.Handle;
+    public static ShaderReflection ConvertToManaged(nint unmanaged) => new(unmanaged);
 }

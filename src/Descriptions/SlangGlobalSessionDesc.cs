@@ -1,40 +1,44 @@
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace SlangShaderSharp;
 
 /// <summary>
 ///     Description of a Slang global session.
 /// </summary>
+[StructLayout(LayoutKind.Sequential)]
 public struct SlangGlobalSessionDesc
 {
     /// <summary>
     ///    Size of this struct.
     /// </summary>
-    public uint structureSize;
+    public uint StructureSize = (uint)Unsafe.SizeOf<SlangGlobalSessionDesc>();
 
     /// <summary>
     ///     Slang API version.
     /// </summary>
-    public uint apiVersion;
+    public uint ApiVersion = Slang.ApiVersion;
 
     /// <summary>
     ///     Specify the oldest Slang language version that any sessions will use.
     /// </summary>
-    public SlangLanguageVersion minLanguageVersion;
+    public SlangLanguageVersion MinLanguageVersion = SlangLanguageVersion.V2025;
 
     /// <summary>
     ///     Whether to enable GLSL support.
     /// </summary>
-    public bool enableGLSL;
+    public bool EnableGLSL = false;
 
     /// <summary>
     ///     Reserved for future use.
     /// </summary>
-    public _reserved_e__FixedBuffer reserved;
+    public ReservedFixedBuffer Reserved;
 
     [InlineArray(16)]
-    public partial struct _reserved_e__FixedBuffer
+    public partial struct ReservedFixedBuffer
     {
         public uint e0;
     }
+
+    public SlangGlobalSessionDesc() { }
 }

@@ -2,9 +2,9 @@ namespace SlangShaderSharp;
 
 public enum SlangCompileTarget : int
 {
-    SLANG_TARGET_UNKNOWN,
-    SLANG_TARGET_NONE,
-    SLANG_GLSL,
+    TargetUnknown,
+    TargetNone,
+    Glsl,
 
     [Obsolete("just use `SLANG_GLSL`")]
     SLANG_GLSL_VULKAN_DEPRECATED,

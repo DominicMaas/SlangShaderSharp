@@ -175,7 +175,7 @@ public unsafe partial interface IComponentType
     SlangResult LinkWithOptions(
         out IComponentType linkedComponentType,
         uint compilerOptionEntryCount,
-        CompilerOptionEntry* compilerOptionEntries,
+        CompilerOptionEntryUnmanaged* compilerOptionEntries,
         out ISlangBlob? diagnostics);
 
     [PreserveSig]

@@ -96,9 +96,46 @@ public unsafe partial interface ISession
         out IComponentType compositeComponentType,
         out ISlangBlob? diagnostics);
 
-    // specializeType
+    /// <summary>
+    ///     Specialize a type based on type arguments.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="specializationArgs"></param>
+    /// <param name="specializationArgCount"></param>
+    /// <param name="diagnostics"></param>
+    /// <returns></returns>
+    [PreserveSig]
+    [return: MarshalUsing(typeof(TypeReflectionMarshaller))]
+    TypeReflection SpecializeType(
+        [MarshalUsing(typeof(TypeReflectionMarshaller))] TypeReflection type,
+        SpecializationArg* specializationArgs,
+        int specializationArgCount,
+        out ISlangBlob? diagnostics);
 
-    // getTypeLayout
+    /// <summary>
+    ///     Get the layout `type` on the chosen `target`.
+    /// </summary>
+    [PreserveSig]
+    [return: MarshalUsing(typeof(TypeLayoutReflectionMarshaller))]
+    TypeLayoutReflection GetTypeLayout(
+        [MarshalUsing(typeof(TypeReflectionMarshaller))] TypeReflection type,
+        int targetIndex,
+        LayoutRules rules,
+        out ISlangBlob? diagnostics);
+
+    /// <summary>
+    ///     Get a container type from `elementType`. For example, given type `T`, returns
+    ///     a type that represents `StructuredBuffer<T>`.
+    /// </summary>
+    /// <param name="elementType">The element type to wrap around.</param>
+    /// <param name="containerType">The type of the container to wrap `elementType` in.</param>
+    /// <param name="diagnostics">A blob to receive diagnostic messages.</param>
+    [PreserveSig]
+    [return: MarshalUsing(typeof(TypeReflectionMarshaller))]
+    TypeReflection GetContainerType(
+        [MarshalUsing(typeof(TypeReflectionMarshaller))] TypeReflection elementType,
+        ContainerType containerType,
+        out ISlangBlob? diagnostics);
 
     // getContainerType
 

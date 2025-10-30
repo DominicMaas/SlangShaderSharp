@@ -1,5 +1,4 @@
 ﻿using Shouldly;
-using System.Runtime.InteropServices;
 
 namespace SlangShaderSharp.Tests;
 
@@ -22,18 +21,8 @@ public class UnitTest1
 
         var sessionDesc = new SessionDesc
         {
-            structureSize = (nuint)Marshal.SizeOf<SessionDesc>(),
+            Targets = [new TargetDesc { Format = SlangCompileTarget.SLANG_SPIRV, Profile = globalSession.FindProfile("spirv_1_5") }]
         };
-
-        var targetDesc = new TargetDesc
-        {
-            structureSize = (nuint)Marshal.SizeOf<TargetDesc>(),
-            format = SlangCompileTarget.SLANG_SPIRV,
-            profile = globalSession.FindProfile("spirv_1_5"),
-        };
-
-        sessionDesc.targets = &targetDesc;
-        sessionDesc.targetCount = 1;
 
         globalSession.CreateSession(sessionDesc, out var session).Succeeded.ShouldBeTrue();
         session.ShouldNotBeNull();
@@ -52,17 +41,8 @@ public class UnitTest1
 
         var sessionDesc = new SessionDesc
         {
-            structureSize = (nuint)sizeof(SessionDesc),
+            Targets = [new TargetDesc { Format = SlangCompileTarget.SLANG_WGSL }]
         };
-
-        var targetDesc = new TargetDesc
-        {
-            structureSize = (nuint)sizeof(TargetDesc),
-            format = SlangCompileTarget.SLANG_WGSL,
-        };
-
-        sessionDesc.targets = &targetDesc;
-        sessionDesc.targetCount = 1;
 
         globalSession.CreateSession(sessionDesc, out var session).Succeeded.ShouldBeTrue();
 

@@ -10,6 +10,8 @@ namespace SlangShaderSharp;
 
 internal partial class Slang
 {
+    public const int ApiVersion = 0;
+
     [LibraryImport("slang", EntryPoint = "slang_createBlob")]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static unsafe partial ISlangBlob CreateBlob(void* data, nuint size);

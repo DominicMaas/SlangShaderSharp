@@ -17,19 +17,12 @@ Slang.CreateGlobalSession(0, out var globalSession).Succeeded.ShouldBeTrue();
 
 // 2. Create Session
 
-var sessionDesc = new SessionDesc
-{
-    structureSize = (nuint)sizeof(SessionDesc),
-};
+var sessionDesc = new SessionDesc();
 
-var targetDesc = new TargetDesc
-{
-    structureSize = (nuint)sizeof(TargetDesc),
-    format = SlangCompileTarget.SLANG_WGSL,
-};
+var targetDesc = new TargetDesc { Format = SlangCompileTarget.SLANG_WGSL, };
 
-sessionDesc.targets = &targetDesc;
-sessionDesc.targetCount = 1;
+sessionDesc.Targets = &targetDesc;
+sessionDesc.TargetCount = 1;
 
 globalSession.CreateSession(sessionDesc, out var session).Succeeded.ShouldBeTrue();
 

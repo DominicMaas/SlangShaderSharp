@@ -15,17 +15,8 @@ public class ModuleReflectionTests
 
         var sessionDesc = new SessionDesc
         {
-            structureSize = (nuint)sizeof(SessionDesc),
+            Targets = [new TargetDesc { Format = SlangCompileTarget.SLANG_WGSL }]
         };
-
-        var targetDesc = new TargetDesc
-        {
-            structureSize = (nuint)sizeof(TargetDesc),
-            format = SlangCompileTarget.SLANG_WGSL,
-        };
-
-        sessionDesc.targets = &targetDesc;
-        sessionDesc.targetCount = 1;
 
         globalSession.CreateSession(sessionDesc, out var session).Succeeded.ShouldBeTrue();
 
@@ -46,6 +37,7 @@ public class ModuleReflectionTests
             """u8), out var moduleLoadError);
 
         module.ShouldNotBeNull(moduleLoadError?.AsString ?? "Unknown Error");
+
 
         module.GetName().ShouldBe("test");
         module.GetFilePath().ShouldBe("test.slang");
