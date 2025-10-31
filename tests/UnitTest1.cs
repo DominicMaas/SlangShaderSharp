@@ -75,7 +75,7 @@ public class UnitTest1
         // 6. Link (with options)
 
         composedProgram.LinkWithOptions([
-            new CompilerOptionEntry(CompilerOptionName.Obfuscate, CompilerOptionValue.CreateInt(1))
+            new CompilerOptionEntry(CompilerOptionName.Obfuscate, CompilerOptionValue.FromInt(1))
         ], out _, out var linkError).Succeeded.ShouldBeTrue(linkError?.AsString ?? "Unknown Error");
 
         //composedProgram.Link(out _, out var linkError).Succeeded.ShouldBeTrue(linkError?.AsString ?? "Unknown Error");

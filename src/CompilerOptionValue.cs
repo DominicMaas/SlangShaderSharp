@@ -11,7 +11,7 @@ public struct CompilerOptionValue
     public string? StringValue0;
     public string? StringValue1;
 
-    public static CompilerOptionValue CreateInt(int value0, int? value1 = null)
+    public static CompilerOptionValue FromInt(int value0, int? value1 = null)
     {
         return new CompilerOptionValue
         {
@@ -21,7 +21,7 @@ public struct CompilerOptionValue
         };
     }
 
-    public static CompilerOptionValue CreateString(string value0, string? value1 = null)
+    public static CompilerOptionValue FromString(string value0, string? value1 = null)
     {
         return new CompilerOptionValue
         {
@@ -30,8 +30,6 @@ public struct CompilerOptionValue
             StringValue1 = value1
         };
     }
-
-
 }
 
 internal unsafe struct CompilerOptionValueUnmanaged
