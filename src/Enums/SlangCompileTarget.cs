@@ -9,7 +9,7 @@ public enum SlangCompileTarget : int
     [Obsolete("just use `SLANG_GLSL`")]
     SLANG_GLSL_VULKAN_DEPRECATED,
 
-    [Obsolete]
+    [Obsolete("No Reason Specified")]
     SLANG_GLSL_VULKAN_ONE_DESC_DEPRECATED,
     SLANG_HLSL,
     SLANG_SPIRV,

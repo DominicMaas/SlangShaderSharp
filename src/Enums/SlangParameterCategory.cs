@@ -36,12 +36,12 @@ public enum SlangParameterCategory : uint
     METAL_TEXTURE = SHADER_RESOURCE,
     METAL_SAMPLER = SAMPLER_STATE,
 
-    [Obsolete]
+    [Obsolete("No Reason Specified")]
     VERTEX_INPUT = VARYING_INPUT,
 
-    [Obsolete]
+    [Obsolete("No Reason Specified")]
     FRAGMENT_OUTPUT = VARYING_OUTPUT,
 
-    [Obsolete]
+    [Obsolete("No Reason Specified")]
     COUNT_V1 = SUBPASS,
 }

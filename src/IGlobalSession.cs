@@ -80,7 +80,7 @@ public partial interface IGlobalSession
     ///     Create a compile request.
     /// </summary>
     [PreserveSig]
-    [Obsolete]
+    [Obsolete("No Reason Specified")]
     void CreateCompileRequest(out ICompileRequest compileRequest);
 
     /// <summary>
