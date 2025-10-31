@@ -3,10 +3,10 @@ using System.Runtime.InteropServices.Marshalling;
 namespace SlangShaderSharp;
 
 [NativeMarshalling(typeof(PreprocessorMacroDescMarshaller))]
-public struct PreprocessorMacroDesc
+public struct PreprocessorMacroDesc(string? name, string? value)
 {
-    public string? Name;
-    public string? Value;
+    public string? Name = name;
+    public string? Value = value;
 }
 
 internal unsafe struct PreprocessorMacroDescUnmanaged

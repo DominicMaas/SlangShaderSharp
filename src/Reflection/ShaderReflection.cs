@@ -1,11 +1,13 @@
 ﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
 namespace SlangShaderSharp;
 
 [DebuggerDisplay("{Handle}")]
 [NativeMarshalling(typeof(ShaderReflectionMarshaller))]
-public readonly struct ShaderReflection : IEquatable<ShaderReflection>
+public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
 {
     internal readonly nint Handle;
 
@@ -29,6 +31,22 @@ public readonly struct ShaderReflection : IEquatable<ShaderReflection>
     public override bool Equals(object? obj) => obj is ShaderReflection other && Equals(other);
     public override int GetHashCode() => unchecked((int)Handle);
     public override string ToString() => $"0x{Handle:x}";
+
+    // ---------------- Methods ---------------- //
+
+    //  TODO
+
+    // ---------------- Native Imports ----------------
+
+    [LibraryImport("slang", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial uint spReflection_GetParameterCount(nint handle);
+
+    [LibraryImport("slang", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial uint spReflection_GetTypeParameterCount(nint handle);
+
+
 }
 
 [CustomMarshaller(typeof(ShaderReflection), MarshalMode.Default, typeof(ShaderReflectionMarshaller))]

@@ -41,7 +41,13 @@ public class UnitTest1
 
         var sessionDesc = new SessionDesc
         {
-            Targets = [new TargetDesc { Format = SlangCompileTarget.SLANG_WGSL }]
+            Targets = [new TargetDesc { Format = SlangCompileTarget.SLANG_WGSL }],
+
+            // Slang supports using the preprocessor.
+            PreprocessorMacros = [
+                new PreprocessorMacroDesc("BIAS_VALUE", "1138"),
+                new PreprocessorMacroDesc("OTHER_MACRO", "float")
+            ],
         };
 
         globalSession.CreateSession(sessionDesc, out var session).Succeeded.ShouldBeTrue();
@@ -84,9 +90,14 @@ public class UnitTest1
 
         composedProgram.GetEntryPointCode(0, 0, out var wgslCode, out _).Succeeded.ShouldBeTrue();
 
+        // Or compile all entry points
+        composedProgram.GetTargetCode(0, out var targetCodeBlob, out _).Succeeded.ShouldBeTrue();
+
         // Output
 
         var code = wgslCode.AsString;
+
+        var allCode = targetCodeBlob.AsString;
 
         // Done
 

@@ -1,11 +1,13 @@
 ﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
 namespace SlangShaderSharp;
 
 [DebuggerDisplay("{Handle}")]
 [NativeMarshalling(typeof(TypeLayoutReflectionMarshaller))]
-public readonly struct TypeLayoutReflection : IEquatable<TypeLayoutReflection>
+public readonly partial struct TypeLayoutReflection : IEquatable<TypeLayoutReflection>
 {
     internal readonly nint Handle;
 
@@ -29,6 +31,22 @@ public readonly struct TypeLayoutReflection : IEquatable<TypeLayoutReflection>
     public override bool Equals(object? obj) => obj is TypeLayoutReflection other && Equals(other);
     public override int GetHashCode() => unchecked((int)Handle);
     public override string ToString() => $"0x{Handle:x}";
+
+    // ---------------- Methods ---------------- //
+
+    public TypeReflection Type => Handle != 0 ? spReflectionTypeLayout_GetType(Handle) : TypeReflection.Null;
+
+    public unsafe TypeReflectionKind Kind => Handle != 0 ? spReflectionTypeLayout_getKind(Handle) : TypeReflectionKind.None;
+
+    // ---------------- Native Imports ----------------
+
+    [LibraryImport("slang", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial TypeReflection spReflectionTypeLayout_GetType(nint handle);
+
+    [LibraryImport("slang", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial TypeReflectionKind spReflectionTypeLayout_getKind(nint handle);
 }
 
 [CustomMarshaller(typeof(TypeLayoutReflection), MarshalMode.Default, typeof(TypeLayoutReflectionMarshaller))]

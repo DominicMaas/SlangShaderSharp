@@ -15,7 +15,7 @@ public class ModuleReflectionTests
 
         var sessionDesc = new SessionDesc
         {
-            Targets = [new TargetDesc { Format = SlangCompileTarget.SLANG_WGSL }]
+            Targets = [new TargetDesc { Format = SlangCompileTarget.SLANG_WGSL }],
         };
 
         globalSession.CreateSession(sessionDesc, out var session).Succeeded.ShouldBeTrue();
@@ -47,14 +47,14 @@ public class ModuleReflectionTests
         var reflectionModule = module.GetModuleReflection();
         reflectionModule.ShouldNotBe(DeclReflection.Null);
 
-        reflectionModule.GetName().ShouldBe("test");
-        reflectionModule.GetKind().ShouldBe(DeclReflection.Kind.Module);
+        reflectionModule.Name.ShouldBe("test");
+        reflectionModule.Kind.ShouldBe(DeclReflectionKind.Module);
 
         reflectionModule.Count.ShouldBe(4);
 
-        reflectionModule[0].GetName().ShouldBe("buffer0");
-        reflectionModule[1].GetName().ShouldBe("buffer1");
-        reflectionModule[2].GetName().ShouldBe("result");
-        reflectionModule[3].GetName().ShouldBe("computeMain");
+        reflectionModule[0].Name.ShouldBe("buffer0");
+        reflectionModule[1].Name.ShouldBe("buffer1");
+        reflectionModule[2].Name.ShouldBe("result");
+        reflectionModule[3].Name.ShouldBe("computeMain");
     }
 }
