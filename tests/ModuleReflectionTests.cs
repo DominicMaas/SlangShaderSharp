@@ -9,7 +9,7 @@ public class ModuleReflectionTests
     {
         // 1. Create Global Session
 
-        Slang.CreateGlobalSession(0, out var globalSession).Succeeded.ShouldBeTrue();
+        Slang.CreateGlobalSession(Slang.ApiVersion, out var globalSession).Succeeded.ShouldBeTrue();
 
         // 2. Create Session
 

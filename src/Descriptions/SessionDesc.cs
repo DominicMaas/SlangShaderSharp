@@ -1,5 +1,6 @@
 ﻿// Ignore Spelling: Preprocessor
 
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
 namespace SlangShaderSharp;
@@ -79,8 +80,8 @@ internal static unsafe class SessionDescMarshaller
             targetCount = targetCount,
             flags = managed.Flags,
             defaultMatrixLayoutMode = managed.DefaultMatrixLayoutMode,
-            ///SearchPaths = StringMarshaller.ConvertToUnmanagedArray(managed.SearchPaths, out long searchPathCount),
-            //SearchPathCount = searchPathCount,
+            searchPaths = ConvertStringArrayToUnmanaged(managed.SearchPaths),
+            searchPathCount = managed.SearchPaths?.Length ?? 0,
             preprocessorMacros = PreprocessorMacroDescMarshaller.ConvertToUnmanagedArray(managed.PreprocessorMacros, out var preprocessorMacroCount),
             preprocessorMacroCount = preprocessorMacroCount,
             //FileSystem = managed.FileSystem != null ? ISlangFileSystemMarshaller,
@@ -99,7 +100,7 @@ internal static unsafe class SessionDescMarshaller
             Targets = TargetDescMarshaller.ConvertToManagedArray(unmanaged.targets, (int)unmanaged.targetCount),
             Flags = unmanaged.flags,
             DefaultMatrixLayoutMode = unmanaged.defaultMatrixLayoutMode,
-            //SearchPaths = unmanaged.SearchPaths,
+            SearchPaths = ConvertStringArrayToManaged(unmanaged.searchPaths, (int)unmanaged.searchPathCount),
             PreprocessorMacros = PreprocessorMacroDescMarshaller.ConvertToManagedArray(unmanaged.preprocessorMacros, (int)unmanaged.preprocessorMacroCount),
             //FileSystem = unmanaged.FileSystem,
             EnableEffectAnnotations = unmanaged.enableEffectAnnotations,
@@ -112,7 +113,49 @@ internal static unsafe class SessionDescMarshaller
     public static void Free(SessionDescUnmanaged unmanaged)
     {
         TargetDescMarshaller.FreeArray(unmanaged.targets, (int)unmanaged.targetCount);
+        FreeStringArray(unmanaged.searchPaths, (int)unmanaged.searchPathCount);
         PreprocessorMacroDescMarshaller.FreeArray(unmanaged.preprocessorMacros, (int)unmanaged.preprocessorMacroCount);
         CompilerOptionEntryMarshaller.FreeArray(unmanaged.compilerOptionEntries, (int)unmanaged.compilerOptionEntryCount);
+    }
+
+    private static byte** ConvertStringArrayToUnmanaged(string[]? strings)
+    {
+        if (strings == null || strings.Length == 0)
+            return null;
+
+        byte** result = (byte**)NativeMemory.Alloc((nuint)(strings.Length * sizeof(byte*)));
+        for (var i = 0; i < strings.Length; i++)
+        {
+            result[i] = Utf8StringMarshaller.ConvertToUnmanaged(strings[i]);
+        }
+
+        return result;
+    }
+
+    private static string[]? ConvertStringArrayToManaged(byte** strings, int count)
+    {
+        if (strings == null || count == 0)
+            return null;
+
+        var result = new string[count];
+        for (var i = 0; i < count; i++)
+        {
+            result[i] = Utf8StringMarshaller.ConvertToManaged(strings[i]) ?? string.Empty;
+        }
+
+        return result;
+    }
+
+    private static void FreeStringArray(byte** strings, int count)
+    {
+        if (strings == null)
+            return;
+
+        for (var i = 0; i < count; i++)
+        {
+            Utf8StringMarshaller.Free(strings[i]);
+        }
+
+        NativeMemory.Free(strings);
     }
 }
