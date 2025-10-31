@@ -3,7 +3,7 @@ using System.Runtime.InteropServices.Marshalling;
 
 namespace SlangShaderSharp;
 
-[GeneratedComInterface]
+[GeneratedComInterface(StringMarshalling = StringMarshalling.Utf8)]
 [Guid("5bc42be8-5c50-4929-9e5e-d15e7c24015f")]
 public unsafe partial interface IComponentType
 {
@@ -38,7 +38,6 @@ public unsafe partial interface IComponentType
     ///     the same when it is used in a composition.
     /// </summary>
     [PreserveSig]
-    [return: MarshalUsing(typeof(ShaderReflectionMarshaller))]
     ShaderReflection GetLayout(
         int targetIndex,
         out ISlangBlob? diagnostics);
@@ -61,7 +60,6 @@ public unsafe partial interface IComponentType
     ///     (if non-null) will be filled in with a blob of messages diagnosing the error.
     /// </summary>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult GetEntryPointCode(
         int entryPointIndex,
         int targetIndex,
@@ -77,7 +75,6 @@ public unsafe partial interface IComponentType
     ///     in memory representation.
     /// </summary>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult GetResultAsFileSystem(
         int entryPointIndex,
         int targetIndex,
@@ -105,9 +102,8 @@ public unsafe partial interface IComponentType
     ///      If any diagnostics (error or warnings) are produced, they will be written to `diagnostics`.
     /// </summary>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult Specialize(
-        nint* specializationArgs,
+        [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)][In] SpecializationArg[] specializationArgs,
         int specializationArgCount,
         out IComponentType specializedComponentType,
         out ISlangBlob? diagnostics);
@@ -132,7 +128,6 @@ public unsafe partial interface IComponentType
     ///     but is not currently documented.
     /// </summary>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult Link(
         out IComponentType lLinkedComponentType,
         out ISlangBlob? diagnostics);
@@ -148,7 +143,6 @@ public unsafe partial interface IComponentType
     /// <param name="sharedLibrary">A pointer to a ISharedLibrary interface which functions can be queried on.</param>
     /// <returns>A `SlangResult` to indicate success or failure.</returns>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult GetEntryPointHostCallable(int entryPointIndex,
         int targetIndex,
         out ISlangSharedLibrary sharedLibrary,
@@ -161,9 +155,8 @@ public unsafe partial interface IComponentType
     ///     SpecializedComponentType that contains one EntryPoint component.
     /// </summary>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult RenameEntryPoint(
-        [MarshalAs(UnmanagedType.LPUTF8Str)] string newName,
+        string newName,
         out IComponentType entryPoint);
 
     /// <summary>
@@ -171,32 +164,55 @@ public unsafe partial interface IComponentType
     ///     from the linked program.
     /// </summary>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult LinkWithOptions(
         out IComponentType linkedComponentType,
         uint compilerOptionEntryCount,
-        CompilerOptionEntryUnmanaged* compilerOptionEntries,
+        [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)][In] CompilerOptionEntry[] compilerOptionEntries,
         out ISlangBlob? diagnostics);
 
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult GetTargetCode(
         int targetIndex,
         out ISlangBlob code,
         out ISlangBlob? diagnostics);
 
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult GetTargetMetadata(
         int targetIndex,
         out IMetadata metadata,
         out ISlangBlob? diagnostics);
 
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult GetEntryPointMetadata(
         int entryPointIndex,
         int targetIndex,
         out IMetadata metadata,
         out ISlangBlob? diagnostics);
+}
+
+public static class IComponentTypeExtensions
+{
+    extension(IComponentType compontentType)
+    {
+        /// <summary>
+        ///     Specialize the component by binding its specialization parameters to concrete arguments.
+        ///
+        ///     The `specializationArgs` array must match the number of specialization parameters on this component type.
+        ///
+        ///      If any diagnostics (error or warnings) are produced, they will be written to `diagnostics`.
+        /// </summary>
+        public SlangResult Specialize(SpecializationArg[] specializationArgs, out IComponentType specializedComponentType, out ISlangBlob? diagnostics)
+        {
+            return compontentType.Specialize(specializationArgs, specializationArgs.Length, out specializedComponentType, out diagnostics);
+        }
+
+        /// <summary>
+        ///     Link and specify additional compiler options when generating code
+        ///     from the linked program.
+        /// </summary>
+        public SlangResult LinkWithOptions(CompilerOptionEntry[] compilerOptionEntries, out IComponentType linkedComponentType, out ISlangBlob? diagnostics)
+        {
+            return compontentType.LinkWithOptions(out linkedComponentType, (uint)compilerOptionEntries.Length, compilerOptionEntries, out diagnostics);
+        }
+    }
 }

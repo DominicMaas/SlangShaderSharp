@@ -15,7 +15,7 @@ namespace SlangShaderSharp;
 ///     a single global session should only be used from a single thread at
 ///     a time.
 /// </summary>
-[GeneratedComInterface]
+[GeneratedComInterface(StringMarshalling = StringMarshalling.Utf8)]
 [Guid("c140b5fd-0c78-452e-ba7c-1a1e70c7f71c")]
 public partial interface IGlobalSession
 {
@@ -23,7 +23,6 @@ public partial interface IGlobalSession
     ///     Create a new session for loading and compiling code.
     /// </summary>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult CreateSession(
         SessionDesc description,
         out ISession sesion);
@@ -36,7 +35,7 @@ public partial interface IGlobalSession
     ///     profiles by name at runtime.
     /// </summary>
     [PreserveSig]
-    SlangProfileID FindProfile([MarshalAs(UnmanagedType.LPUTF8Str)] string name);
+    SlangProfileID FindProfile(string name);
 
     /// <summary>
     ///     Set the path that downstream compilers (aka back end compilers) will be looked from.
@@ -51,7 +50,7 @@ public partial interface IGlobalSession
     [PreserveSig]
     void SetDownstreamCompilerPath(
         SlangPassThrough passThrough,
-        [MarshalAs(UnmanagedType.LPUTF8Str)] string path);
+        string path);
 
     /// <summary>
     ///     Set the 'prelude' for generated code for a 'downstream compiler'.
@@ -65,7 +64,7 @@ public partial interface IGlobalSession
     [Obsolete("Use SetLanguagePrelude instead")]
     void SetDownstreamCompilerPrelude(
         SlangPassThrough passThrough,
-        [MarshalAs(UnmanagedType.LPUTF8Str)] string preludeText);
+        string preludeText);
 
     /// <summary>
     ///     Get the 'prelude' associated with a specific source language.
@@ -89,8 +88,8 @@ public partial interface IGlobalSession
     /// </summary>
     [PreserveSig]
     void AddBuiltins(
-        [MarshalAs(UnmanagedType.LPUTF8Str)] string sourcePath,
-        [MarshalAs(UnmanagedType.LPUTF8Str)] string sourceString);
+        string sourcePath,
+        string sourceString);
 
     /// <summary>
     ///     Set the session shared library loader. If this changes the loader, it may cause shared
@@ -118,11 +117,9 @@ public partial interface IGlobalSession
     ///     could not be found SLANG_FAIL other kinds of failures
     /// </returns>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult CheckCompileTargetSupport(SlangCompileTarget target);
 
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult CheckPassThroughSupport(SlangPassThrough passThrough);
 
     /// <summary>
@@ -134,7 +131,6 @@ public partial interface IGlobalSession
     ///      NOTE! API is experimental and not ready for production code
     /// </remarks>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult CompileCoreModule(CompileCoreModuleFlags flags);
 
     /// <summary>
@@ -146,7 +142,6 @@ public partial interface IGlobalSession
     ///      NOTE! API is experimental and not ready for production code
     /// </remarks>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult LoadCoreModule(
         nint coreModule,
         nuint coreModuleSizeInBytes);
@@ -160,7 +155,6 @@ public partial interface IGlobalSession
     ///     NOTE! API is experimental and not ready for production code
     /// </remarks>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult SaveCoreModule(
         SlangArchiveType archiveType,
         out ISlangBlob outBlob);
@@ -173,7 +167,7 @@ public partial interface IGlobalSession
     ///     capabilities by name at runtime.
     /// </summary>
     [PreserveSig]
-    SlangCapabilityID FindCapability([MarshalAs(UnmanagedType.LPUTF8Str)] string name);
+    SlangCapabilityID FindCapability(string name);
 
     /// <summary>
     ///     Set the downstream/pass through compiler to be used for a transition from the source type to
@@ -212,8 +206,7 @@ public partial interface IGlobalSession
     ///     parsing and checking any SPIR-V code
     /// </summary>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
-    SlangResult SetSPIRVCoreGrammar([MarshalAs(UnmanagedType.LPUTF8Str)] string jsonPath);
+    SlangResult SetSPIRVCoreGrammar(string jsonPath);
 
     /// <summary>
     ///     Parse slangc command line options into a SessionDesc that can be used to create a session
@@ -225,10 +218,9 @@ public partial interface IGlobalSession
     /// <param name="auxAllocation">Auxiliary memory allocated to hold data used in the session desc.</param>
     /// <returns></>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult ParseCommandLineArguments(
         int argc,
-        [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPUTF8Str)] string[] argv,
+        [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 0)][In] string[] argv,
         out SessionDesc sessionDesc,
         out nint auxAllocation);
 
@@ -236,7 +228,6 @@ public partial interface IGlobalSession
     ///     Computes a digest that uniquely identifies the session description.
     /// </summary>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult GetSessionDescDigest(
         SessionDesc sessionDesc,
         out ISlangBlob blob);
@@ -251,7 +242,6 @@ public partial interface IGlobalSession
     ///      NOTE! API is experimental and not ready for production code.
     /// </remarks>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult CompileBuiltinModule(
         BuiltinModuleName module,
         CompileCoreModuleFlags flags);
@@ -266,7 +256,6 @@ public partial interface IGlobalSession
     ///     NOTE! API is experimental and not ready for production code
     /// </remarks>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult LoadBuiltinModule(
         BuiltinModuleName module,
         nint moduleData,
@@ -282,7 +271,6 @@ public partial interface IGlobalSession
     ///     NOTE! API is experimental and not ready for production code
     /// </remarks>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult SaveBuiltinModule(
         BuiltinModuleName module,
         SlangArchiveType archiveType,

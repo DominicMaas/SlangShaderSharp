@@ -72,9 +72,13 @@ public class UnitTest1
 
         session.CreateCompositeComponentType([module, entryPoint], out var composedProgram, out _).Succeeded.ShouldBeTrue();
 
-        // 6. Link
+        // 6. Link (with options)
 
-        composedProgram.Link(out _, out var linkError).Succeeded.ShouldBeTrue(linkError?.AsString ?? "Unknown Error");
+        composedProgram.LinkWithOptions([
+            new CompilerOptionEntry(CompilerOptionName.Obfuscate, CompilerOptionValue.CreateInt(1))
+        ], out _, out var linkError).Succeeded.ShouldBeTrue(linkError?.AsString ?? "Unknown Error");
+
+        //composedProgram.Link(out _, out var linkError).Succeeded.ShouldBeTrue(linkError?.AsString ?? "Unknown Error");
 
         // 7. Get Target Kernel Code
 
@@ -82,7 +86,7 @@ public class UnitTest1
 
         // Output
 
-        _ = wgslCode.AsString;
+        var code = wgslCode.AsString;
 
         // Done
 

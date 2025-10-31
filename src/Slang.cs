@@ -12,7 +12,7 @@ internal partial class Slang
 {
     public const int ApiVersion = 0;
 
-    [LibraryImport("slang", EntryPoint = "slang_createBlob")]
+    [LibraryImport("slang", EntryPoint = "slang_createBlob", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static unsafe partial ISlangBlob CreateBlob(void* data, nuint size);
 
@@ -42,9 +42,8 @@ internal partial class Slang
     /// </summary>
     /// <param name="apiVersion">Pass in SLANG_API_VERSION</param>
     /// <param name="globalSession">The created global session.</param>
-    [LibraryImport("slang", EntryPoint = "slang_createGlobalSession")]
+    [LibraryImport("slang", EntryPoint = "slang_createGlobalSession", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     public static partial SlangResult CreateGlobalSession(int apiVersion, out IGlobalSession globalSession);
 
     /// <summary>
@@ -52,9 +51,8 @@ internal partial class Slang
     /// </summary>
     /// <param name="desc">Description of the global session.</param>
     /// <param name="globalSession">The created global session.</param>
-    [LibraryImport("slang", EntryPoint = "slang_createGlobalSession2")]
+    [LibraryImport("slang", EntryPoint = "slang_createGlobalSession2", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     public static partial SlangResult CreateGlobalSession2(SlangGlobalSessionDesc desc, out IGlobalSession globalSession);
 
     /// <summary>
@@ -63,9 +61,8 @@ internal partial class Slang
     /// </summary>
     /// <param name="apiVersion">Pass in SLANG_API_VERSION</param>
     /// <param name="globalSession">The created global session that doesn't have a core module setup.</param>
-    [LibraryImport("slang", EntryPoint = "slang_createGlobalSessionWithoutCoreModule")]
+    [LibraryImport("slang", EntryPoint = "slang_createGlobalSessionWithoutCoreModule", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     public static partial SlangResult CreateGlobalSessionWithoutCoreModule(int apiVersion, out IGlobalSession globalSession);
 
     /// <summary>
@@ -74,7 +71,7 @@ internal partial class Slang
     ///
     ///     NOTE! API is experimental and not ready for production code
     /// </summary>
-    [LibraryImport("slang", EntryPoint = "slang_getEmbeddedCoreModule")]
+    [LibraryImport("slang", EntryPoint = "slang_getEmbeddedCoreModule", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     public static partial ISlangBlob GetEmbeddedCoreModule();
 
@@ -84,14 +81,14 @@ internal partial class Slang
     ///     have been released. No other Slang functions such as `createGlobalSession`
     ///     should be called after this function.
     /// </summary>
-    [LibraryImport("slang", EntryPoint = "slang_shutdown")]
+    [LibraryImport("slang", EntryPoint = "slang_shutdown", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     public static partial void Shutdown();
 
     /// <summary>
     ///     Return the last signaled internal error message.
     /// </summary>
-    [LibraryImport("slang", EntryPoint = "slang_getLastInternalErrorMessage")]
+    [LibraryImport("slang", EntryPoint = "slang_getLastInternalErrorMessage", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     [return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]
     public static partial string GetLastInternalErrorMessage();

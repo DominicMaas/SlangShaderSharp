@@ -4,6 +4,7 @@ using System.Runtime.InteropServices.Marshalling;
 namespace SlangShaderSharp;
 
 [DebuggerDisplay("{_result}")]
+[NativeMarshalling(typeof(SlangResultMarshaller))]
 public readonly struct SlangResult(int value) : IEquatable<SlangResult>
 {
     // Facilities

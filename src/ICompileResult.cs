@@ -8,7 +8,7 @@ namespace SlangShaderSharp;
 ///     This is needed for features such as separate debug compilation which
 ///     output both base and debug spirv.
 /// </summary>
-[GeneratedComInterface]
+[GeneratedComInterface(StringMarshalling = StringMarshalling.Utf8)]
 [Guid("5fa9380e-b62f-41e5-9f12-4bad4d9eaae4")]
 public unsafe partial interface ICompileResult : ISlangCastable
 {
@@ -16,12 +16,10 @@ public unsafe partial interface ICompileResult : ISlangCastable
     uint GetItemCount();
 
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult GetItemData(
         uint index,
         out ISlangBlob blob);
 
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult GetMetadata(out IMetadata metadata);
 }

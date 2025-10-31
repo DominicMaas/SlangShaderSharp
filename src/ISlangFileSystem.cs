@@ -14,7 +14,7 @@ namespace SlangShaderSharp;
 ///     the caller of any method that returns a ISlangBlob to release the blob when it is no
 ///     longer used (using 'release').
 /// </summary>
-[GeneratedComInterface]
+[GeneratedComInterface(StringMarshalling = StringMarshalling.Utf8)]
 [Guid("003a09fc-3a4d-4ba0-ad60-1fd863a915ab")]
 public partial interface ISlangFileSystem
 {
@@ -33,8 +33,7 @@ public partial interface ISlangFileSystem
     /// <param name="outBlob">A destination pointer to receive the blob of the file contents.</param>
     /// <returns>A `SlangResult` to indicate success or failure in loading the file.</returns>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult LoadFile(
-        [MarshalAs(UnmanagedType.LPStr)] string path,
+        string path,
         out ISlangBlob outBlob);
 }

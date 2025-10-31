@@ -3,7 +3,7 @@ using System.Runtime.InteropServices.Marshalling;
 
 namespace SlangShaderSharp;
 
-[GeneratedComInterface]
+[GeneratedComInterface(StringMarshalling = StringMarshalling.Utf8)]
 [Guid("6264ab2b-a3e8-4a06-97f1-49bc2d2ab14d")]
 public partial interface ISlangSharedLibraryLoader
 {
@@ -17,6 +17,7 @@ public partial interface ISlangSharedLibraryLoader
     /// <param name="sharedLibrary">Holds the shared library if successfully loaded</param>
     /// <returns></returns>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
-    SlangResult LoadSharedLibrary([MarshalAs(UnmanagedType.LPUTF8Str)] string path, out ISlangSharedLibrary sharedLibrary);
+    SlangResult LoadSharedLibrary(
+        string path,
+        out ISlangSharedLibrary sharedLibrary);
 }

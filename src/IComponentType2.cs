@@ -13,19 +13,17 @@ namespace SlangShaderSharp;
 ///     are used to get the base and debug spirv, and metadata containing the
 ///     debug build identifier.
 /// </summary>
-[GeneratedComInterface]
+[GeneratedComInterface(StringMarshalling = StringMarshalling.Utf8)]
 [Guid("9c2a4b3d-7f68-4e91-a52c-8b193e457a9f")]
 public partial interface IComponentType2
 {
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult GetTargetCompileResult(
         int targetIndex,
         out ICompileResult compileResult,
         out ISlangBlob? diagnostics);
 
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult GetEntryPointCompileResult(
         int entryPointIndex,
         int targetIndex,

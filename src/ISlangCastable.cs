@@ -7,7 +7,7 @@ namespace SlangShaderSharp;
 ///     An interface to provide a mechanism to cast, that doesn't require ref counting
 ///     and doesn't have to return a pointer to a ISlangUnknown derived class
 /// </summary>
-[GeneratedComInterface]
+[GeneratedComInterface(StringMarshalling = StringMarshalling.Utf8)]
 [Guid("87ede0e1-4852-44b0-8bf2-cb31874de239")]
 public partial interface ISlangCastable
 {

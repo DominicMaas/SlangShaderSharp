@@ -12,7 +12,7 @@ namespace SlangShaderSharp;
 ///     All paths as input char*, or output as ISlangBlobs are always encoded as UTF-8 strings.
 ///     Blobs that contain strings are always zero terminated.
 /// </summary>
-[GeneratedComInterface]
+[GeneratedComInterface(StringMarshalling = StringMarshalling.Utf8)]
 [Guid("5fb632d2-979d-4481-9fee-663c3f1449e1")]
 public unsafe partial interface ISlangFileSystemExt : ISlangFileSystem
 {
@@ -47,9 +47,8 @@ public unsafe partial interface ISlangFileSystemExt : ISlangFileSystem
     /// </summary>
     /// <returns>A `SlangResult` to indicate success or failure getting the uniqueIdentity.</returns>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult GetFileUniqueIdentity(
-        [MarshalAs(UnmanagedType.LPUTF8Str)] string path,
+        string path,
         out ISlangBlob uniqueIdentity);
 
     /// <summary>
@@ -63,11 +62,10 @@ public unsafe partial interface ISlangFileSystemExt : ISlangFileSystem
     /// <param name="pathOut">Holds the string which is the relative path. The string is held in the blob zero terminated.</param>
     /// <returns>A `SlangResult` to indicate success or failure in loading the file.</returns>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult CalcCombinedPath(
         SlangPathType fromPathType,
-        [MarshalAs(UnmanagedType.LPUTF8Str)] string fromPath,
-        [MarshalAs(UnmanagedType.LPUTF8Str)] string path,
+        string fromPath,
+        string path,
         out ISlangBlob pathOut);
 
     /// <summary>
@@ -75,9 +73,8 @@ public unsafe partial interface ISlangFileSystemExt : ISlangFileSystem
     /// </summary>
     /// <returns>SLANG_OK if located and type is known, else an error. SLANG_E_NOT_FOUND if not found.</returns>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult GetPathType(
-        [MarshalAs(UnmanagedType.LPUTF8Str)] string path,
+        string path,
         out SlangPathType pathType);
 
     /// <summary>
@@ -88,10 +85,9 @@ public unsafe partial interface ISlangFileSystemExt : ISlangFileSystem
     /// <param name="pathOut">The output path held in a blob</param>
     /// <returns>SLANG_OK if successfully simplified the path (SLANG_E_NOT_IMPLEMENTED if not implemented, or some other error code)</returns>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult GetPath(
         PathKind kind,
-        [MarshalAs(UnmanagedType.LPUTF8Str)] string path,
+        string path,
         out ISlangBlob pathOut);
 
     /// <summary>
@@ -111,9 +107,8 @@ public unsafe partial interface ISlangFileSystemExt : ISlangFileSystem
     /// <param name="userData">This is passed to the callback</param>
     /// <returns>SLANG_OK if successful</returns>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult EnumeratePathContents(
-        [MarshalAs(UnmanagedType.LPUTF8Str)] string path,
+        string path,
         delegate* unmanaged[Stdcall]<SlangPathType, char*, void*, void> callback,
         void* userData);
 

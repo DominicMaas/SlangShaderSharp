@@ -3,14 +3,13 @@ using System.Runtime.InteropServices.Marshalling;
 namespace SlangShaderSharp;
 
 [NativeMarshalling(typeof(CompilerOptionEntryMarshaller))]
-public struct CompilerOptionEntry
+public struct CompilerOptionEntry(CompilerOptionName name, CompilerOptionValue value)
 {
-    public CompilerOptionName Name;
-    public CompilerOptionValue Value;
+    public CompilerOptionName Name = name;
+    public CompilerOptionValue Value = value;
 }
 
-// TODO: Make internal
-public struct CompilerOptionEntryUnmanaged
+internal struct CompilerOptionEntryUnmanaged
 {
     public CompilerOptionName name;
     public CompilerOptionValueUnmanaged value;

@@ -29,7 +29,7 @@ namespace SlangShaderSharp;
 ///     Applications wishing to control the memory usage for compiled
 ///     and loaded code should use multiple sessions.
 /// </summary>
-[GeneratedComInterface]
+[GeneratedComInterface(StringMarshalling = StringMarshalling.Utf8)]
 [Guid("67618701-d116-468f-ab3b-474bedce0e3d")]
 public unsafe partial interface ISession
 {
@@ -45,7 +45,7 @@ public unsafe partial interface ISession
     /// </summary>
     [PreserveSig]
     IModule? LoadModule(
-        [MarshalAs(UnmanagedType.LPUTF8Str)] string moduleName,
+        string moduleName,
         out ISlangBlob? diagnostics);
 
     /// <summary>
@@ -53,8 +53,8 @@ public unsafe partial interface ISession
     /// </summary>
     [PreserveSig]
     IModule? LoadModuleFromSource(
-        [MarshalAs(UnmanagedType.LPUTF8Str)] string moduleName,
-        [MarshalAs(UnmanagedType.LPUTF8Str)] string path,
+        string moduleName,
+        string path,
         ISlangBlob source,
         out ISlangBlob? diagnostics);
 
@@ -89,7 +89,6 @@ public unsafe partial interface ISession
     ///     aggregates a single module more than once.
     /// </summary>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult CreateCompositeComponentType(
         nint* componentTypes,
         long componentTypeCount,
@@ -99,16 +98,10 @@ public unsafe partial interface ISession
     /// <summary>
     ///     Specialize a type based on type arguments.
     /// </summary>
-    /// <param name="type"></param>
-    /// <param name="specializationArgs"></param>
-    /// <param name="specializationArgCount"></param>
-    /// <param name="diagnostics"></param>
-    /// <returns></returns>
     [PreserveSig]
-    [return: MarshalUsing(typeof(TypeReflectionMarshaller))]
     TypeReflection SpecializeType(
-        [MarshalUsing(typeof(TypeReflectionMarshaller))] TypeReflection type,
-        SpecializationArg* specializationArgs,
+        TypeReflection type,
+        [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)][In] SpecializationArg[] specializationArgs,
         int specializationArgCount,
         out ISlangBlob? diagnostics);
 
@@ -116,9 +109,8 @@ public unsafe partial interface ISession
     ///     Get the layout `type` on the chosen `target`.
     /// </summary>
     [PreserveSig]
-    [return: MarshalUsing(typeof(TypeLayoutReflectionMarshaller))]
     TypeLayoutReflection GetTypeLayout(
-        [MarshalUsing(typeof(TypeReflectionMarshaller))] TypeReflection type,
+        TypeReflection type,
         int targetIndex,
         LayoutRules rules,
         out ISlangBlob? diagnostics);
@@ -131,9 +123,8 @@ public unsafe partial interface ISession
     /// <param name="containerType">The type of the container to wrap `elementType` in.</param>
     /// <param name="diagnostics">A blob to receive diagnostic messages.</param>
     [PreserveSig]
-    [return: MarshalUsing(typeof(TypeReflectionMarshaller))]
     TypeReflection GetContainerType(
-        [MarshalUsing(typeof(TypeReflectionMarshaller))] TypeReflection elementType,
+        TypeReflection elementType,
         ContainerType containerType,
         out ISlangBlob? diagnostics);
 
@@ -168,6 +159,14 @@ public static class ISessionExtensions
 {
     extension(ISession session)
     {
+        /// <summary>
+        ///     Specialize a type based on type arguments.
+        /// </summary>
+        public TypeReflection SpecializeType(TypeReflection type, SpecializationArg[] specializationArgs, out ISlangBlob? diagnostics)
+        {
+            return session.SpecializeType(type, specializationArgs, specializationArgs.Length, out diagnostics);
+        }
+
         /// <summary>
         ///     Combine multiple component types to create a composite component type.
         ///

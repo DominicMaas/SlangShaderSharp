@@ -10,10 +10,31 @@ public struct CompilerOptionValue
     public int IntValue1;
     public string? StringValue0;
     public string? StringValue1;
+
+    public static CompilerOptionValue CreateInt(int value0, int? value1 = null)
+    {
+        return new CompilerOptionValue
+        {
+            Kind = CompilerOptionValueKind.Int,
+            IntValue0 = value0,
+            IntValue1 = value1 ?? 0
+        };
+    }
+
+    public static CompilerOptionValue CreateString(string value0, string? value1 = null)
+    {
+        return new CompilerOptionValue
+        {
+            Kind = CompilerOptionValueKind.String,
+            StringValue0 = value0,
+            StringValue1 = value1
+        };
+    }
+
+
 }
 
-// TODO: Make internal
-public unsafe struct CompilerOptionValueUnmanaged
+internal unsafe struct CompilerOptionValueUnmanaged
 {
     public CompilerOptionValueKind kind;
     public int intValue0;

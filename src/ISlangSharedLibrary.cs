@@ -9,7 +9,7 @@ namespace SlangShaderSharp;
 ///     An interface that can be used to encapsulate access to a shared library. An implementation
 ///     does not have to implement the library as a shared library
 /// </summary>
-[GeneratedComInterface]
+[GeneratedComInterface(StringMarshalling = StringMarshalling.Utf8)]
 [Guid("70dbc7c4-dc3b-4a07-ae7e-752af6a81555")]
 public unsafe partial interface ISlangSharedLibrary : ISlangCastable
 {
@@ -19,7 +19,7 @@ public unsafe partial interface ISlangSharedLibrary : ISlangCastable
     /// <param name="name">name The name of the function</param>
     /// <returns>The function pointer related to the name or nullptr if not found</returns>
     [PreserveSig]
-    nint FindFuncByName([MarshalAs(UnmanagedType.LPUTF8Str)] string name);
+    nint FindFuncByName(string name);
 
     /// <summary>
     ///     Get a symbol by name. If the library is unloaded will only return nullptr.
@@ -27,5 +27,5 @@ public unsafe partial interface ISlangSharedLibrary : ISlangCastable
     /// <param name="name">The name of the symbol</param>
     /// <returns>The pointer related to the name or nullptr if not found</returns>
     [PreserveSig]
-    nint FindSymbolAddressByName([MarshalAs(UnmanagedType.LPUTF8Str)] string name);
+    nint FindSymbolAddressByName(string name);
 }

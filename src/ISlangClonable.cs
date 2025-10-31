@@ -3,7 +3,7 @@ using System.Runtime.InteropServices.Marshalling;
 
 namespace SlangShaderSharp;
 
-[GeneratedComInterface]
+[GeneratedComInterface(StringMarshalling = StringMarshalling.Utf8)]
 [Guid("1ec36168-e9f4-430d-bb17-048a8046b31f")]
 public unsafe partial interface ISlangClonable : ISlangCastable
 {

@@ -18,7 +18,7 @@ namespace SlangShaderSharp;
 ///
 ///     A module establishes a namespace for looking up types, functions, etc.
 /// </summary>
-[GeneratedComInterface]
+[GeneratedComInterface(StringMarshalling = StringMarshalling.Utf8)]
 [Guid("0c720e64-8722-4d31-8990-638a98b1c279")]
 public unsafe partial interface IModule : IComponentType
 {
@@ -29,9 +29,8 @@ public unsafe partial interface IModule : IComponentType
     ///     `IModule::findAndCheckEntryPoint` instead.
     /// </summary>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult FindEntryPointByName(
-        [MarshalAs(UnmanagedType.LPUTF8Str)] string name,
+        string name,
         out IEntryPoint entryPoint);
 
     /// <summary>
@@ -48,7 +47,6 @@ public unsafe partial interface IModule : IComponentType
     /// </summary>
     /// <returns></returns>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult GetDefinedEntryPoint(
         int index,
         out IEntryPoint entryPoint);
@@ -57,7 +55,6 @@ public unsafe partial interface IModule : IComponentType
     ///     Get a serialized representation of the checked module.
     /// </summary>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult Serialize(out ISlangBlob serializedBlob);
 
     /// <summary>
@@ -65,8 +62,7 @@ public unsafe partial interface IModule : IComponentType
     /// </summary>
     /// <returns></returns>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
-    SlangResult WriteToFile([MarshalAs(UnmanagedType.LPUTF8Str)] string fileName);
+    SlangResult WriteToFile(string fileName);
 
     /// <summary>
     ///     Get the name of the module.
@@ -94,9 +90,8 @@ public unsafe partial interface IModule : IComponentType
     ///      not marked with the `[shader("...")]` attribute.
     /// </summary>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult FindAndCheckEntryPoint(
-        [MarshalAs(UnmanagedType.LPUTF8Str)] string name,
+        string name,
         SlangStage stage,
         out IEntryPoint entryPoint,
         out ISlangBlob? diagnostics);
@@ -118,7 +113,6 @@ public unsafe partial interface IModule : IComponentType
     string GetDependencyFilePath(int index);
 
     [PreserveSig]
-    [return: MarshalUsing(typeof(DeclReflectionMarshaller))]
     DeclReflection GetModuleReflection();
 
     /// <summary>
@@ -127,6 +121,5 @@ public unsafe partial interface IModule : IComponentType
     /// <param name="disassembledBlob"></param>
     /// <returns></returns>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult Disassemble(out ISlangBlob disassembledBlob);
 }

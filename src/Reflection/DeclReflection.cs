@@ -88,40 +88,37 @@ public readonly partial struct DeclReflection : IEquatable<DeclReflection>, IRea
 
     // ---------------- Native Imports ----------------
 
-    [LibraryImport("slang")]
+    [LibraryImport("slang", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     [return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]
     private static unsafe partial string spReflectionDecl_getName(nint decl);
 
-    [LibraryImport("slang")]
+    [LibraryImport("slang", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial Kind spReflectionDecl_getKind(nint decl);
 
-    [LibraryImport("slang")]
+    [LibraryImport("slang", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial uint spReflectionDecl_getChildrenCount(nint decl);
 
-    [LibraryImport("slang")]
+    [LibraryImport("slang", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    [return: MarshalUsing(typeof(DeclReflectionMarshaller))]
     private static partial DeclReflection spReflectionDecl_getChild(nint decl, uint index);
 
     // getType
 
     // asVariable
 
-    [LibraryImport("slang")]
+    [LibraryImport("slang", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    [return: MarshalUsing(typeof(FunctionReflectionMarshaller))]
     private static partial FunctionReflection spReflectionDecl_castToFunction(nint decl);
 
     // asFunction
 
     // asGeneric
 
-    [LibraryImport("slang")]
+    [LibraryImport("slang", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    [return: MarshalUsing(typeof(DeclReflectionMarshaller))]
     private static partial DeclReflection spReflectionDecl_getParent(nint decl);
 
     // findModifier

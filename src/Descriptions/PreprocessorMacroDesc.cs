@@ -9,7 +9,7 @@ public struct PreprocessorMacroDesc
     public string? Value;
 }
 
-public unsafe struct PreprocessorMacroDescUnmanaged
+internal unsafe struct PreprocessorMacroDescUnmanaged
 {
     public byte* name;
     public byte* value;

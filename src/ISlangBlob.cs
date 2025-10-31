@@ -9,7 +9,7 @@ namespace SlangShaderSharp;
 ///
 ///     This interface definition is compatible with the `ID3DBlob` and `ID3D10Blob` interfaces.
 /// </summary>
-[GeneratedComInterface]
+[GeneratedComInterface(StringMarshalling = StringMarshalling.Utf8)]
 [Guid("8ba5fb08-5195-40e2-ac58-0d989c3a0102")]
 public unsafe partial interface ISlangBlob
 {

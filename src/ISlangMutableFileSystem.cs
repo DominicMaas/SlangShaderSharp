@@ -3,7 +3,7 @@ using System.Runtime.InteropServices.Marshalling;
 
 namespace SlangShaderSharp;
 
-[GeneratedComInterface]
+[GeneratedComInterface(StringMarshalling = StringMarshalling.Utf8)]
 [Guid("a058675c-1d65-452a-8458-ccded1427105")]
 public unsafe partial interface ISlangMutableFileSystem : ISlangFileSystemExt
 {
@@ -15,9 +15,8 @@ public unsafe partial interface ISlangMutableFileSystem : ISlangFileSystemExt
     /// <param name="size">The size of the data in bytes</param>
     /// <returns>SLANG_OK if successful (SLANG_E_NOT_IMPLEMENTED if not implemented, or some other error code)</returns>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult SaveFile(
-        [MarshalAs(UnmanagedType.LPUTF8Str)] string path,
+        string path,
         void* data,
         nuint size);
 
@@ -34,9 +33,8 @@ public unsafe partial interface ISlangMutableFileSystem : ISlangFileSystemExt
     /// <param name="dataBlob">The data to be saved</param>
     /// <returns>SLANG_OK if successful (SLANG_E_NOT_IMPLEMENTED if not implemented, or some other error code)</returns>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
     SlangResult SaveFileBlob(
-        [MarshalAs(UnmanagedType.LPUTF8Str)] string path,
+        string path,
         nint dataBlob);
 
     /// <summary>
@@ -46,8 +44,7 @@ public unsafe partial interface ISlangMutableFileSystem : ISlangFileSystemExt
     /// <param name="path">The path to remove</param>
     /// <returns>SLANG_OK if successful</returns>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
-    SlangResult Remove([MarshalAs(UnmanagedType.LPUTF8Str)] string path);
+    SlangResult Remove(string path);
 
     /// <summary>
     ///     Create a directory.
@@ -57,6 +54,5 @@ public unsafe partial interface ISlangMutableFileSystem : ISlangFileSystemExt
     /// <param name="path">To the directory to create. The parent path *must* exist otherwise will return an error.</param>
     /// <returns>SLANG_OK if successful</returns>
     [PreserveSig]
-    [return: MarshalUsing(typeof(SlangResultMarshaller))]
-    SlangResult CreateDirectory([MarshalAs(UnmanagedType.LPUTF8Str)] string path);
+    SlangResult CreateDirectory(string path);
 }
