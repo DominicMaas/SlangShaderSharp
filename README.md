@@ -2,7 +2,7 @@
 
 A very rough in development C# binding for the Slang shading language.
 
-Bindings written against 2025.19.1.
+Bindings written against 2025.20.
 
 Not all bindings have been implemented yet!
 
