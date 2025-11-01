@@ -1,4 +1,5 @@
 ﻿using SlangShaderSharp.Internal;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
@@ -8,7 +9,7 @@ using System.Text;
 
 namespace SlangShaderSharp;
 
-internal partial class Slang
+public partial class Slang
 {
     public const int ApiVersion = 0;
 
@@ -83,6 +84,7 @@ internal partial class Slang
     /// </summary>
     [LibraryImport("slang", EntryPoint = "slang_shutdown", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    [SuppressMessage("Interoperability", "CA1401:P/Invokes should not be visible", Justification = "Is Safe")]
     public static partial void Shutdown();
 
     /// <summary>
