@@ -5,8 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <AnalysisLevel>latest</AnalysisLevel>
-    <AnalysisMode>Recommended</AnalysisMode>
+    <AnalysisLevel>latest-Minimum</AnalysisLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <ILLinkTreatWarningsAsErrors>true</ILLinkTreatWarningsAsErrors>
     <IsTrimmable>true</IsTrimmable>
@@ -19,15 +18,17 @@
     <Version>2025.20.0.0</Version>
     <EnablePackageValidation>true</EnablePackageValidation>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
   <PropertyGroup>
     <PackageId>SlangShaderSharp</PackageId>
     <Authors>Dominic Maas</Authors>
     <Description>C# bindings for the Slang Shader Language compiler</Description>
-	<PackageProjectUrl>https://github.com/DominicMaas/SlangShaderSharp/</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/DominicMaas/SlangShaderSharp</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <RepositoryUrl>https://github.com/DominicMaas/SlangShaderSharp</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -55,7 +56,11 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.HighPerformance" Version="8.4.0" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="..\.editorconfig" />
   </ItemGroup>
 
 </Project>
