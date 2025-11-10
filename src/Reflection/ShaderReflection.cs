@@ -38,11 +38,11 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
 
     // ---------------- Native Imports ----------------
 
-    [LibraryImport("slang", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial uint spReflection_GetParameterCount(nint handle);
 
-    [LibraryImport("slang", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial uint spReflection_GetTypeParameterCount(nint handle);
 

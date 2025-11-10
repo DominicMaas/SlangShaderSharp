@@ -128,31 +128,155 @@ public unsafe partial interface ISession
         ContainerType containerType,
         out ISlangBlob? diagnostics);
 
-    // getContainerType
+    /// <summary>
+    ///      Return a `TypeReflection` that represents the `__Dynamic` type.
+    ///      This type can be used as a specialization argument to indicate using
+    ///      dynamic dispatch.
+    /// </summary>
+    /// <returns></returns>
+    [PreserveSig]
+    TypeReflection GetDynamicType();
 
-    // getDynamicType
+    /// <summary>
+    ///     Get the mangled name for a type RTTI object.
+    /// </summary>
+    [PreserveSig]
+    SlangResult GetTypeRTTIMangledName(
+        TypeReflection type,
+        out ISlangBlob nameBlob);
 
-    // getTypeRTTIMangledName
+    /// <summary>
+    ///     Get the mangled name for a type witness.
+    /// </summary>
+    /// <returns></returns>
+    [PreserveSig]
+    SlangResult GetTypeConformanceWitnessMangledName(
+        TypeReflection type,
+        TypeReflection interfaceType,
+        out ISlangBlob nameBlob);
 
-    // getTypeConformanceWitnessMangledName
+    /// <summary>
+    ///     Get the sequential ID used to identify a type witness in a dynamic object.
+    ///     The sequential ID is part of the RTTI bytes returned by `getDynamicObjectRTTIBytes`.
+    /// </summary>
+    [PreserveSig]
+    SlangResult GetTypeConformanceWitnessSequentialID(
+        TypeReflection type,
+        TypeReflection interfaceType,
+        out uint id);
 
-    // getTypeConformanceWitnessSequentialID
+    /// <summary>
+    ///     Create a request to load/compile front-end code.
+    /// </summary>
+    [PreserveSig]
+    SlangResult CreateCompileRequest(out ICompileRequest compileRequest);
 
-    // createCompileRequest
+    /// <summary>
+    ///     Creates a `IComponentType` that represents a type's conformance to an interface.
+    ///     The retrieved `ITypeConformance` objects can be included in a composite `IComponentType`
+    ///     to explicitly specify which implementation types should be included in the final compiled
+    ///     code.For example, if an module defines `IMaterial` interface and `AMaterial`,
+    ///     `BMaterial`, `CMaterial` types that implements the interface, the user can exclude
+    ///     `CMaterial` implementation from the resulting shader code by explicitly adding
+    ///     `AMaterial:IMaterial` and `BMaterial:IMaterial` conformances to a composite
+    ///     `IComponentType` and get entry point code from it.The resulting code will not have
+    ///     anything related to `CMaterial` in the dynamic dispatch logic.If the user does not
+    ///     explicitly include any `TypeConformances` to an interface type, all implementations to
+    ///     that interface will be included by default. By linking a `ITypeConformance`, the user is
+    ///     also given the opportunity to specify the dispatch ID of the implementation type.If
+    ///     `conformanceIdOverride` is -1, there will be no override behavior and Slang will
+    ///     automatically assign IDs to implementation types.The automatically assigned IDs can be
+    ///     queried via `ISession::getTypeConformanceWitnessSequentialID`.
+    /// </summary>
+    /// <returns>SLANG_OK if succeeds, or SLANG_FAIL if `type` does not conform to `interfaceType`.</returns>
+    [PreserveSig]
+    SlangResult CreateTypeConformanceComponentType(
+        TypeReflection type,
+        TypeReflection interfaceType,
+        out ITypeConformance conformance,
+        long conformanceIdOverride,
+        out ISlangBlob? diagnostics);
 
-    // createTypeConformanceComponentType
+    /// <summary>
+    ///     Load a module from a Slang module blob.
+    /// </summary>
+    [PreserveSig]
+    IModule? LoadModuleFromIRBlob(
+        string moduleName,
+        string path,
+        ISlangBlob source,
+        out ISlangBlob? diagnostics);
 
-    // loadModuleFromIRBlob
+    [PreserveSig]
+    long GetLoadedModuleCount();
 
-    // getLoadedModuleCount
+    [PreserveSig]
+    IModule? GetLoadedModule(long index);
 
-    // getLoadedModule
+    /// <summary>
+    ///     Checks if a precompiled binary module is up-to-date with the current compiler
+    ///     option settings and the source file contents.
+    /// </summary>
+    [PreserveSig]
+    [return: MarshalAs(UnmanagedType.I1)]
+    bool IsBinaryModuleUpToDate(
+        string modulePath,
+        ISlangBlob binaryModuleBlob);
 
-    // isBinaryModuleUpToDate
+    /// <summary>
+    ///     Load a module from a string.
+    /// </summary>
+    [PreserveSig]
+    IModule? LoadModuleFromSourceString(
+        string moduleName,
+        string path,
+        string sourceStr,
+        out ISlangBlob? diagnostics);
 
-    // loadModuleFromSourceString
+    /// <summary>
+    ///     Get the 16-byte RTTI header to fill into a dynamic object.
+    ///     This header is used to identify the type of the object for dynamic dispatch purpose.
+    ///     For example, given the following shader:
+    ///
+    ///     <code lang="slang">
+    ///     [anyValueSize(32)] dyn interface IFoo { int eval(); }
+    ///     struct Impl : IFoo { int eval() { return 1; } }
+    ///
+    ///     ConstantBuffer<dyn IFoo> cb0;
+    ///
+    ///     [numthreads(1,1,1)
+    ///     void main()
+    ///     {
+    ///         cb0.eval();
+    ///     }
+    ///     </code>
+    ///
+    ///     The constant buffer `cb0` should be filled with 16+32=48 bytes of data, where the first
+    ///      16 bytes should be the RTTI bytes returned by calling `getDynamicObjectRTTIBytes(type_Impl,
+    ///      type_IFoo)`, and the rest 32 bytes should hold the actual data of the dynamic object (in
+    ///      this case, fields in the `Impl` type).
+    ///
+    ///     `bufferSizeInBytes` must be greater than 16.
+    /// </summary>
+    [PreserveSig]
+    SlangResult GetDynamicObjectRTTIBytes(
+        TypeReflection type,
+        TypeReflection interfaceType,
+        out long rttiDataBuffer,
+        long bufferSizeInBytes);
 
-    // etc.
+    /// <summary>
+    ///     Read module info (name and version) from a module blob
+    ///
+    ///     The returned pointers are valid for as long as the session.
+    /// </summary>
+    /// <returns></returns>
+    [PreserveSig]
+    SlangResult LoadModuleInfoFromIRBlob(
+        ISlangBlob source,
+        out long moduleVersion,
+        out string moduleCompilerVersion,
+        out string moduleName);
 }
 
 public static class ISessionExtensions

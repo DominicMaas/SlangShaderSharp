@@ -6,6 +6,22 @@ Bindings written against 2025.21.2.
 
 Not all bindings have been implemented yet! Notably missing are the ones for reflection.
 
+- Some types may also be incorrect (especially around Slang types and things like size_t)
+- Test works but must be run one at a time due to global state in Slang.
+ 
+
+## Missing Bindings
+
+- SlangTerminatedChars
+- ISlangWriter
+- ISlangProfiler
+- IByteCodeRunner
+- Attribute/UserAttribute
+- Reflection APIs
+- IModulePrecompileService_Experimental
+- slang_loadModuleInfoFromIRBlob
+- slang_createByteCodeRunner
+
 ## Versioning
 
 The versioning of this library follows the versioning of the underlying Slang library where the `Revision` part is used to indicate changes in the bindings.
@@ -23,16 +39,20 @@ SlangShaderSharp `2025.21.2.1` corresponds to Slang library version `2025.21.2` 
 ```csharp
 // 1. Create Global Session
 
-Slang.CreateGlobalSession(0, out var globalSession).Succeeded.ShouldBeTrue();
+Slang.CreateGlobalSession(Slang.ApiVersion, out var globalSession).Succeeded.ShouldBeTrue();
 
 // 2. Create Session
 
-var sessionDesc = new SessionDesc();
+var sessionDesc = new SessionDesc
+{
+    Targets = [new TargetDesc { Format = SlangCompileTarget.SLANG_WGSL }],
 
-var targetDesc = new TargetDesc { Format = SlangCompileTarget.SLANG_WGSL, };
-
-sessionDesc.Targets = &targetDesc;
-sessionDesc.TargetCount = 1;
+    // Slang supports using the preprocessor.
+    PreprocessorMacros = [
+        new PreprocessorMacroDesc("BIAS_VALUE", "1138"),
+        new PreprocessorMacroDesc("OTHER_MACRO", "float")
+    ],
+};
 
 globalSession.CreateSession(sessionDesc, out var session).Succeeded.ShouldBeTrue();
 

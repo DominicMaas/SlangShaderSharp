@@ -40,11 +40,11 @@ public readonly partial struct TypeLayoutReflection : IEquatable<TypeLayoutRefle
 
     // ---------------- Native Imports ----------------
 
-    [LibraryImport("slang", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial TypeReflection spReflectionTypeLayout_GetType(nint handle);
 
-    [LibraryImport("slang", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial TypeReflectionKind spReflectionTypeLayout_getKind(nint handle);
 }

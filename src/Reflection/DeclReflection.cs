@@ -73,44 +73,44 @@ public readonly partial struct DeclReflection : IEquatable<DeclReflection>, IRea
 
     // ---------------- Native Imports ----------------
 
-    [LibraryImport("slang", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     [return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]
     private static unsafe partial string spReflectionDecl_getName(nint decl);
 
-    [LibraryImport("slang", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial DeclReflectionKind spReflectionDecl_getKind(nint decl);
 
-    [LibraryImport("slang", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial uint spReflectionDecl_getChildrenCount(nint decl);
 
-    [LibraryImport("slang", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial DeclReflection spReflectionDecl_getChild(nint decl, uint index);
 
-    [LibraryImport("slang", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial TypeReflection spReflection_getTypeFromDecl(nint decl);
 
-    [LibraryImport("slang", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial VariableReflection spReflectionDecl_castToVariable(nint decl);
 
-    [LibraryImport("slang", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial FunctionReflection spReflectionDecl_castToFunction(nint decl);
 
-    [LibraryImport("slang", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial GenericReflection spReflectionDecl_castToGeneric(nint decl);
 
-    [LibraryImport("slang", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial DeclReflection spReflectionDecl_getParent(nint decl);
 
-    [LibraryImport("slang", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial nint spReflectionDecl_findModifier(nint decl, ModifierID id);
 }
