@@ -133,5 +133,9 @@ public enum CompilerOptionName
     DenormalModeFp64,
     UseMSVCStyleBitfieldPacking,
     ForceCLayout,
+
+    /// <summary> bool, enable experimental features </summary>
+    ExperimentalFeature,
+
     CountOf,
 }

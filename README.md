@@ -2,9 +2,19 @@
 
 A very rough in development C# binding for the Slang shading language.
 
-Bindings written against 2025.20.
+Bindings written against 2025.21.2.
 
-Not all bindings have been implemented yet!
+Not all bindings have been implemented yet! Notably missing are the ones for reflection.
+
+## Versioning
+
+The versioning of this library follows the versioning of the underlying Slang library where the `Revision` part is used to indicate changes in the bindings.
+
+For Example:
+
+SlangShaderSharp `2025.21.2.0` corresponds to Slang library version `2025.21.2`.
+SlangShaderSharp `2025.21.2.1` corresponds to Slang library version `2025.21.2` with changes in the bindings only.
+
 
 ## Usage
 
@@ -68,3 +78,11 @@ _ = wgslCode.AsString;
 
 Slang.Shutdown();
 ```
+
+## Updating Bindings
+
+> Eventually this should be moved to a GitHub Action.
+
+1. Update `update_slang.ps1` to point towards the desired Slang version.
+2. Run `update_slang.ps1`.
+3. Adjust any bindings as needed to incorporate any changes in the header files (diff compare the header files to make this easy!)

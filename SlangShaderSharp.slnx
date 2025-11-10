@@ -3,7 +3,7 @@
     <File Path="headers/slang.h" />
     <File Path="LICENSE.txt" />
     <File Path="README.md" />
-    <File Path="scripts/generate-bindings.ps1" />
+    <File Path="update_slang.ps1" />
   </Folder>
   <Project Path="src/SlangShaderSharp.csproj" />
   <Project Path="tests/SlangShaderSharp.Tests.csproj" />
