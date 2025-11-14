@@ -15,7 +15,7 @@ public class UnitTest1
     }
 
     [Fact]
-    public unsafe void TestGlobalAndLocalSession()
+    public void TestGlobalAndLocalSession()
     {
         Slang.CreateGlobalSession(Slang.ApiVersion, out var globalSession);
 
@@ -31,7 +31,7 @@ public class UnitTest1
     }
 
     [Fact]
-    public unsafe void TestModuleLoad()
+    public void TestModuleLoad()
     {
         // 1. Create Global Session
 

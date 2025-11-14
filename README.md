@@ -1,6 +1,6 @@
 # SlangShaderSharp
 
-A very rough in development C# binding for the Slang shading language.
+A very rough in development C# binding for the Slang shading language that target .NET 8+.
 
 Bindings written against 2025.21.2.
 

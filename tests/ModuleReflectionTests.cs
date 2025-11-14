@@ -5,7 +5,7 @@ namespace SlangShaderSharp.Tests;
 public class ModuleReflectionTests
 {
     [Fact]
-    public unsafe void Test()
+    public void Test()
     {
         // 1. Create Global Session
 
