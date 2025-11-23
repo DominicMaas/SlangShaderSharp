@@ -1,4 +1,5 @@
 ﻿using SlangShaderSharp.Internal;
+using SlangShaderSharp.Reflection;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -35,6 +36,45 @@ public readonly partial struct VariableReflection : IEquatable<VariableReflectio
 
     // ---------------- Methods ---------------- //
 
+    public string Name
+    {
+        get
+        {
+            if (this == Null) return string.Empty;
+            return spReflectionVariable_GetName(this);
+        }
+    }
+
+    public TypeReflection Type
+    {
+        get
+        {
+            if (this == Null) return TypeReflection.Null;
+            return spReflectionVariable_GetType(this);
+        }
+    }
+
+    public uint AttributeCount
+    {
+        get
+        {
+            if (this == Null) return 0;
+            return spReflectionVariable_GetUserAttributeCount(this);
+        }
+    }
+
+    public AttributeReflection GetAttribute(uint index)
+    {
+        if (this == Null) return AttributeReflection.Null;
+        return spReflectionVariable_GetUserAttribute(this, index);
+    }
+
+    public AttributeReflection FindAttributeByName(string name)
+    {
+        if (this == Null) return AttributeReflection.Null;
+        return spReflectionVariable_FindUserAttributeByName(this, name);
+    }
+
     // ---------------- Native Imports ---------------- //
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
@@ -51,6 +91,14 @@ public readonly partial struct VariableReflection : IEquatable<VariableReflectio
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial uint spReflectionVariable_GetUserAttributeCount(VariableReflection var);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial AttributeReflection spReflectionVariable_GetUserAttribute(VariableReflection type, uint index);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial AttributeReflection spReflectionVariable_FindUserAttributeByName(VariableReflection type, string name);
 }
 
 [CustomMarshaller(typeof(VariableReflection), MarshalMode.Default, typeof(VariableReflectionMarshaller))]

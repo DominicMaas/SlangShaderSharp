@@ -34,19 +34,33 @@ public readonly partial struct TypeLayoutReflection : IEquatable<TypeLayoutRefle
 
     // ---------------- Methods ---------------- //
 
-    public TypeReflection Type => Handle != 0 ? spReflectionTypeLayout_GetType(Handle) : TypeReflection.Null;
+    public TypeReflection Type
+    {
+        get
+        {
+            if (this == Null) return TypeReflection.Null;
+            return spReflectionTypeLayout_GetType(this);
+        }
+    }
 
-    public unsafe TypeReflectionKind Kind => Handle != 0 ? spReflectionTypeLayout_getKind(Handle) : TypeReflectionKind.None;
+    public TypeReflectionKind Kind
+    {
+        get
+        {
+            if (this == Null) return TypeReflectionKind.None;
+            return spReflectionTypeLayout_getKind(this);
+        }
+    }
 
     // ---------------- Native Imports ----------------
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial TypeReflection spReflectionTypeLayout_GetType(nint handle);
+    private static partial TypeReflection spReflectionTypeLayout_GetType(TypeLayoutReflection type);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial TypeReflectionKind spReflectionTypeLayout_getKind(nint handle);
+    private static partial TypeReflectionKind spReflectionTypeLayout_getKind(TypeLayoutReflection type);
 }
 
 [CustomMarshaller(typeof(TypeLayoutReflection), MarshalMode.Default, typeof(TypeLayoutReflectionMarshaller))]

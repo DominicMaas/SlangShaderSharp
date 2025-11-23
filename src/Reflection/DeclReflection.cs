@@ -36,27 +36,86 @@ public readonly partial struct DeclReflection : IEquatable<DeclReflection>, IRea
 
     // ---------------- Methods ---------------- //
 
-    public string? Name => Handle != 0 ? spReflectionDecl_getName(this) : null;
+    public string Name
+    {
+        get
+        {
+            if (this == Null) return string.Empty;
+            return spReflectionDecl_getName(this);
+        }
+    }
 
-    public DeclReflectionKind Kind => Handle != 0 ? spReflectionDecl_getKind(this) : DeclReflectionKind.Unsupported;
+    public DeclReflectionKind Kind
+    {
+        get
+        {
+            if (this == Null) return DeclReflectionKind.Unsupported;
+            return spReflectionDecl_getKind(this);
+        }
+    }
 
-    public TypeReflection Type => Handle != 0 ? spReflection_getTypeFromDecl(this) : TypeReflection.Null;
+    public TypeReflection Type
+    {
+        get
+        {
+            if (this == Null) return TypeReflection.Null;
+            return spReflection_getTypeFromDecl(this);
+        }
+    }
 
-    public VariableReflection AsVariable() => Handle != 0 ? spReflectionDecl_castToVariable(this) : VariableReflection.Null;
+    public VariableReflection AsVariable()
+    {
+        if (this == Null) return VariableReflection.Null;
+        return spReflectionDecl_castToVariable(this);
+    }
 
-    public FunctionReflection AsFunction() => Handle != 0 ? spReflectionDecl_castToFunction(this) : FunctionReflection.Null;
+    public FunctionReflection AsFunction()
+    {
+        if (this == Null) return FunctionReflection.Null;
+        return spReflectionDecl_castToFunction(this);
+    }
 
-    public GenericReflection AsGeneric() => Handle != 0 ? spReflectionDecl_castToGeneric(this) : GenericReflection.Null;
+    public GenericReflection AsGeneric()
+    {
+        if (this == Null) return GenericReflection.Null;
+        return spReflectionDecl_castToGeneric(this);
+    }
 
-    public DeclReflection Parent => Handle != 0 ? spReflectionDecl_getParent(this) : Null;
+    public DeclReflection Parent
+    {
+        get
+        {
+            if (this == Null) return Null;
+            return spReflectionDecl_getParent(this);
+        }
 
-    public nint FindModifier(ModifierID id) => Handle != 0 ? spReflectionDecl_findModifier(this, id) : 0;
+    }
+
+    public nint FindModifier(ModifierID id)
+    {
+        if (this == Null) return 0;
+        return spReflectionDecl_findModifier(this, id);
+    }
 
     // ---------------- IReadOnlyList Implementation ---------------- //
 
-    public int Count => Handle != 0 ? (int)spReflectionDecl_getChildrenCount(this) : 0;
+    public int Count
+    {
+        get
+        {
+            if (this == Null) return 0;
+            return (int)spReflectionDecl_getChildrenCount(this);
+        }
+    }
 
-    public DeclReflection this[int index] => Handle != 0 ? spReflectionDecl_getChild(this, (uint)index) : Null;
+    public DeclReflection this[int index]
+    {
+        get
+        {
+            if (this == Null) return Null;
+            return spReflectionDecl_getChild(this, (uint)index);
+        }
+    }
 
     public IEnumerator<DeclReflection> GetEnumerator()
     {

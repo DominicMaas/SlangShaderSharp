@@ -53,8 +53,31 @@ public class ModuleReflectionTests
         reflectionModule.Count.ShouldBe(4);
 
         reflectionModule[0].Name.ShouldBe("buffer0");
+        reflectionModule[0].Kind.ShouldBe(DeclReflectionKind.Variable);
+
+        var buffer0Reflection = reflectionModule[0].AsVariable();
+        buffer0Reflection.ShouldNotBe(VariableReflection.Null);
+
+        reflectionModule[0].AsFunction().ShouldBe(FunctionReflection.Null);
+
         reflectionModule[1].Name.ShouldBe("buffer1");
+        reflectionModule[1].Kind.ShouldBe(DeclReflectionKind.Variable);
+
         reflectionModule[2].Name.ShouldBe("result");
-        reflectionModule[3].Name.ShouldBe("computeMain");
+        reflectionModule[2].Kind.ShouldBe(DeclReflectionKind.Variable);
+
+        var computeMain = reflectionModule[3];
+        computeMain.Name.ShouldBe("computeMain");
+        computeMain.Kind.ShouldBe(DeclReflectionKind.Func);
+
+        computeMain.Count.ShouldBe(1);
+        computeMain[0].Name.ShouldBe("threadId");
+        computeMain[0].Kind.ShouldBe(DeclReflectionKind.Variable);
+
+        var computeMainFunction = computeMain.AsFunction();
+        computeMainFunction.ShouldNotBe(FunctionReflection.Null);
+
+        computeMainFunction.ParameterCount.ShouldBe((uint)1);
+        var param0 = computeMainFunction.GetParameter(0);
     }
 }

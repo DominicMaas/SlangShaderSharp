@@ -39,7 +39,7 @@ public readonly partial struct EntryPointReflection : IEquatable<EntryPointRefle
     {
         get
         {
-            ReflectionHelpers.AssertValid(Handle);
+            if (this == Null) return string.Empty;
             return spReflectionEntryPoint_getName(this);
         }
     }
@@ -48,7 +48,7 @@ public readonly partial struct EntryPointReflection : IEquatable<EntryPointRefle
     {
         get
         {
-            ReflectionHelpers.AssertValid(Handle);
+            if (this == Null) return string.Empty;
             return spReflectionEntryPoint_getNameOverride(this);
         }
     }
@@ -57,7 +57,7 @@ public readonly partial struct EntryPointReflection : IEquatable<EntryPointRefle
     {
         get
         {
-            ReflectionHelpers.AssertValid(Handle);
+            if (this == Null) return 0;
             return spReflectionEntryPoint_getParameterCount(this);
         }
     }
@@ -66,7 +66,7 @@ public readonly partial struct EntryPointReflection : IEquatable<EntryPointRefle
     {
         get
         {
-            ReflectionHelpers.AssertValid(Handle);
+            if (this == Null) return FunctionReflection.Null;
             return spReflectionEntryPoint_getFunction(this);
         }
     }

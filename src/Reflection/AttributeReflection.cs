@@ -35,15 +35,27 @@ public readonly partial struct AttributeReflection : IEquatable<AttributeReflect
 
     // ---------------- Methods ---------------- //
 
-    public string? Name => this == Null ? null : spReflectionUserAttribute_GetName(this);
+    public string Name
+    {
+        get
+        {
+            if (this == Null) return string.Empty;
+            return spReflectionUserAttribute_GetName(this);
+        }
+    }
 
-    public uint ArgumentCount => this == Null ? 0 : spReflectionUserAttribute_GetArgumentCount(this);
+    public uint ArgumentCount
+    {
+        get
+        {
+            if (this == Null) return 0;
+            return spReflectionUserAttribute_GetArgumentCount(this);
+        }
+    }
 
     public TypeReflection GetArgumentType(uint index)
     {
-        if (this == Null)
-            return TypeReflection.Null;
-
+        if (this == Null) return TypeReflection.Null;
         return spReflectionUserAttribute_GetArgumentType(this, index);
     }
 
@@ -65,6 +77,16 @@ public readonly partial struct AttributeReflection : IEquatable<AttributeReflect
             return null;
 
         return value;
+    }
+
+    public string? GetArgumentValueString(uint index)
+    {
+        if (this == Null) return null;
+
+        var ptr = spReflectionUserAttribute_GetArgumentValueString(this, index, out var size);
+        if (ptr == nint.Zero) return null;
+
+        return Marshal.PtrToStringUTF8(ptr, (int)size);
     }
 
     // ---------------- Native Imports ---------------- //
