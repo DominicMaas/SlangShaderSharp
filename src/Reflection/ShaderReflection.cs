@@ -40,12 +40,21 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial uint spReflection_GetParameterCount(nint handle);
+    private static partial uint spReflection_GetParameterCount(ShaderReflection handle);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial uint spReflection_GetTypeParameterCount(nint handle);
+    private static partial uint spReflection_GetTypeParameterCount(ShaderReflection handle);
 
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial ISession spReflection_GetSession(ShaderReflection handle);
+
+    // TODO:
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial uint spReflection_getEntryPointCount(ShaderReflection handle);
 
 }
 

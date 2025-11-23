@@ -29,6 +29,10 @@ public readonly struct BufferReflection : IEquatable<BufferReflection>
     public override bool Equals(object? obj) => obj is BufferReflection other && Equals(other);
     public override int GetHashCode() => unchecked((int)Handle);
     public override string ToString() => $"0x{Handle:x}";
+
+    // ---------------- Methods ---------------- //
+
+    // ---------------- Native Imports ---------------- //
 }
 
 [CustomMarshaller(typeof(BufferReflection), MarshalMode.Default, typeof(BufferReflectionMarshaller))]

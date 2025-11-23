@@ -36,27 +36,27 @@ public readonly partial struct DeclReflection : IEquatable<DeclReflection>, IRea
 
     // ---------------- Methods ---------------- //
 
-    public unsafe string? Name => Handle != 0 ? spReflectionDecl_getName(Handle) : null;
+    public string? Name => Handle != 0 ? spReflectionDecl_getName(this) : null;
 
-    public unsafe DeclReflectionKind Kind => Handle != 0 ? spReflectionDecl_getKind(Handle) : DeclReflectionKind.Unsupported;
+    public DeclReflectionKind Kind => Handle != 0 ? spReflectionDecl_getKind(this) : DeclReflectionKind.Unsupported;
 
-    public TypeReflection Type => Handle != 0 ? spReflection_getTypeFromDecl(Handle) : TypeReflection.Null;
+    public TypeReflection Type => Handle != 0 ? spReflection_getTypeFromDecl(this) : TypeReflection.Null;
 
-    public VariableReflection AsVariable() => Handle != 0 ? spReflectionDecl_castToVariable(Handle) : VariableReflection.Null;
+    public VariableReflection AsVariable() => Handle != 0 ? spReflectionDecl_castToVariable(this) : VariableReflection.Null;
 
-    public FunctionReflection AsFunction() => Handle != 0 ? spReflectionDecl_castToFunction(Handle) : FunctionReflection.Null;
+    public FunctionReflection AsFunction() => Handle != 0 ? spReflectionDecl_castToFunction(this) : FunctionReflection.Null;
 
-    public GenericReflection AsGeneric() => Handle != 0 ? spReflectionDecl_castToGeneric(Handle) : GenericReflection.Null;
+    public GenericReflection AsGeneric() => Handle != 0 ? spReflectionDecl_castToGeneric(this) : GenericReflection.Null;
 
-    public DeclReflection Parent => Handle != 0 ? spReflectionDecl_getParent(Handle) : Null;
+    public DeclReflection Parent => Handle != 0 ? spReflectionDecl_getParent(this) : Null;
 
-    public nint FindModifier(ModifierID id) => Handle != 0 ? spReflectionDecl_findModifier(Handle, id) : 0;
+    public nint FindModifier(ModifierID id) => Handle != 0 ? spReflectionDecl_findModifier(this, id) : 0;
 
     // ---------------- IReadOnlyList Implementation ---------------- //
 
-    public int Count => Handle != 0 ? (int)spReflectionDecl_getChildrenCount(Handle) : 0;
+    public int Count => Handle != 0 ? (int)spReflectionDecl_getChildrenCount(this) : 0;
 
-    public DeclReflection this[int index] => Handle != 0 ? spReflectionDecl_getChild(Handle, (uint)index) : Null;
+    public DeclReflection this[int index] => Handle != 0 ? spReflectionDecl_getChild(this, (uint)index) : Null;
 
     public IEnumerator<DeclReflection> GetEnumerator()
     {
@@ -71,48 +71,48 @@ public readonly partial struct DeclReflection : IEquatable<DeclReflection>, IRea
         return GetEnumerator();
     }
 
-    // ---------------- Native Imports ----------------
+    // ---------------- Native Imports ---------------- //
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     [return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]
-    private static unsafe partial string spReflectionDecl_getName(nint decl);
+    private static unsafe partial string spReflectionDecl_getName(DeclReflection decl);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial DeclReflectionKind spReflectionDecl_getKind(nint decl);
+    private static partial DeclReflectionKind spReflectionDecl_getKind(DeclReflection decl);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial uint spReflectionDecl_getChildrenCount(nint decl);
+    private static partial uint spReflectionDecl_getChildrenCount(DeclReflection decl);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial DeclReflection spReflectionDecl_getChild(nint decl, uint index);
+    private static partial DeclReflection spReflectionDecl_getChild(DeclReflection decl, uint index);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial TypeReflection spReflection_getTypeFromDecl(nint decl);
+    private static partial TypeReflection spReflection_getTypeFromDecl(DeclReflection decl);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial VariableReflection spReflectionDecl_castToVariable(nint decl);
+    private static partial VariableReflection spReflectionDecl_castToVariable(DeclReflection decl);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial FunctionReflection spReflectionDecl_castToFunction(nint decl);
+    private static partial FunctionReflection spReflectionDecl_castToFunction(DeclReflection decl);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial GenericReflection spReflectionDecl_castToGeneric(nint decl);
+    private static partial GenericReflection spReflectionDecl_castToGeneric(DeclReflection decl);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial DeclReflection spReflectionDecl_getParent(nint decl);
+    private static partial DeclReflection spReflectionDecl_getParent(DeclReflection decl);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial nint spReflectionDecl_findModifier(nint decl, ModifierID id);
+    private static partial nint spReflectionDecl_findModifier(DeclReflection decl, ModifierID id);
 }
 
 [CustomMarshaller(typeof(DeclReflection), MarshalMode.Default, typeof(DeclReflectionMarshaller))]
