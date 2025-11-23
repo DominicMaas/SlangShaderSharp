@@ -1,4 +1,4 @@
-﻿namespace SlangShaderSharp.Enums;
+﻿namespace SlangShaderSharp;
 
 /// <summary>
 ///     Defines an archive type used to holds a 'file system' type structure.

@@ -1,4 +1,4 @@
-﻿namespace SlangShaderSharp.Enums;
+﻿namespace SlangShaderSharp;
 
 /// <summary>
 ///     Flags to control compilation behavior.

@@ -1,5 +1,4 @@
-﻿using SlangShaderSharp.Reflection;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;

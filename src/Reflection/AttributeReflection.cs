@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
-namespace SlangShaderSharp.Reflection;
+namespace SlangShaderSharp;
 
 [DebuggerDisplay("{Handle}")]
 [NativeMarshalling(typeof(AttributeReflectionMarshaller))]

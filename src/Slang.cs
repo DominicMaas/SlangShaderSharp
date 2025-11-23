@@ -69,6 +69,20 @@ public partial class Slang
     public static partial IModule? LoadModuleFromIRBlob(IGlobalSession session, string moduleName, string path, ReadOnlySpan<byte> source, nuint sourceSize, out ISlangBlob? diagnostics);
 
     /// <summary>
+    ///     Read module info (name and version) from IR data.
+    /// </summary>
+    /// <param name="session">The session to use for loading module info.</param>
+    /// <param name="source">IR data containing the module.</param>
+    /// <param name="sourceSize">Size of the IR data in bytes.</param>
+    /// <param name="moduleVersion">Module version number.</param>
+    /// <param name="moduleCompilerVersion">Compiler version that created the module.</param>
+    /// <param name="moduleName">Name of the module.</param>
+    /// <returns>SLANG_OK on success, or an error code on failure.</returns>
+    [LibraryImport(LibraryName, EntryPoint = "slang_loadModuleInfoFromIRBlob", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    public static partial SlangResult LoadModuleInfoFromIRBlob(ISession session, ReadOnlySpan<byte> source, nuint sourceSize, out int moduleVersion, out string moduleCompilerVersion, out string moduleName);
+
+    /// <summary>
     ///     Create a global session, with the built-in core module.
     /// </summary>
     /// <param name="apiVersion">Pass in SLANG_API_VERSION</param>

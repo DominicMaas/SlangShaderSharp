@@ -13,13 +13,11 @@ Not all bindings have been implemented yet! Notably missing are the ones for ref
 ## Missing Bindings
 
 - SlangTerminatedChars
-- ISlangWriter
-- ISlangProfiler
+- ICompileRequest
 - IByteCodeRunner
 - Attribute/UserAttribute
 - Reflection APIs
 - IModulePrecompileService_Experimental
-- slang_loadModuleInfoFromIRBlob
 - slang_createByteCodeRunner
 
 ## Versioning
