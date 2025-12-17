@@ -137,5 +137,17 @@ public enum CompilerOptionName
     /// <summary> bool, enable experimental features </summary>
     ExperimentalFeature,
 
+    /// <summary> bool, reports detailed compiler performance benchmark results </summary>
+    ReportDetailedPerfBenchmark,
+
+    /// <summary> bool, enable detailed IR validation </summary>
+    ValidateIRDetailed,
+
+    /// <summary> string, pass name to dump IR before </summary>
+    DumpIRBefore,
+
+    /// <summary> string, pass name to dump IR after </summary>
+    DumpIRAfter,
+
     CountOf,
 }

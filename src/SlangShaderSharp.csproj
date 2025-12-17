@@ -16,7 +16,7 @@
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <Version>2025.23.1.0</Version>
+    <Version>2025.24.1.0</Version>
     <EnablePackageValidation>true</EnablePackageValidation>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>

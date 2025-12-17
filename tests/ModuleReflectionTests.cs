@@ -15,7 +15,7 @@ public class ModuleReflectionTests
 
         var sessionDesc = new SessionDesc
         {
-            Targets = [new TargetDesc { Format = SlangCompileTarget.SLANG_WGSL }],
+            Targets = [new TargetDesc { Format = SlangCompileTarget.Wgsl }],
         };
 
         globalSession.CreateSession(sessionDesc, out var session).Succeeded.ShouldBeTrue();

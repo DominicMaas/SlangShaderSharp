@@ -21,7 +21,7 @@ public class UnitTest1
 
         var sessionDesc = new SessionDesc
         {
-            Targets = [new TargetDesc { Format = SlangCompileTarget.SLANG_SPIRV, Profile = globalSession.FindProfile("spirv_1_5") }]
+            Targets = [new TargetDesc { Format = SlangCompileTarget.Spirv, Profile = globalSession.FindProfile("spirv_1_5") }]
         };
 
         globalSession.CreateSession(sessionDesc, out var session).Succeeded.ShouldBeTrue();
@@ -41,7 +41,7 @@ public class UnitTest1
 
         var sessionDesc = new SessionDesc
         {
-            Targets = [new TargetDesc { Format = SlangCompileTarget.SLANG_WGSL }],
+            Targets = [new TargetDesc { Format = SlangCompileTarget.Wgsl }],
 
             // Slang supports using the preprocessor.
             PreprocessorMacros = [
@@ -111,7 +111,7 @@ public class UnitTest1
 
         globalSession.CreateSession(new()
         {
-            Targets = [new TargetDesc { Format = SlangCompileTarget.SLANG_WGSL }],
+            Targets = [new TargetDesc { Format = SlangCompileTarget.Wgsl }],
             SearchPaths = ["Assets/"]
         }, out var session).Succeeded.ShouldBeTrue();
 

@@ -2,7 +2,7 @@
 
 A very rough in development C# binding for the Slang shading language that target .NET 8+.
 
-Bindings written against 2025.23.1.
+Bindings written against 2025.24.1.
 
 Not all bindings have been implemented yet! Notably missing are the ones for reflection.
 
@@ -43,7 +43,7 @@ Slang.CreateGlobalSession(Slang.ApiVersion, out var globalSession).Succeeded.Sho
 
 var sessionDesc = new SessionDesc
 {
-    Targets = [new TargetDesc { Format = SlangCompileTarget.SLANG_WGSL }],
+    Targets = [new TargetDesc { Format = SlangCompileTarget.Wgsl }],
 
     // Slang supports using the preprocessor.
     PreprocessorMacros = [

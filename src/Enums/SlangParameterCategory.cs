@@ -2,46 +2,46 @@ namespace SlangShaderSharp;
 
 public enum SlangParameterCategory : uint
 {
-    NONE,
-    MIXED,
-    CONSTANT_BUFFER,
-    SHADER_RESOURCE,
-    UNORDERED_ACCESS,
-    VARYING_INPUT,
-    VARYING_OUTPUT,
-    SAMPLER_STATE,
-    UNIFORM,
-    DESCRIPTOR_TABLE_SLOT,
-    SPECIALIZATION_CONSTANT,
-    PUSH_CONSTANT_BUFFER,
+    None,
+    Mixed,
+    ConstantBuffer,
+    ShaderResource,
+    UnorderedAccess,
+    VaryingInput,
+    VaryingOutput,
+    SamplerState,
+    Uniform,
+    DescriptorTableSlot,
+    SpecializationConstant,
+    PushConstantBuffer,
 
     /// <summary>
     ///     HLSL register `space`, Vulkan GLSL `set`
     /// </summary>
-    REGISTER_SPACE,
-    GENERIC,
-    RAY_PAYLOAD,
-    HIT_ATTRIBUTES,
-    CALLABLE_PAYLOAD,
-    SHADER_RECORD,
-    EXISTENTIAL_TYPE_PARAM,
-    EXISTENTIAL_OBJECT_PARAM,
-    SUB_ELEMENT_REGISTER_SPACE,
-    SUBPASS,
-    METAL_ARGUMENT_BUFFER_ELEMENT,
-    METAL_ATTRIBUTE,
-    METAL_PAYLOAD,
-    COUNT,
-    METAL_BUFFER = CONSTANT_BUFFER,
-    METAL_TEXTURE = SHADER_RESOURCE,
-    METAL_SAMPLER = SAMPLER_STATE,
+    RegisterSpace,
+    Generic,
+    RayPayload,
+    HitAttributes,
+    CallablePayload,
+    ShaderRecord,
+    ExistentialTypeParam,
+    ExistentialObjectParam,
+    SubElementRegisterSpace,
+    Subpass,
+    MetalArgumentBufferElement,
+    MetalAttribute,
+    MetalPayload,
+    Count,
+    MetalBuffer = ConstantBuffer,
+    MetalTexture = ShaderResource,
+    MetalSampler = SamplerState,
 
     [Obsolete("No Reason Specified")]
-    VERTEX_INPUT = VARYING_INPUT,
+    VertexInput = VaryingInput,
 
     [Obsolete("No Reason Specified")]
-    FRAGMENT_OUTPUT = VARYING_OUTPUT,
+    FragmentOutput = VaryingOutput,
 
     [Obsolete("No Reason Specified")]
-    COUNT_V1 = SUBPASS,
+    CountV1 = Subpass,
 }

@@ -7,117 +7,127 @@ public enum SlangCompileTarget : int
     Glsl,
 
     [Obsolete("just use `SLANG_GLSL`")]
-    SLANG_GLSL_VULKAN_DEPRECATED,
+    GlslVulkanDeprecated,
 
     [Obsolete("No Reason Specified")]
-    SLANG_GLSL_VULKAN_ONE_DESC_DEPRECATED,
-    SLANG_HLSL,
-    SLANG_SPIRV,
-    SLANG_SPIRV_ASM,
-    SLANG_DXBC,
-    SLANG_DXBC_ASM,
-    SLANG_DXIL,
-    SLANG_DXIL_ASM,
+    GlslVulkanOneDescDeprecated,
+    Hlsl,
+    Spirv,
+    SpirvAsm,
+    Dxbc,
+    DxbcAsm,
+    Dxil,
+    DxilAsm,
 
     /// <summary>
     ///     The C language
     /// </summary>
-    SLANG_C_SOURCE,
+    CSource,
 
     /// <summary>
     ///     C++ code for shader kernels.
     /// </summary>
-    SLANG_CPP_SOURCE,
+    CppSource,
 
     /// <summary>
     ///     Standalone binary executable (for hosting CPU/OS)
     /// </summary>
-    SLANG_HOST_EXECUTABLE,
+    HostExecutable,
 
     /// <summary>
     ///     A shared library/Dll for shader kernels (for hosting CPU/OS)
     /// </summary>
-    SLANG_SHADER_SHARED_LIBRARY,
+    ShaderSharedLibrary,
 
     /// <summary>
     ///     A CPU target that makes the compiled shader code available to be run immediately
     /// </summary>
-    SLANG_SHADER_HOST_CALLABLE,
+    ShaderHostCallable,
 
     /// <summary>
     ///     Cuda source
     /// </summary>
-    SLANG_CUDA_SOURCE,
+    CudaSource,
 
     /// <summary>
     ///     PTX
     /// </summary>
-    SLANG_PTX,
+    PTX,
 
     /// <summary>
     ///     Object code that contains CUDA functions.
     /// </summary>
-    SLANG_CUDA_OBJECT_CODE,
+    CudaObjectCode,
 
     /// <summary>
     ///     Object code that can be used for later linking
     /// </summary>
-    SLANG_OBJECT_CODE,
+    ObjectCode,
 
     /// <summary>
     ///     C++ code for host library or executable.
     /// </summary>
-    SLANG_HOST_CPP_SOURCE,
+    HostCppSource,
 
     /// <summary>
     ///     Host callable host code (ie non kernel/shader)
     /// </summary>
-    SLANG_HOST_HOST_CALLABLE,
+    HostHostCallable,
 
     /// <summary>
     ///      C++ PyTorch binding code.
     /// </summary>
-    SLANG_CPP_PYTORCH_BINDING,
+    CppPyTorchBinding,
 
     /// <summary>
     ///     Metal shading language
     /// </summary>
-    SLANG_METAL,
+    Metal,
 
     /// <summary>
     ///     Metal library
     /// </summary>
-    SLANG_METAL_LIB,
+    MetalLib,
 
     /// <summary>
     ///     Metal library assembly
     /// </summary>
-    SLANG_METAL_LIB_ASM,
+    MetalLibAsm,
 
     /// <summary>
     ///     A shared library/Dll for host code (for hosting CPU/OS)
     /// </summary>
-    SLANG_HOST_SHARED_LIBRARY,
+    HostSharedLibrary,
 
     /// <summary>
     ///     WebGPU shading language
     /// </summary>
-    SLANG_WGSL,
+    Wgsl,
 
     /// <summary>
     ///     SPIR-V assembly via WebGPU shading language
     /// </summary>
-    SLANG_WGSL_SPIRV_ASM,
+    WgslSpirvAsm,
 
     /// <summary>
     ///     SPIR-V via WebGPU shading language
     /// </summary>
-    SLANG_WGSL_SPIRV,
+    WgslSpirv,
 
     /// <summary>
     ///     Bytecode that can be interpreted by the Slang VM
     /// </summary>
-    SLANG_HOST_VM,
+    HostVM,
 
-    SLANG_TARGET_COUNT_OF,
+    /// <summary>
+    ///     C++ header for shader kernels.
+    /// </summary>
+    CppHeader,
+
+    /// <summary>
+    ///     Cuda header
+    /// </summary>
+    CudaHeader,
+
+    CountOf,
 }
