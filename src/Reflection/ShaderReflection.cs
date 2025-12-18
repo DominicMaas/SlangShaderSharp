@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using SlangShaderSharp.Internal;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
@@ -34,27 +35,265 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
 
     // ---------------- Methods ---------------- //
 
-    //  TODO
+    public uint ParameterCount
+    {
+        get
+        {
+            if (this == Null) return 0;
+            return spReflection_GetParameterCount(this);
+        }
+    }
+
+    public uint TypeParameterCount
+    {
+        get
+        {
+            if (this == Null) return 0;
+            return spReflection_GetTypeParameterCount(this);
+        }
+    }
+
+    public ISession? GetSession()
+    {
+        if (this == Null) return null;
+        return spReflection_GetSession(this);
+    }
+
+    public TypeParameterReflection GetTypeParameterByIndex(uint index)
+    {
+        if (this == Null) return TypeParameterReflection.Null;
+        return spReflection_GetTypeParameterByIndex(this, index);
+    }
+
+    public TypeParameterReflection? FindTypeParameter(string name)
+    {
+        if (this == Null) return null;
+        var result = spReflection_FindTypeParameter(this, name);
+        return result == TypeParameterReflection.Null ? null : result;
+    }
+
+    public VariableLayoutReflection GetParameterByIndex(uint index)
+    {
+        if (this == Null) return VariableLayoutReflection.Null;
+        return spReflection_GetParameterByIndex(this, index);
+    }
+
+    public uint EntryPointCount
+    {
+        get
+        {
+            if (this == Null) return 0;
+            return spReflection_getEntryPointCount(this);
+        }
+    }
+
+    public EntryPointReflection GetEntryPointByIndex(uint index)
+    {
+        if (this == Null) return EntryPointReflection.Null;
+        return spReflection_getEntryPointByIndex(this, index);
+    }
+
+    public uint GlobalConstantBufferBinding
+    {
+        get
+        {
+            if (this == Null) return 0;
+            return spReflection_getGlobalConstantBufferBinding(this);
+        }
+    }
+
+    public nuint GlobalConstantBufferSize
+    {
+        get
+        {
+            if (this == Null) return 0;
+            return spReflection_getGlobalConstantBufferSize(this);
+        }
+    }
+
+    public TypeReflection? FindTypeByName(string name)
+    {
+        if (this == Null) return null;
+        var result = spReflection_FindTypeByName(this, name);
+        return result == TypeReflection.Null ? null : result;
+    }
+
+    public FunctionReflection? FindFunctionByName(string name)
+    {
+        if (this == Null) return null;
+        var result = spReflection_FindFunctionByName(this, name);
+        return result == FunctionReflection.Null ? null : result;
+    }
+
+    public FunctionReflection? FindFunctionByNameInType(TypeReflection reflectionType, string name)
+    {
+        if (this == Null) return null;
+        var result = spReflection_FindFunctionByNameInType(this, reflectionType, name);
+        return result == FunctionReflection.Null ? null : result;
+    }
+
+    public VariableReflection? FindVarByNameInType(TypeReflection reflectionType, string name)
+    {
+        if (this == Null) return null;
+        var result = spReflection_FindVarByNameInType(this, reflectionType, name);
+        return result == VariableReflection.Null ? null : result;
+    }
+
+    public TypeLayoutReflection? GetTypeLayout(TypeReflection reflectionType, LayoutRules rules)
+    {
+        if (this == Null) return null;
+        var result = spReflection_GetTypeLayout(this, reflectionType, rules);
+        return result == TypeLayoutReflection.Null ? null : result;
+    }
+
+    public EntryPointReflection? FindEntryPointByName(string name)
+    {
+        if (this == Null) return null;
+        var result = spReflection_findEntryPointByName(this, name);
+        return result == EntryPointReflection.Null ? null : result;
+    }
+
+    public bool IsSubType(TypeReflection subType, TypeReflection superType)
+    {
+        if (this == Null) return false;
+        return spReflection_isSubType(this, subType, superType);
+    }
+
+    public uint HashedStringCount
+    {
+        get
+        {
+            if (this == Null) return 0;
+            return spReflection_getHashedStringCount(this);
+        }
+    }
+
+    public string? GetHashedString(uint index)
+    {
+        if (this == Null) return null;
+        var result = spReflection_getHashedString(this, index, out var count);
+        return count == 0 ? null : result;
+    }
+
+    public TypeLayoutReflection? GetGlobalParamsTypeLayout()
+    {
+        if (this == Null) return null;
+        var result = spReflection_getGlobalParamsTypeLayout(this);
+        return result == TypeLayoutReflection.Null ? null : result;
+    }
+
+    public VariableLayoutReflection? GetGlobalParamsVarLayout()
+    {
+        if (this == Null) return null;
+        var result = spReflection_getGlobalParamsVarLayout(this);
+        return result == VariableLayoutReflection.Null ? null : result;
+    }
 
     // ---------------- Native Imports ----------------
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial uint spReflection_GetParameterCount(ShaderReflection handle);
+    private static partial uint spReflection_GetParameterCount(ShaderReflection reflection);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial uint spReflection_GetTypeParameterCount(ShaderReflection handle);
+    private static partial uint spReflection_GetTypeParameterCount(ShaderReflection reflection);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial ISession spReflection_GetSession(ShaderReflection handle);
-
-    // TODO:
+    private static partial ISession? spReflection_GetSession(ShaderReflection reflection);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial uint spReflection_getEntryPointCount(ShaderReflection handle);
+    private static partial TypeParameterReflection spReflection_GetTypeParameterByIndex(ShaderReflection reflection, uint index);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial TypeParameterReflection spReflection_FindTypeParameter(ShaderReflection reflection, string name);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial VariableLayoutReflection spReflection_GetParameterByIndex(ShaderReflection reflection, uint index);
+
+    // [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    //  [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    //  private static partial VariableLayoutReflection spGetReflection(SlangCompileRequest);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial uint spReflection_getEntryPointCount(ShaderReflection reflection);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial EntryPointReflection spReflection_getEntryPointByIndex(ShaderReflection reflection, uint index);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial uint spReflection_getGlobalConstantBufferBinding(ShaderReflection reflection);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial nuint spReflection_getGlobalConstantBufferSize(ShaderReflection reflection);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial TypeReflection spReflection_FindTypeByName(ShaderReflection reflection, string name);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial FunctionReflection spReflection_FindFunctionByName(ShaderReflection reflection, string name);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial FunctionReflection spReflection_FindFunctionByNameInType(ShaderReflection reflection, TypeReflection reflectionType, string name);
+
+    // tryResolveOverloadedFunction
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial VariableReflection spReflection_FindVarByNameInType(ShaderReflection reflection, TypeReflection reflectionType, string name);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial TypeLayoutReflection spReflection_GetTypeLayout(ShaderReflection reflection, TypeReflection reflectionType, LayoutRules rules);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial EntryPointReflection spReflection_findEntryPointByName(ShaderReflection reflection, string name);
+
+    // TODO
+
+    // [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    // [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    // private static partial TypeReflection spReflection_specializeType(ShaderReflection reflection, TypeReflection type, int argCount, TypeRef);
+
+    // [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    // [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    // private static partial GenericReflection spReflection_specializeGeneric(ShaderReflection reflection);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    [return: MarshalAs(UnmanagedType.I1)]
+    private static partial bool spReflection_isSubType(ShaderReflection reflection, TypeReflection subType, TypeReflection superType);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial uint spReflection_getHashedStringCount(ShaderReflection reflection);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    [return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]
+    private static partial string spReflection_getHashedString(ShaderReflection reflection, uint index, out nuint count);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial TypeLayoutReflection spReflection_getGlobalParamsTypeLayout(ShaderReflection reflection);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial VariableLayoutReflection spReflection_getGlobalParamsVarLayout(ShaderReflection reflection);
+
+    //private static partial SlangResult spReflection_ToJson(ShaderReflection reflection, nint compileREquest);
 
 }
 
