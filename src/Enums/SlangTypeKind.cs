@@ -22,5 +22,6 @@ public enum SlangTypeKind : uint
     Feedback,
     Pointer,
     DynamicResource,
+    Enum,
     Count,
 }

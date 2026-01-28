@@ -149,5 +149,29 @@ public enum CompilerOptionName
     /// <summary> string, pass name to dump IR after </summary>
     DumpIRAfter,
 
+    /// <summary>  num SlangEmitCPUMethod </summary>
+    EmitCPUMethod,
+
+    /// <summary> bool </summary>
+    EmitCPUViaCPP,
+
+    /// <summary> bool </summary>
+    EmitCPUViaLLVM,
+
+    /// <summary> string </summary>
+    LLVMTargetTriple,
+
+    /// <summary> string </summary>
+    LLVMCPU,
+
+    /// <summary> string </summary>
+    LLVMFeatures,
+
+    /// <summary> bool, enable the experimental rich diagnostics </summary>
+    EnableRichDiagnostics,
+
+    /// <summary> bool </summary>
+    ReportDynamicDispatchSites,
+
     CountOf,
 }

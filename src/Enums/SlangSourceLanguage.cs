@@ -12,5 +12,6 @@ public enum SlangSourceLanguage : int
     Spirv,
     Metal,
     Wgsl,
+    Llvm,
     CountOf
 }

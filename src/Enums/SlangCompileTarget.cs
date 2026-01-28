@@ -60,7 +60,7 @@ public enum SlangCompileTarget : int
     CudaObjectCode,
 
     /// <summary>
-    ///     Object code that can be used for later linking
+    ///     Object code that can be used for later linking (kernel/shader)
     /// </summary>
     ObjectCode,
 
@@ -128,6 +128,21 @@ public enum SlangCompileTarget : int
     ///     Cuda header
     /// </summary>
     CudaHeader,
+
+    /// <summary>
+    ///     Host object code
+    /// </summary>
+    HostObjectCode,
+
+    /// <summary>
+    ///     Host LLVM IR assembly
+    /// </summary>
+    HostLvvmIR,
+
+    /// <summary>
+    ///     Host LLVM IR assembly (kernel/shader)
+    /// </summary>
+    ShaderLvvmIR,
 
     CountOf,
 }

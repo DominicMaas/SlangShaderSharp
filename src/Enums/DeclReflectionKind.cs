@@ -8,5 +8,6 @@ public enum DeclReflectionKind : uint
     Module = 3,
     Generic = 4,
     Variable = 5,
-    Namespace = 6
+    Namespace = 6,
+    Enum = 7,
 }

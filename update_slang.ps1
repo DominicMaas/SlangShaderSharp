@@ -1,4 +1,4 @@
-$version = "2025.24.1"
+$version = "2026.1.1"
 
 mkdir $env:TEMP\slang
 
