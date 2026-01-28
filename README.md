@@ -2,6 +2,8 @@
 
 A very rough in development C# binding for the Slang shading language that target .NET 8+.
 
+Now available on NuGet: https://www.nuget.org/packages/SlangShaderSharp/
+
 Bindings written against 2026.1.1.
 
 Not all bindings have been implemented yet! Notably missing are the ones for reflection.
@@ -31,6 +33,7 @@ SlangShaderSharp `2025.21.2.1` corresponds to Slang library version `2025.21.2` 
 
 
 ## Usage
+
 
 ### Loading a Module and Getting WGSL Code for a Compute Shader
 

@@ -1,7 +1,7 @@
 <Solution>
   <Folder Name="/Solution Items/">
     <File Path="headers/slang.h" />
-    <File Path="LICENSE.txt" />
+    <File Path="LICENSE.md" />
     <File Path="README.md" />
     <File Path="update_slang.ps1" />
   </Folder>
