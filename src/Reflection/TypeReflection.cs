@@ -125,6 +125,15 @@ public readonly partial struct TypeReflection : IEquatable<TypeReflection>
         }
     }
 
+    public nuint ElementCount
+    {
+        get
+        {
+            if (this == Null) return 0;
+            return spReflectionType_GetElementCount(this);
+        }
+    }
+
     public uint AttributeCount
     {
         get
@@ -199,6 +208,10 @@ public readonly partial struct TypeReflection : IEquatable<TypeReflection>
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial VariableReflection spReflectionType_GetFieldByIndex(TypeReflection type, uint index);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial nuint spReflectionType_GetElementCount(TypeReflection type);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
