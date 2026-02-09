@@ -13,7 +13,7 @@ public partial class Slang
 {
     internal const string LibraryName = "slang-compiler";
 
-    public const int ApiVersion = 0;
+    public const nint ApiVersion = 0;
 
     [LibraryImport(LibraryName, EntryPoint = "slang_createBlob", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
@@ -80,7 +80,7 @@ public partial class Slang
     /// <returns>SLANG_OK on success, or an error code on failure.</returns>
     [LibraryImport(LibraryName, EntryPoint = "slang_loadModuleInfoFromIRBlob", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    public static partial SlangResult LoadModuleInfoFromIRBlob(ISession session, ReadOnlySpan<byte> source, nuint sourceSize, out int moduleVersion, out string moduleCompilerVersion, out string moduleName);
+    public static partial SlangResult LoadModuleInfoFromIRBlob(ISession session, ReadOnlySpan<byte> source, nuint sourceSize, out nint moduleVersion, out string moduleCompilerVersion, out string moduleName);
 
     /// <summary>
     ///     Create a global session, with the built-in core module.
@@ -89,7 +89,7 @@ public partial class Slang
     /// <param name="globalSession">The created global session.</param>
     [LibraryImport(LibraryName, EntryPoint = "slang_createGlobalSession", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    public static partial SlangResult CreateGlobalSession(int apiVersion, out IGlobalSession globalSession);
+    public static partial SlangResult CreateGlobalSession(nint apiVersion, out IGlobalSession globalSession);
 
     /// <summary>
     ///     Create a global session, with the built-in core module.
@@ -108,7 +108,7 @@ public partial class Slang
     /// <param name="globalSession">The created global session that doesn't have a core module setup.</param>
     [LibraryImport(LibraryName, EntryPoint = "slang_createGlobalSessionWithoutCoreModule", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    public static partial SlangResult CreateGlobalSessionWithoutCoreModule(int apiVersion, out IGlobalSession globalSession);
+    public static partial SlangResult CreateGlobalSessionWithoutCoreModule(nint apiVersion, out IGlobalSession globalSession);
 
     /// <summary>
     ///      Returns a blob that contains the serialized core module.

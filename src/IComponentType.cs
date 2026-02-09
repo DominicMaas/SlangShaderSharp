@@ -39,14 +39,14 @@ public unsafe partial interface IComponentType
     /// </summary>
     [PreserveSig]
     ShaderReflection GetLayout(
-        int targetIndex,
+        nint targetIndex,
         out ISlangBlob? diagnostics);
 
     /// <summary>
     ///     Get the number of (unspecialized) specialization parameters for the component type.
     /// </summary>
     [PreserveSig]
-    int GetSpecializationParamCount();
+    nint GetSpecializationParamCount();
 
     /// <summary>
     ///     Get the compiled code for the entry point at `entryPointIndex` for the chosen `targetIndex`
@@ -61,8 +61,8 @@ public unsafe partial interface IComponentType
     /// </summary>
     [PreserveSig]
     SlangResult GetEntryPointCode(
-        int entryPointIndex,
-        int targetIndex,
+        nint entryPointIndex,
+        nint targetIndex,
         out ISlangBlob outCode,
         out ISlangBlob? outDiagnostics);
 
@@ -76,8 +76,8 @@ public unsafe partial interface IComponentType
     /// </summary>
     [PreserveSig]
     SlangResult GetResultAsFileSystem(
-        int entryPointIndex,
-        int targetIndex,
+        nint entryPointIndex,
+        nint targetIndex,
         out ISlangMutableFileSystem fileSystem);
 
     /// <summary>
@@ -89,8 +89,8 @@ public unsafe partial interface IComponentType
     /// </summary>
     [PreserveSig]
     void GetEntryPointHash(
-        int entryPointIndex,
-        int targetIndex,
+        nint entryPointIndex,
+        nint targetIndex,
         out ISlangBlob hash);
 
     /// <summary>
@@ -104,7 +104,7 @@ public unsafe partial interface IComponentType
     [PreserveSig]
     SlangResult Specialize(
         [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 1)][In] SpecializationArg[] specializationArgs,
-        int specializationArgCount,
+        nint specializationArgCount,
         out IComponentType specializedComponentType,
         out ISlangBlob? diagnostics);
 
@@ -172,20 +172,20 @@ public unsafe partial interface IComponentType
 
     [PreserveSig]
     SlangResult GetTargetCode(
-        int targetIndex,
+        nint targetIndex,
         out ISlangBlob code,
         out ISlangBlob? diagnostics);
 
     [PreserveSig]
     SlangResult GetTargetMetadata(
-        int targetIndex,
+        nint targetIndex,
         out IMetadata metadata,
         out ISlangBlob? diagnostics);
 
     [PreserveSig]
     SlangResult GetEntryPointMetadata(
-        int entryPointIndex,
-        int targetIndex,
+        nint entryPointIndex,
+        nint targetIndex,
         out IMetadata metadata,
         out ISlangBlob? diagnostics);
 }

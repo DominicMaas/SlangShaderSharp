@@ -102,7 +102,7 @@ public unsafe partial interface ISession
     TypeReflection SpecializeType(
         TypeReflection type,
         [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)][In] SpecializationArg[] specializationArgs,
-        int specializationArgCount,
+        nint specializationArgCount,
         out ISlangBlob? diagnostics);
 
     /// <summary>
@@ -111,7 +111,7 @@ public unsafe partial interface ISession
     [PreserveSig]
     TypeLayoutReflection GetTypeLayout(
         TypeReflection type,
-        int targetIndex,
+        nint targetIndex,
         LayoutRules rules,
         out ISlangBlob? diagnostics);
 

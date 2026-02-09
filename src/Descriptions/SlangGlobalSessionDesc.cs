@@ -17,7 +17,7 @@ public struct SlangGlobalSessionDesc
     /// <summary>
     ///     Slang API version.
     /// </summary>
-    public uint ApiVersion = Slang.ApiVersion;
+    public uint ApiVersion = (uint)Slang.ApiVersion;
 
     /// <summary>
     ///     Specify the oldest Slang language version that any sessions will use.
