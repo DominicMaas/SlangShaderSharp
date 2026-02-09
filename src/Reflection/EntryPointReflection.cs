@@ -71,6 +71,33 @@ public readonly partial struct EntryPointReflection : IEquatable<EntryPointRefle
         }
     }
 
+    public SlangStage Stage
+    {
+        get
+        {
+            if (this == Null) return SlangStage.None;
+            return spReflectionEntryPoint_getStage(this);
+        }
+    }
+
+    public VariableLayoutReflection VarLayout
+    {
+        get
+        {
+            if (this == Null) return VariableLayoutReflection.Null;
+            return spReflectionEntryPoint_getVarLayout(this);
+        }
+    }
+
+    public VariableLayoutReflection ResultVarLayout
+    {
+        get
+        {
+            if (this == Null) return VariableLayoutReflection.Null;
+            return spReflectionEntryPoint_getResultVarLayout(this);
+        }
+    }
+
     //  TODO
 
     // ---------------- Native Imports ---------------- //
