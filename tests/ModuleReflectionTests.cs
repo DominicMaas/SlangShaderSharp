@@ -115,6 +115,8 @@ public class ModuleReflectionTests(GlobalSessionFixture fixture)
         var shaderReflection = vertexEntryPoint.GetLayout(0, out var layoutError);
         shaderReflection.ShouldNotBe(ShaderReflection.Null, layoutError?.AsString ?? "Unknown Error");
 
+        shaderReflection.EntryPointCount.ShouldBe((uint)1);
+
         shaderReflection.FindEntryPointByName("computeMain").ShouldNotBeNull();
         shaderReflection.FindEntryPointByName("computeMain_no_exist").ShouldBeNull();
 
@@ -151,6 +153,14 @@ public class ModuleReflectionTests(GlobalSessionFixture fixture)
         firstParam.Type.Kind.ShouldBe(SlangTypeKind.Vector);
         firstParam.Type.ColumnCount.ShouldBe((uint)3);
         firstParam.Type.ScalarType.ShouldBe(SlangScalarType.UInt32);
+
+        // Test json blob
+
+        shaderReflection.ToJson(out var jsonBlob).ShouldBe(SlangResult.SLANG_OK);
+        jsonBlob.ShouldNotBeNull();
+
+        var jsonString = jsonBlob.AsString;
+        jsonString.ShouldNotBeNullOrEmpty();
     }
 
     /// <summary>
