@@ -19,14 +19,30 @@ public partial interface IComponentType2
 {
     [PreserveSig]
     SlangResult GetTargetCompileResult(
-        int targetIndex,
+        nint targetIndex,
         out ICompileResult compileResult,
         out ISlangBlob? diagnostics);
 
     [PreserveSig]
     SlangResult GetEntryPointCompileResult(
-        int entryPointIndex,
-        int targetIndex,
+        nint entryPointIndex,
+        nint targetIndex,
         out ICompileResult compileResult,
+        out ISlangBlob? diagnostics);
+
+    /// <summary>
+    ///     Get functions accessible through the ISlangSharedLibrary interface.
+    ///     The functions remain in scope as long as the ISlangSharedLibrary interface is in scope.
+    /// </summary>
+    /// <remarks>
+    ///     NOTE! Requires a compilation target of SLANG_HOST_CALLABLE.
+    /// </remarks>
+    /// <param name="targetIndex">The index of the target to get code for (default: zero)</param>
+    /// <param name="sharedLibrary">A pointer to a ISharedLibrary interface which functions can be queried on.</param>
+    /// <returns>A `SlangResult` to indicate success or failure.</returns>
+    [PreserveSig]
+    SlangResult GetTargetHostCallable(
+        int targetIndex,
+        out ISlangSharedLibrary sharedLibrary,
         out ISlangBlob? diagnostics);
 }

@@ -4,7 +4,7 @@ A very rough in development C# binding for the Slang shading language that targe
 
 Now available on NuGet: https://www.nuget.org/packages/SlangShaderSharp/
 
-Bindings written against 2026.1.1.
+Bindings written against 2026.2.
 
 Not all bindings have been implemented yet! Notably missing are the ones for reflection.
 

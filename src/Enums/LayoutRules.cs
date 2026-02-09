@@ -3,5 +3,7 @@
 public enum LayoutRules : int
 {
     Default = 0,
-    MetalArgumentBufferTier2 = 1
+    MetalArgumentBufferTier2 = 1,
+    DefaultStructuredBuffer = 2,
+    DefaultConstantBuffer = 3,
 }
