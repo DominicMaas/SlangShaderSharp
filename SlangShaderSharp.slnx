@@ -1,6 +1,10 @@
 <Solution>
-  <Folder Name="/Solution Items/">
+  <Folder Name="/Headers/">
+    <File Path="headers/slang-deprecated.h" />
+    <File Path="headers/slang-image-format-defs.h" />
     <File Path="headers/slang.h" />
+  </Folder>
+  <Folder Name="/Solution Items/">
     <File Path="LICENSE.md" />
     <File Path="README.md" />
     <File Path="update_slang.ps1" />
