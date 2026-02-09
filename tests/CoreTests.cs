@@ -1,42 +1,32 @@
 ﻿using Shouldly;
+using SlangShaderSharp.Tests.Support;
 
 namespace SlangShaderSharp.Tests;
 
-public class UnitTest1
+[Collection("GlobalSession")]
+public sealed class CoreTests(GlobalSessionFixture fixture)
 {
     [Fact]
     public void TestUsingComWrappers()
     {
-        Slang.CreateGlobalSession(Slang.ApiVersion, out var globalSession);
-
-        ((int)globalSession.FindProfile("glsl_450")).ShouldBe(1441792);
-
-        Slang.Shutdown();
+        ((int)fixture.GlobalSession.FindProfile("glsl_450")).ShouldBe(1441792);
     }
 
     [Fact]
     public void TestGlobalAndLocalSession()
     {
-        Slang.CreateGlobalSession(Slang.ApiVersion, out var globalSession);
-
         var sessionDesc = new SessionDesc
         {
-            Targets = [new TargetDesc { Format = SlangCompileTarget.Spirv, Profile = globalSession.FindProfile("spirv_1_5") }]
+            Targets = [new TargetDesc { Format = SlangCompileTarget.Spirv, Profile = fixture.GlobalSession.FindProfile("spirv_1_5") }]
         };
 
-        globalSession.CreateSession(sessionDesc, out var session).Succeeded.ShouldBeTrue();
+        fixture.GlobalSession.CreateSession(sessionDesc, out var session).Succeeded.ShouldBeTrue();
         session.ShouldNotBeNull();
-
-        Slang.Shutdown();
     }
 
     [Fact]
     public void TestModuleLoad()
     {
-        // 1. Create Global Session
-
-        Slang.CreateGlobalSession(Slang.ApiVersion, out var globalSession).Succeeded.ShouldBeTrue();
-
         // 2. Create Session
 
         var sessionDesc = new SessionDesc
@@ -50,7 +40,7 @@ public class UnitTest1
             ],
         };
 
-        globalSession.CreateSession(sessionDesc, out var session).Succeeded.ShouldBeTrue();
+        fixture.GlobalSession.CreateSession(sessionDesc, out var session).Succeeded.ShouldBeTrue();
 
         // 3. Load module
 
@@ -98,18 +88,12 @@ public class UnitTest1
         var code = wgslCode.AsString;
 
         var allCode = targetCodeBlob.AsString;
-
-        // Done
-
-        Slang.Shutdown();
     }
 
     [Fact]
     public void TestModuleLoadFromDisk()
     {
-        Slang.CreateGlobalSession(Slang.ApiVersion, out var globalSession).Succeeded.ShouldBeTrue();
-
-        globalSession.CreateSession(new()
+        fixture.GlobalSession.CreateSession(new()
         {
             Targets = [new TargetDesc { Format = SlangCompileTarget.Wgsl }],
             SearchPaths = ["Assets/"]
@@ -130,7 +114,5 @@ public class UnitTest1
 
         var wgsl = targetCodeBlob.AsString;
         wgsl.ShouldNotBeNullOrEmpty();
-
-        Slang.Shutdown();
     }
 }

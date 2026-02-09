@@ -9,7 +9,6 @@ Bindings written against 2026.2.
 Not all bindings have been implemented yet! Notably missing are the ones for reflection.
 
 - Some types may also be incorrect (especially around Slang types and things like size_t)
-- Test works but must be run one at a time due to global state in Slang.
  
 
 ## Missing Bindings

@@ -1,44 +1,34 @@
 ﻿using Shouldly;
+using SlangShaderSharp.Tests.Support;
 
 namespace SlangShaderSharp.Tests;
 
-public class BlobTests
+[Collection("GlobalSession")]
+public class BlobTests(GlobalSessionFixture fixture)
 {
     [Fact]
     public void TestCreateString()
     {
-        Slang.CreateGlobalSession(0, out _);
-
         var blob = Slang.CreateBlob("Hello World!");
         blob.AsString.ShouldBe("Hello World!");
-
-        Slang.Shutdown();
     }
 
     [Fact]
     public void TestCreateRaw()
     {
-        Slang.CreateGlobalSession(0, out _);
-
         var myBytes = new ReadOnlySpan<byte>([255, 128, 255, 128]);
 
         var blob = Slang.CreateBlob(myBytes);
         blob.Buffer.SequenceEqual(myBytes).ShouldBeTrue();
-
-        Slang.Shutdown();
     }
 
     [Fact]
     public void TestDataDropped()
     {
-        Slang.CreateGlobalSession(0, out _);
-
         var myBytes = new ReadOnlySpan<byte>([255, 128, 255, 128]);
 
         var blob = Slang.CreateBlob(myBytes);
         AssertSame(blob);
-
-        Slang.Shutdown();
     }
 
     private static void AssertSame(ISlangBlob blob)

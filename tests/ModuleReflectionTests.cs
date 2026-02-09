@@ -1,17 +1,15 @@
 ﻿using Shouldly;
+using SlangShaderSharp.Tests.Support;
 using System.Diagnostics;
 
 namespace SlangShaderSharp.Tests;
 
-public class ModuleReflectionTests
+[Collection("GlobalSession")]
+public class ModuleReflectionTests(GlobalSessionFixture fixture)
 {
     [Fact]
     public void TestBasic()
     {
-        // 1. Create Global Session
-
-        Slang.CreateGlobalSession(Slang.ApiVersion, out var globalSession).Succeeded.ShouldBeTrue();
-
         // 2. Create Session
 
         var sessionDesc = new SessionDesc
@@ -19,7 +17,7 @@ public class ModuleReflectionTests
             Targets = [new TargetDesc { Format = SlangCompileTarget.Wgsl }],
         };
 
-        globalSession.CreateSession(sessionDesc, out var session).Succeeded.ShouldBeTrue();
+        fixture.GlobalSession.CreateSession(sessionDesc, out var session).Succeeded.ShouldBeTrue();
 
         // 3. Load module
 
@@ -88,10 +86,6 @@ public class ModuleReflectionTests
     [Fact]
     public void TestBuildLayout()
     {
-        // 1. Create Global Session
-
-        Slang.CreateGlobalSession(Slang.ApiVersion, out var globalSession).Succeeded.ShouldBeTrue();
-
         // 2. Create Session
 
         var sessionDesc = new SessionDesc
@@ -99,7 +93,7 @@ public class ModuleReflectionTests
             Targets = [new TargetDesc { Format = SlangCompileTarget.Wgsl }],
         };
 
-        globalSession.CreateSession(sessionDesc, out var session).Succeeded.ShouldBeTrue();
+        fixture.GlobalSession.CreateSession(sessionDesc, out var session).Succeeded.ShouldBeTrue();
 
         // 3. Load module
 
@@ -259,6 +253,5 @@ public class ModuleReflectionTests
                 }
             }
         }
-
     }
 }
