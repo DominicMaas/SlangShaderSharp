@@ -93,7 +93,12 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
         return spReflection_getEntryPointByIndex(this, index);
     }
 
-    public uint GlobalConstantBufferBinding
+    /// <summary>
+    ///     Get the binding index for the global constant buffer.
+    ///
+    ///     Returns `SLANG_UNKNOWN_SIZE` when the binding depends on unresolved generic parameters or link-time constants.
+    /// </summary>
+    public nuint GlobalConstantBufferBinding
     {
         get
         {
@@ -102,6 +107,12 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
         }
     }
 
+    /// <summary>
+    ///     Get the size of the global constant buffer.
+    ///
+    ///     Returns `SLANG_UNBOUNDED_SIZE` for unbounded resources.
+    ///     Returns `SLANG_UNKNOWN_SIZE` when the size depends on unresolved generic parameters or link-time constants.
+    /// </summary>
     public nuint GlobalConstantBufferSize
     {
         get
@@ -132,6 +143,17 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
         return result == FunctionReflection.Null ? null : result;
     }
 
+    public unsafe FunctionReflection? TryResolveOverloadedFunction(ReadOnlySpan<FunctionReflection> candidates)
+    {
+        if (this == Null) return null;
+
+        fixed (FunctionReflection* pCandidates = candidates)
+        {
+            var result = spReflection_TryResolveOverloadedFunction(this, candidates.Length, pCandidates);
+            return result == FunctionReflection.Null ? null : result;
+        }
+    }
+
     public VariableReflection? FindVarByNameInType(TypeReflection reflectionType, string name)
     {
         if (this == Null) return null;
@@ -152,6 +174,23 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
         var result = spReflection_findEntryPointByName(this, name);
         return result == EntryPointReflection.Null ? null : result;
     }
+
+    public unsafe TypeReflection? SpecializeType(TypeReflection type, ReadOnlySpan<TypeReflection> args, out ISlangBlob diagnostics)
+    {
+        if (this == Null)
+        {
+            diagnostics = null!;
+            return null;
+        }
+
+        fixed (TypeReflection* pArgs = args)
+        {
+            var result = spReflection_specializeType(this, type, args.Length, pArgs, out diagnostics);
+            return result == TypeReflection.Null ? null : result;
+        }
+    }
+
+    // specializeGeneric
 
     public bool IsSubType(TypeReflection subType, TypeReflection superType)
     {
@@ -187,6 +226,17 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
         if (this == Null) return null;
         var result = spReflection_getGlobalParamsVarLayout(this);
         return result == VariableLayoutReflection.Null ? null : result;
+    }
+
+    public SlangResult ToJson(out ISlangBlob blob)
+    {
+        if (this == Null)
+        {
+            blob = null!;
+            return SlangResult.SLANG_E_INVALID_HANDLE;
+        }
+
+        return spReflection_ToJson(this, null!, out blob);
     }
 
     // ---------------- Native Imports ----------------
@@ -247,7 +297,9 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial FunctionReflection spReflection_FindFunctionByNameInType(ShaderReflection reflection, TypeReflection reflectionType, string name);
 
-    // tryResolveOverloadedFunction
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static unsafe partial FunctionReflection spReflection_TryResolveOverloadedFunction(ShaderReflection reflection, int candidateCount, FunctionReflection* candidates);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
@@ -261,15 +313,13 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial EntryPointReflection spReflection_findEntryPointByName(ShaderReflection reflection, string name);
 
-    // TODO
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static unsafe partial TypeReflection spReflection_specializeType(ShaderReflection reflection, TypeReflection type, nint specializationArgCount, TypeReflection* specializationArgs, out ISlangBlob diagnostics);
 
-    // [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
-    // [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    // private static partial TypeReflection spReflection_specializeType(ShaderReflection reflection, TypeReflection type, int argCount, TypeRef);
-
-    // [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
-    // [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    // private static partial GenericReflection spReflection_specializeGeneric(ShaderReflection reflection);
+    //[LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    //[UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    //private static partial GenericReflection spReflection_specializeGeneric(ShaderReflection reflection, GenericReflection genearic, nint specializationArgCount, SlangReflectionGenericArgType);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
@@ -293,7 +343,9 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial VariableLayoutReflection spReflection_getGlobalParamsVarLayout(ShaderReflection reflection);
 
-    //private static partial SlangResult spReflection_ToJson(ShaderReflection reflection, nint compileREquest);
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial SlangResult spReflection_ToJson(ShaderReflection reflection, ICompileRequest compileRequest, out ISlangBlob blob);
 
 }
 

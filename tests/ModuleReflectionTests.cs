@@ -80,6 +80,79 @@ public class ModuleReflectionTests(GlobalSessionFixture fixture)
         var param0 = computeMainFunction.GetParameter(0);
     }
 
+    [Fact]
+    public void EntryPointTests()
+    {
+        // 2. Create Session
+
+        var sessionDesc = new SessionDesc
+        {
+            Targets = [new TargetDesc { Format = SlangCompileTarget.Wgsl }],
+        };
+
+        fixture.GlobalSession.CreateSession(sessionDesc, out var session).Succeeded.ShouldBeTrue();
+
+        // 3. Load module
+
+        var module = session.LoadModuleFromSource("test", "test.slang", Slang.CreateBlob("""
+            StructuredBuffer<float> buffer0;
+            StructuredBuffer<float> buffer1;
+            RWStructuredBuffer<float> result;
+
+            [shader("compute")]
+            [numthreads(1,2,3)]
+            void computeMain(uint3 threadId : SV_DispatchThreadID)
+            {
+                uint index = threadId.x;
+                result[index] = buffer0[index] + buffer1[index];
+            }
+            """u8), out var moduleLoadError);
+
+        module.ShouldNotBeNull(moduleLoadError?.AsString ?? "Unknown Error");
+
+        module.FindEntryPointByName("computeMain", out var vertexEntryPoint).Succeeded.ShouldBeTrue();
+
+        var shaderReflection = vertexEntryPoint.GetLayout(0, out var layoutError);
+        shaderReflection.ShouldNotBe(ShaderReflection.Null, layoutError?.AsString ?? "Unknown Error");
+
+        shaderReflection.FindEntryPointByName("computeMain").ShouldNotBeNull();
+        shaderReflection.FindEntryPointByName("computeMain_no_exist").ShouldBeNull();
+
+        shaderReflection.GetEntryPointByIndex(0).ShouldNotBe(EntryPointReflection.Null);
+        shaderReflection.GetEntryPointByIndex(1).ShouldBe(EntryPointReflection.Null);
+
+        var entryPoint = shaderReflection.FindEntryPointByName("computeMain");
+
+        entryPoint!.Value.Name.ShouldBe("computeMain");
+        entryPoint!.Value.ParameterCount.ShouldBe((uint)1);
+
+        entryPoint!.Value.Stage.ShouldBe(SlangStage.Compute);
+
+        Span<nuint> sizes = stackalloc nuint[3];
+
+        sizes[0].ShouldBe((nuint)0);
+        sizes[1].ShouldBe((nuint)0);
+        sizes[2].ShouldBe((nuint)0);
+
+        entryPoint!.Value.GetComputeThreadGroupSize(sizes);
+
+        sizes[0].ShouldBe((nuint)1);
+        sizes[1].ShouldBe((nuint)2);
+        sizes[2].ShouldBe((nuint)3);
+
+
+        var firstParam = entryPoint.Value.GetParameterByIndex(0);
+        firstParam.ShouldNotBe(VariableLayoutReflection.Null);
+
+        firstParam.Name.ShouldBe("threadId");
+        firstParam.SemanticName.ShouldBe("SV_DISPATCHTHREADID");
+        firstParam.SemanticIndex.ShouldBe((nuint)0);
+
+        firstParam.Type.Kind.ShouldBe(SlangTypeKind.Vector);
+        firstParam.Type.ColumnCount.ShouldBe((uint)3);
+        firstParam.Type.ScalarType.ShouldBe(SlangScalarType.UInt32);
+    }
+
     /// <summary>
     ///     Reflection tests for internal engine project, using a simplified shader layout
     /// </summary>

@@ -71,12 +71,47 @@ public readonly partial struct EntryPointReflection : IEquatable<EntryPointRefle
         }
     }
 
+    public VariableLayoutReflection GetParameterByIndex(uint index)
+    {
+        if (this == Null) return VariableLayoutReflection.Null;
+        return spReflectionEntryPoint_getParameterByIndex(this, index);
+    }
+
     public SlangStage Stage
     {
         get
         {
             if (this == Null) return SlangStage.None;
             return spReflectionEntryPoint_getStage(this);
+        }
+    }
+
+    public unsafe void GetComputeThreadGroupSize(Span<nuint> sizes)
+    {
+        if (this == Null) return;
+
+        fixed (nuint* pSizes = sizes)
+        {
+            spReflectionEntryPoint_getComputeThreadGroupSize(this, (nuint)sizes.Length, pSizes);
+        }
+    }
+
+    public nuint ComputeWaveSize
+    {
+        get
+        {
+            if (this == Null) return 0;
+            spReflectionEntryPoint_getComputeWaveSize(this, out nuint waveSize);
+            return waveSize;
+        }
+    }
+
+    public bool UsesAnySampleRateInput
+    {
+        get
+        {
+            if (this == Null) return false;
+            return spReflectionEntryPoint_usesAnySampleRateInput(this) != 0;
         }
     }
 
@@ -89,6 +124,14 @@ public readonly partial struct EntryPointReflection : IEquatable<EntryPointRefle
         }
     }
 
+    public TypeLayoutReflection TypeLayout
+    {
+        get
+        {
+            return VarLayout.TypeLayout;
+        }
+    }
+
     public VariableLayoutReflection ResultVarLayout
     {
         get
@@ -98,7 +141,14 @@ public readonly partial struct EntryPointReflection : IEquatable<EntryPointRefle
         }
     }
 
-    //  TODO
+    public bool HasDefaultConstantBuffer
+    {
+        get
+        {
+            if (this == Null) return false;
+            return spReflectionEntryPoint_hasDefaultConstantBuffer(this) != 0;
+        }
+    }
 
     // ---------------- Native Imports ---------------- //
 
@@ -130,11 +180,11 @@ public readonly partial struct EntryPointReflection : IEquatable<EntryPointRefle
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial void spReflectionEntryPoint_getComputeThreadGroupSize(EntryPointReflection entryPoint, uint axisCount, out uint sizeAlongAxis);
+    private static unsafe partial void spReflectionEntryPoint_getComputeThreadGroupSize(EntryPointReflection entryPoint, nuint axisCount, nuint* sizeAlongAxis);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial void spReflectionEntryPoint_getComputeWaveSize(EntryPointReflection entryPoint, out uint waveSize);
+    private static partial void spReflectionEntryPoint_getComputeWaveSize(EntryPointReflection entryPoint, out nuint waveSize);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]

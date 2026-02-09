@@ -120,6 +120,20 @@ public readonly partial struct FunctionReflection : IEquatable<FunctionReflectio
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial AttributeReflection spReflectionFunction_FindUserAttributeByName(FunctionReflection type, string name);
+
+    // spReflectionFunction_FindModifier
+
+    // spReflectionFunction_GetGenericContainer
+
+    // spReflectionFunction_applySpecializations
+
+    // spReflectionFunction_specializeWithArgTypes
+
+    // spReflectionFunction_isOverloaded
+
+    // spReflectionFunction_getOverloadCount
+
+    // spReflectionFunction_getOverload
 }
 
 [CustomMarshaller(typeof(FunctionReflection), MarshalMode.Default, typeof(FunctionReflectionMarshaller))]

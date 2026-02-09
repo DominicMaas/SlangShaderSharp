@@ -74,6 +74,44 @@ public readonly partial struct VariableReflection : IEquatable<VariableReflectio
         return spReflectionVariable_FindUserAttributeByName(this, name);
     }
 
+    public bool HasDefaultValue
+    {
+        get
+        {
+            if (this == Null) return false;
+            return spReflectionVariable_HasDefaultValue(this);
+        }
+    }
+
+    public SlangResult GetDefaultValueInt(out long value)
+    {
+        value = default;
+        if (this == Null) return SlangResult.SLANG_E_INVALID_HANDLE;
+        return spReflectionVariable_GetDefaultValueInt(this, out value);
+    }
+
+    public SlangResult GetDefaultValueFloat(out float value)
+    {
+        value = default;
+        if (this == Null) return SlangResult.SLANG_E_INVALID_HANDLE;
+        return spReflectionVariable_GetDefaultValueFloat(this, out value);
+    }
+
+    public GenericReflection GenericContainer
+    {
+        get
+        {
+            if (this == Null) return GenericReflection.Null;
+            return spReflectionVariable_GetGenericContainer(this);
+        }
+    }
+
+    public VariableReflection ApplySpecializations(GenericReflection generic)
+    {
+        if (this == Null) return Null;
+        return spReflectionVariable_applySpecializations(this, generic);
+    }
+
     // ---------------- Native Imports ---------------- //
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
@@ -93,11 +131,32 @@ public readonly partial struct VariableReflection : IEquatable<VariableReflectio
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial AttributeReflection spReflectionVariable_GetUserAttribute(VariableReflection type, uint index);
+    private static partial AttributeReflection spReflectionVariable_GetUserAttribute(VariableReflection var, uint index);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial AttributeReflection spReflectionVariable_FindUserAttributeByName(VariableReflection type, string name);
+    private static partial AttributeReflection spReflectionVariable_FindUserAttributeByName(VariableReflection var, string name);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static partial bool spReflectionVariable_HasDefaultValue(VariableReflection var);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial SlangResult spReflectionVariable_GetDefaultValueInt(VariableReflection var, out long value);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial SlangResult spReflectionVariable_GetDefaultValueFloat(VariableReflection var, out float value);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial GenericReflection spReflectionVariable_GetGenericContainer(VariableReflection var);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial VariableReflection spReflectionVariable_applySpecializations(VariableReflection var, GenericReflection generic);
 }
 
 [CustomMarshaller(typeof(VariableReflection), MarshalMode.Default, typeof(VariableReflectionMarshaller))]

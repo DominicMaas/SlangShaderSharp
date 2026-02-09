@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using SlangShaderSharp.Internal;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
@@ -171,6 +172,7 @@ public readonly partial struct VariableLayoutReflection : IEquatable<VariableLay
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    [return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]
     private static partial string spReflectionVariableLayout_GetSemanticName(VariableLayoutReflection var);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
