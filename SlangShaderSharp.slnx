@@ -5,6 +5,7 @@
     <File Path="headers/slang.h" />
   </Folder>
   <Folder Name="/Solution Items/">
+    <File Path=".github/workflows/test.yml" />
     <File Path="LICENSE.md" />
     <File Path="README.md" />
     <File Path="update_slang.ps1" />

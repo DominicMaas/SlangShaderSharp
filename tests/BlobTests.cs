@@ -9,6 +9,8 @@ public class BlobTests(GlobalSessionFixture fixture)
     [Fact]
     public void TestCreateString()
     {
+        _ = fixture;
+
         var blob = Slang.CreateBlob("Hello World!");
         blob.AsString.ShouldBe("Hello World!");
     }
@@ -16,6 +18,8 @@ public class BlobTests(GlobalSessionFixture fixture)
     [Fact]
     public void TestCreateRaw()
     {
+        _ = fixture;
+
         var myBytes = new ReadOnlySpan<byte>([255, 128, 255, 128]);
 
         var blob = Slang.CreateBlob(myBytes);
@@ -25,6 +29,8 @@ public class BlobTests(GlobalSessionFixture fixture)
     [Fact]
     public void TestDataDropped()
     {
+        _ = fixture;
+
         var myBytes = new ReadOnlySpan<byte>([255, 128, 255, 128]);
 
         var blob = Slang.CreateBlob(myBytes);
