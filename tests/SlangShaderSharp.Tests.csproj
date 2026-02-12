@@ -6,7 +6,6 @@
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <LangVersion>latest</LangVersion>
-	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,10 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\runtimes\$(RuntimeIdentifier)\native\**\*">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <Visible>false</Visible>
-    </Content>
+	<Content Include="..\runtimes\**">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  <Visible>false</Visible>
+	</Content>
   </ItemGroup>
 
   <ItemGroup>
