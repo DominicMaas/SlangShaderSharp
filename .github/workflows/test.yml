@@ -2,9 +2,11 @@ name: Build & Test
 
 on:
   push:
-    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
+    paths:
+    - '**.cs'
+    - '**.csproj'
 
 env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1

@@ -72,7 +72,7 @@ jobs:
 
   create_release:
     needs:
-    - build
+    - build_test_pack
     if: |
       always() &&
       (needs.build.result == 'success' || needs.build.result == 'skipped')
