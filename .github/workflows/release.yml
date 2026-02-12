@@ -1,0 +1,83 @@
+name: Build & Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        type: string
+        description: Version
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_NOLOGO: true
+  VERSION: '${{ inputs.version }}'
+  PKG_DIR: ${{ github.workspace}}/nuget
+
+jobs:
+  create_tag:
+    name: "Create Tag"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create tag with specified version
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          custom_tag: ${{ inputs.version }}
+          tag_prefix: ''
+
+  build_test_pack:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest]
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        ref: ${{ format('{0}', inputs.version) }}
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 10.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build /p:Version=${{ env.VERSION }}  --configuration Release --no-restore
+
+    - name: Test
+      run: dotnet test /p:Version=${{ env.VERSION }}  --configuration Release --no-build --verbosity normal
+
+    - name: Pack
+      run: dotnet pack /p:Version=${{ env.VERSION }} --no-build --output ${{ env.PKG_DIR }}
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: Package
+        if-no-files-found: error
+        path: ${{ env.PKG_DIR }}/*.nupkg
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: Symbols
+        if-no-files-found: error
+        path: ${{ env.PKG_DIR }}/*.snupkg
+      
+  #create_release:
+  #  needs:
+  #  - build
+  #  if: |
+  #    always() &&
+  #    (needs.build.result == 'success' || needs.build.result == 'skipped')
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - name: Download Binaries
+  #      uses: actions/download-artifact@v4
+      
+  
