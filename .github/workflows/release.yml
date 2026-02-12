@@ -28,16 +28,13 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           custom_tag: ${{ inputs.version }}
           tag_prefix: ''
+          release_branches: 'main'
 
   build_test_pack:
     name: Build, Test & Pack
-    runs-on: ${{ matrix.os }}
+    runs-on: windows-latest
     needs:
       - create_tag
-    strategy:
-      matrix:
-        os: [windows-latest]
-
     steps:
     - uses: actions/checkout@v4
       with:
@@ -75,7 +72,8 @@ jobs:
     - build_test_pack
     if: |
       always() &&
-      (needs.build.result == 'success' || needs.build.result == 'skipped')
+      (needs.build_test_pack.result == 'success' || needs.build_test_pack.result == 'skipped')
+    name: Create Release
     runs-on: ubuntu-latest
     steps:
       - name: Download Binaries
