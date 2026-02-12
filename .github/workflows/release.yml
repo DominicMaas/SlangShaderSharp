@@ -10,12 +10,13 @@ on:
 env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
   DOTNET_NOLOGO: true
-  VERSION: '${{ inputs.version }}'
+  GITHUB_ACTIONS: true
+  VERSION: ${{ inputs.version }}
   PKG_DIR: ${{ github.workspace}}/nuget
 
 jobs:
   create_tag:
-    name: "Create Tag"
+    name: Create Tag
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,7 +30,10 @@ jobs:
           tag_prefix: ''
 
   build_test_pack:
+    name: Build, Test & Pack
     runs-on: ${{ matrix.os }}
+    needs:
+      - create_tag
     strategy:
       matrix:
         os: [windows-latest]
@@ -41,7 +45,7 @@ jobs:
         ref: ${{ format('{0}', inputs.version) }}
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 10.0.x
 
@@ -57,27 +61,36 @@ jobs:
     - name: Pack
       run: dotnet pack /p:Version=${{ env.VERSION }} --no-build --output ${{ env.PKG_DIR }}
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       with:
-        name: Package
+        name: SlangShaderSharp ${{ env.VERSION }}
         if-no-files-found: error
-        path: ${{ env.PKG_DIR }}/*.nupkg
+        path: |
+          ${{ env.PKG_DIR }}/*.nupkg
+          ${{ env.PKG_DIR }}/*.snupkg
 
-    - uses: actions/upload-artifact@v4
-      with:
-        name: Symbols
-        if-no-files-found: error
-        path: ${{ env.PKG_DIR }}/*.snupkg
 
-  #create_release:
-  #  needs:
-  #  - build
-  #  if: |
-  #    always() &&
-  #    (needs.build.result == 'success' || needs.build.result == 'skipped')
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #    - name: Download Binaries
-  #      uses: actions/download-artifact@v4
+  create_release:
+    needs:
+    - build
+    if: |
+      always() &&
+      (needs.build.result == 'success' || needs.build.result == 'skipped')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Binaries
+        uses: actions/download-artifact@v7
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.version }}
+          files: |
+            *.nupkg
+            *.snupkg
+          name: SlangShaderSharp ${{ inputs.version }}
+          generate_release_notes: true
+          draft: false
+          prerelease: false
 
 
