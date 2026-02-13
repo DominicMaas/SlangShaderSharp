@@ -118,11 +118,6 @@ public partial class DummyLibrary : ISlangSharedLibrary
         return null;
     }
 
-    public nint FindFuncByName(string name)
-    {
-        return nint.Zero;
-    }
-
     public nint FindSymbolAddressByName(string name)
     {
         return nint.Zero;
