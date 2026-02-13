@@ -78,6 +78,11 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
         return spReflection_GetParameterByIndex(this, index);
     }
 
+    public static ShaderReflection GetReflection(ICompileRequest request)
+    {
+        return spGetReflection(request);
+    }
+
     public uint EntryPointCount
     {
         get
@@ -190,7 +195,20 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
         }
     }
 
-    // specializeGeneric
+    public unsafe GenericReflection SpecializeGeneric(GenericReflection generic, ReadOnlySpan<SlangReflectionGenericArgType> argTypes, ReadOnlySpan<SlangReflectionGenericArg> argVals, out ISlangBlob diagnostics)
+    {
+        if (this == Null)
+        {
+            diagnostics = null!;
+            return GenericReflection.Null;
+        }
+
+        fixed (SlangReflectionGenericArgType* pArgTypes = argTypes)
+        fixed (SlangReflectionGenericArg* pArgVals = argVals)
+        {
+            return spReflection_specializeGeneric(this, generic, argTypes.Length, pArgTypes, pArgVals, out diagnostics);
+        }
+    }
 
     public bool IsSubType(TypeReflection subType, TypeReflection superType)
     {
@@ -278,9 +296,9 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial VariableLayoutReflection spReflection_GetParameterByIndex(ShaderReflection reflection, uint index);
 
-    // [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
-    //  [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    //  private static partial VariableLayoutReflection spGetReflection(SlangCompileRequest);
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial ShaderReflection spGetReflection(ICompileRequest request);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
@@ -330,9 +348,9 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static unsafe partial TypeReflection spReflection_specializeType(ShaderReflection reflection, TypeReflection type, nint specializationArgCount, TypeReflection* specializationArgs, out ISlangBlob diagnostics);
 
-    //[LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
-    //[UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    //private static partial GenericReflection spReflection_specializeGeneric(ShaderReflection reflection, GenericReflection genearic, nint specializationArgCount, SlangReflectionGenericArgType);
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static unsafe partial GenericReflection spReflection_specializeGeneric(ShaderReflection reflection, GenericReflection generic, nint specializationArgCount, SlangReflectionGenericArgType* specializationArgTypes, SlangReflectionGenericArg* specializationArgVals, out ISlangBlob diagnostics);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]

@@ -83,10 +83,10 @@ public readonly partial struct FunctionReflection : IEquatable<FunctionReflectio
         return spReflectionFunction_GetUserAttribute(this, index);
     }
 
-    public AttributeReflection? FindAttributeByName(string name)
+    public AttributeReflection? FindAttributeByName(ISession session, string name)
     {
         if (this == Null) return null;
-        var attr = spReflectionFunction_FindUserAttributeByName(this, name);
+        var attr = spReflectionFunction_FindUserAttributeByName(this, session, name);
         return attr == AttributeReflection.Null ? null : attr;
     }
 
@@ -119,21 +119,36 @@ public readonly partial struct FunctionReflection : IEquatable<FunctionReflectio
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial AttributeReflection spReflectionFunction_FindUserAttributeByName(FunctionReflection type, string name);
+    private static partial AttributeReflection spReflectionFunction_FindUserAttributeByName(FunctionReflection type, ISession session, string name);
 
-    // spReflectionFunction_FindModifier
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial nint spReflectionFunction_FindModifier(FunctionReflection func, ModifierID id);
 
-    // spReflectionFunction_GetGenericContainer
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial GenericReflection spReflectionFunction_GetGenericContainer(FunctionReflection func);
 
-    // spReflectionFunction_applySpecializations
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial FunctionReflection spReflectionFunction_applySpecializations(FunctionReflection func, GenericReflection generic);
 
-    // spReflectionFunction_specializeWithArgTypes
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static unsafe partial FunctionReflection spReflectionFunction_specializeWithArgTypes(FunctionReflection func, uint argCount, TypeReflection* args);
 
-    // spReflectionFunction_isOverloaded
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    [return: MarshalAs(UnmanagedType.I1)]
+    private static partial bool spReflectionFunction_isOverloaded(FunctionReflection func);
 
-    // spReflectionFunction_getOverloadCount
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial uint spReflectionFunction_getOverloadCount(FunctionReflection func);
 
-    // spReflectionFunction_getOverload
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial FunctionReflection spReflectionFunction_getOverload(FunctionReflection func, uint index);
 }
 
 [CustomMarshaller(typeof(FunctionReflection), MarshalMode.Default, typeof(FunctionReflectionMarshaller))]

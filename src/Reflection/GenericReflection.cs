@@ -1,11 +1,14 @@
-﻿using System.Diagnostics;
+﻿using SlangShaderSharp.Internal;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
 namespace SlangShaderSharp;
 
 [DebuggerDisplay("{Handle}")]
 [NativeMarshalling(typeof(GenericReflectionMarshaller))]
-public readonly struct GenericReflection : IEquatable<GenericReflection>
+public readonly partial struct GenericReflection : IEquatable<GenericReflection>
 {
     internal readonly nint Handle;
 
@@ -30,33 +33,64 @@ public readonly struct GenericReflection : IEquatable<GenericReflection>
     public override int GetHashCode() => unchecked((int)Handle);
     public override string ToString() => $"0x{Handle:x}";
 
-    // spReflectionGeneric_asDecl
+    // ---------------- Native Imports ---------------- //
 
-    // spReflectionGeneric_GetName
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial DeclReflection spReflectionGeneric_asDecl(GenericReflection generic);
 
-    // spReflectionGeneric_GetTypeParameterCount
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    [return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]
+    private static partial string spReflectionGeneric_GetName(GenericReflection generic);
 
-    // spReflectionGeneric_GetTypeParameter
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial uint spReflectionGeneric_GetTypeParameterCount(GenericReflection generic);
 
-    // spReflectionGeneric_GetValueParameterCount
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial VariableReflection spReflectionGeneric_GetTypeParameter(GenericReflection generic, uint index);
 
-    // spReflectionGeneric_GetValueParameter
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial uint spReflectionGeneric_GetValueParameterCount(GenericReflection generic);
 
-    // spReflectionGeneric_GetTypeParameterConstraintCount
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial VariableReflection spReflectionGeneric_GetValueParameter(GenericReflection generic, uint index);
 
-    // spReflectionGeneric_GetTypeParameterConstraintType
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial uint spReflectionGeneric_GetTypeParameterConstraintCount(GenericReflection generic, VariableReflection typeParam);
 
-    // spReflectionGeneric_GetInnerDecl
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial TypeReflection spReflectionGeneric_GetTypeParameterConstraintType(GenericReflection generic, VariableReflection typeParam, uint index);
 
-    // spReflectionGeneric_GetInnerKind
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial DeclReflection spReflectionGeneric_GetInnerDecl(GenericReflection generic);
 
-    // spReflectionGeneric_GetOuterGenericContainer
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial SlangDeclKind spReflectionGeneric_GetInnerKind(GenericReflection generic);
 
-    // spReflectionGeneric_GetConcreteType
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial GenericReflection spReflectionGeneric_GetOuterGenericContainer(GenericReflection generic);
 
-    // spReflectionGeneric_GetConcreteIntVal
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial TypeReflection spReflectionGeneric_GetConcreteType(GenericReflection generic, VariableReflection typeParam);
 
-    // spReflectionGeneric_applySpecializations
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial long spReflectionGeneric_GetConcreteIntVal(GenericReflection generic, VariableReflection valueParam);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial GenericReflection spReflectionGeneric_applySpecializations(GenericReflection generic, GenericReflection specialization);
 }
 
 [CustomMarshaller(typeof(GenericReflection), MarshalMode.Default, typeof(GenericReflectionMarshaller))]

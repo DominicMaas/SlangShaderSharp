@@ -53,6 +53,12 @@ public readonly partial struct VariableReflection : IEquatable<VariableReflectio
         }
     }
 
+    public nint FindModifier(ModifierID id)
+    {
+        if (this == Null) return 0;
+        return spReflectionVariable_FindModifier(this, id);
+    }
+
     public uint AttributeCount
     {
         get
@@ -68,10 +74,10 @@ public readonly partial struct VariableReflection : IEquatable<VariableReflectio
         return spReflectionVariable_GetUserAttribute(this, index);
     }
 
-    public AttributeReflection FindAttributeByName(string name)
+    public AttributeReflection FindAttributeByName(ISession session, string name)
     {
         if (this == Null) return AttributeReflection.Null;
-        return spReflectionVariable_FindUserAttributeByName(this, name);
+        return spReflectionVariable_FindUserAttributeByName(this, session, name);
     }
 
     public bool HasDefaultValue
@@ -123,7 +129,9 @@ public readonly partial struct VariableReflection : IEquatable<VariableReflectio
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial TypeReflection spReflectionVariable_GetType(VariableReflection var);
 
-    // TODO: Modifier
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial nint spReflectionVariable_FindModifier(VariableReflection var, ModifierID id);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
@@ -135,11 +143,11 @@ public readonly partial struct VariableReflection : IEquatable<VariableReflectio
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial AttributeReflection spReflectionVariable_FindUserAttributeByName(VariableReflection var, string name);
+    private static partial AttributeReflection spReflectionVariable_FindUserAttributeByName(VariableReflection var, ISession session, string name);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    [return: MarshalAs(UnmanagedType.Bool)]
+    [return: MarshalAs(UnmanagedType.U1)]
     private static partial bool spReflectionVariable_HasDefaultValue(VariableReflection var);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]

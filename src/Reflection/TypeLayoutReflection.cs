@@ -408,7 +408,7 @@ public readonly partial struct TypeLayoutReflection : IEquatable<TypeLayoutRefle
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    [return: MarshalAs(UnmanagedType.Bool)]
+    [return: MarshalAs(UnmanagedType.I1)]
     private static partial bool spReflectionTypeLayout_isBindingRangeSpecializable(TypeLayoutReflection type, nint index);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
