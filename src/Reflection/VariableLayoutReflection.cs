@@ -48,18 +48,16 @@ public readonly partial struct VariableLayoutReflection : IEquatable<VariableLay
     {
         get
         {
-            if (this == Null) return string.Empty;
-            return Variable.Name;
+            // Proxy to Variable
+            var v = Variable;
+            return v == VariableReflection.Null ? string.Empty : v.Name;
         }
     }
 
-    public TypeReflection Type
+    public nint FindModifier(ModifierID id)
     {
-        get
-        {
-            if (this == Null) return TypeReflection.Null;
-            return Variable.Type;
-        }
+        // Proxy to Variable
+        return Variable.FindModifier(id);
     }
 
     public TypeLayoutReflection TypeLayout
@@ -68,6 +66,45 @@ public readonly partial struct VariableLayoutReflection : IEquatable<VariableLay
         {
             if (this == Null) return TypeLayoutReflection.Null;
             return spReflectionVariableLayout_GetTypeLayout(this);
+        }
+    }
+
+    public SlangParameterCategory Category
+    {
+        get
+        {
+            // Proxy to TypeLayout
+            return TypeLayout.ParameterCategory;
+        }
+    }
+
+    public uint CategoryCount
+    {
+        get
+        {
+            // Proxy to TypeLayout
+            return TypeLayout.CategoryCount;
+        }
+    }
+
+    public SlangParameterCategory GetCategoryByIndex(uint index)
+    {
+        // Proxy to TypeLayout
+        return TypeLayout.GetCategoryByIndex(index);
+    }
+
+    public nuint GetOffset(SlangParameterCategory category)
+    {
+        if (this == Null) return 0;
+        return spReflectionVariableLayout_GetOffset(this, category);
+    }
+
+    public TypeReflection Type
+    {
+        get
+        {
+            // Proxy to Variable which proxies to its Type
+            return Variable.Type;
         }
     }
 
@@ -80,13 +117,19 @@ public readonly partial struct VariableLayoutReflection : IEquatable<VariableLay
         }
     }
 
-    public nuint BindingSpace
+    public uint BindingSpace
     {
         get
         {
             if (this == Null) return 0;
             return spReflectionParameter_GetBindingSpace(this);
         }
+    }
+
+    public nuint GetBindingSpace(SlangParameterCategory category)
+    {
+        if (this == Null) return 0;
+        return spReflectionVariableLayout_GetSpace(this, category);
     }
 
     public SlangImageFormat ImageFormat
@@ -125,60 +168,48 @@ public readonly partial struct VariableLayoutReflection : IEquatable<VariableLay
         }
     }
 
-    public nuint GetOffset(SlangParameterCategory category = SlangParameterCategory.Uniform)
-    {
-        if (this == Null) return 0;
-        return spReflectionVariableLayout_GetOffset(this, category);
-    }
-
-    public nuint GetSpace(SlangParameterCategory category)
-    {
-        if (this == Null) return 0;
-        return spReflectionVariableLayout_GetSpace(this, category);
-    }
-
     // ---------------- Native Imports ---------------- //
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial VariableReflection spReflectionVariableLayout_GetVariable(VariableLayoutReflection var);
+    private static partial VariableReflection spReflectionVariableLayout_GetVariable(VariableLayoutReflection vars);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial TypeLayoutReflection spReflectionVariableLayout_GetTypeLayout(VariableLayoutReflection var);
+    private static partial TypeLayoutReflection spReflectionVariableLayout_GetTypeLayout(VariableLayoutReflection vars);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial nuint spReflectionVariableLayout_GetOffset(VariableLayoutReflection var, SlangParameterCategory category);
+    private static partial nuint spReflectionVariableLayout_GetOffset(VariableLayoutReflection vars, SlangParameterCategory category);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial uint spReflectionParameter_GetBindingIndex(VariableLayoutReflection var);
+    private static partial uint spReflectionParameter_GetBindingIndex(VariableLayoutReflection vars);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial nuint spReflectionParameter_GetBindingSpace(VariableLayoutReflection var);
+    private static partial uint spReflectionParameter_GetBindingSpace(VariableLayoutReflection vars);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial nuint spReflectionVariableLayout_GetSpace(VariableLayoutReflection var, SlangParameterCategory category);
+    private static partial nuint spReflectionVariableLayout_GetSpace(VariableLayoutReflection vars, SlangParameterCategory category);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial SlangImageFormat spReflectionVariableLayout_GetImageFormat(VariableLayoutReflection var);
+    private static partial SlangImageFormat spReflectionVariableLayout_GetImageFormat(VariableLayoutReflection vars);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     [return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]
-    private static partial string spReflectionVariableLayout_GetSemanticName(VariableLayoutReflection var);
+    private static partial string spReflectionVariableLayout_GetSemanticName(VariableLayoutReflection vars);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial nuint spReflectionVariableLayout_GetSemanticIndex(VariableLayoutReflection var);
+    private static partial nuint spReflectionVariableLayout_GetSemanticIndex(VariableLayoutReflection vars);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial SlangStage spReflectionVariableLayout_getStage(VariableLayoutReflection var);
+    private static partial SlangStage spReflectionVariableLayout_getStage(VariableLayoutReflection vars);
 }
 
 [CustomMarshaller(typeof(VariableLayoutReflection), MarshalMode.Default, typeof(VariableLayoutReflectionMarshaller))]

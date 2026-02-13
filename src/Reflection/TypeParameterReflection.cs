@@ -12,7 +12,7 @@ public readonly partial struct TypeParameterReflection : IEquatable<TypeParamete
 {
     internal readonly nint Handle;
 
-    [Obsolete("Use DeclReflection.Null instead.")]
+    [Obsolete("Use TypeParameterReflection.Null instead.")]
     public TypeParameterReflection()
     {
         Handle = 0;
@@ -62,7 +62,7 @@ public readonly partial struct TypeParameterReflection : IEquatable<TypeParamete
         }
     }
 
-    public TypeReflection GetConstraintByIndex(uint index)
+    public TypeReflection GetConstraintByIndex(int index)
     {
         if (this == Null) return TypeReflection.Null;
         return spReflectionTypeParameter_GetConstraintByIndex(this, index);
@@ -73,20 +73,19 @@ public readonly partial struct TypeParameterReflection : IEquatable<TypeParamete
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     [return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]
-    private static unsafe partial string spReflectionTypeParameter_GetName(TypeParameterReflection typeParam);
+    private static partial string spReflectionTypeParameter_GetName(TypeParameterReflection typeParam);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static unsafe partial uint spReflectionTypeParameter_GetIndex(TypeParameterReflection typeParam);
+    private static partial uint spReflectionTypeParameter_GetIndex(TypeParameterReflection typeParam);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static unsafe partial uint spReflectionTypeParameter_GetConstraintCount(TypeParameterReflection typeParam);
+    private static partial uint spReflectionTypeParameter_GetConstraintCount(TypeParameterReflection typeParam);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static unsafe partial TypeReflection spReflectionTypeParameter_GetConstraintByIndex(TypeParameterReflection typeParam, uint index);
-
+    private static partial TypeReflection spReflectionTypeParameter_GetConstraintByIndex(TypeParameterReflection typeParam, int index);
 }
 
 [CustomMarshaller(typeof(TypeParameterReflection), MarshalMode.Default, typeof(TypeParameterReflectionMarshaller))]

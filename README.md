@@ -4,12 +4,7 @@ An in-development C# binding for the Slang shading language that targets .NET 8+
 
 Now available on NuGet: https://www.nuget.org/packages/SlangShaderSharp/
 
-Not all bindings have been implemented (see below - notable reflection), and not all bindings have been tested. Please raise an issue on GitHub if you encounter any issues.
-
-## Missing Bindings
-
-- Attribute/UserAttribute
-- Reflection APIs
+Most bindings have been implemented, but not fully tested. If you discover a missing or broken binding, please raise an issue on GitHub.
 
 ## Versioning
 
@@ -89,6 +84,13 @@ _ = wgslCode.AsString;
 Slang.Shutdown();
 ```
 
+## Extensions
+
+### ISlangBlob
+
+- `ReadOnlySpan<byte> Buffer` - View the blob data as a safe read-only span.
+- `string AsString` - Converts the blob data to a UTF-8 string.
+
 ## Updating Bindings
 
 > Eventually this should be moved to a GitHub Action.
@@ -96,3 +98,4 @@ Slang.Shutdown();
 1. Update `update_slang.ps1` to point towards the desired Slang version.
 2. Run `update_slang.ps1`.
 3. Adjust any bindings as needed to incorporate any changes in the header files (diff compare the header files to make this easy!)
+
