@@ -33,7 +33,7 @@ public readonly partial struct EntryPointReflection : IEquatable<EntryPointRefle
     public override int GetHashCode() => unchecked((int)Handle);
     public override string ToString() => $"0x{Handle:x}";
 
-    // ---------------- Methods ---------------- //
+    // ---------------- Public Interface ---------------- //
 
     public string Name
     {
@@ -124,13 +124,7 @@ public readonly partial struct EntryPointReflection : IEquatable<EntryPointRefle
         }
     }
 
-    public TypeLayoutReflection TypeLayout
-    {
-        get
-        {
-            return VarLayout.TypeLayout;
-        }
-    }
+    public TypeLayoutReflection TypeLayout => VarLayout.TypeLayout;
 
     public VariableLayoutReflection ResultVarLayout
     {

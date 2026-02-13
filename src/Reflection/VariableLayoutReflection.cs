@@ -33,7 +33,7 @@ public readonly partial struct VariableLayoutReflection : IEquatable<VariableLay
     public override int GetHashCode() => unchecked((int)Handle);
     public override string ToString() => $"0x{Handle:x}";
 
-    // ---------------- Properties ---------------- //
+    // ---------------- Public Interface ---------------- //
 
     public VariableReflection Variable
     {
@@ -124,9 +124,6 @@ public readonly partial struct VariableLayoutReflection : IEquatable<VariableLay
             return spReflectionVariableLayout_getStage(this);
         }
     }
-
-    // ---------------- Methods ---------------- //
-
 
     public nuint GetOffset(SlangParameterCategory category = SlangParameterCategory.Uniform)
     {

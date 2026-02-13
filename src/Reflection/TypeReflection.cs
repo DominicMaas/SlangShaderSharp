@@ -33,7 +33,7 @@ public readonly partial struct TypeReflection : IEquatable<TypeReflection>
     public override int GetHashCode() => unchecked((int)Handle);
     public override string ToString() => $"0x{Handle:x}";
 
-    // ---------------- Properties ---------------- //
+    // ---------------- Public Interface ---------------- //
 
     public SlangTypeKind Kind
     {
@@ -143,16 +143,41 @@ public readonly partial struct TypeReflection : IEquatable<TypeReflection>
         }
     }
 
-    public GenericReflection GenericContainer
+    public bool IsArray => Kind == SlangTypeKind.Array;
+
+    public TypeReflection UnwrapArray()
+    {
+        var type = this;
+        while (type.IsArray)
+        {
+            type = type.ElementType;
+        }
+        return type;
+    }
+
+    public nuint TotalArrayElementCount
     {
         get
         {
-            if (this == Null) return GenericReflection.Null;
-            return spReflectionType_GetGenericContainer(this);
+            if (!IsArray) return 0;
+
+            nuint result = 1;
+            var type = this;
+
+            for (; ; )
+            {
+                if (!type.IsArray) return result;
+
+                var c = type.ElementCount;
+
+                if (c == Slang.UnknownSize) return Slang.UnknownSize;
+                if (c == Slang.UnboundedSize) return Slang.UnboundedSize;
+
+                result *= c;
+                type = type.ElementType;
+            }
         }
     }
-
-    // ---------------- Methods ---------------- //
 
     public VariableReflection GetFieldByIndex(uint index)
     {
@@ -188,10 +213,21 @@ public readonly partial struct TypeReflection : IEquatable<TypeReflection>
         return spReflectionType_FindUserAttributeByName(this, name);
     }
 
+    public AttributeReflection FindUserAttributeByName(string name) => FindAttributeByName(name);
+
     public TypeReflection ApplySpecializations(GenericReflection generic)
     {
         if (this == Null) return Null;
         return spReflectionType_applySpecializations(this, generic);
+    }
+
+    public GenericReflection GenericContainer
+    {
+        get
+        {
+            if (this == Null) return GenericReflection.Null;
+            return spReflectionType_GetGenericContainer(this);
+        }
     }
 
     // ---------------- Native Imports ---------------- //

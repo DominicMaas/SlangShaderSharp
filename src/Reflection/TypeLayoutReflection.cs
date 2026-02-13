@@ -32,7 +32,7 @@ public readonly partial struct TypeLayoutReflection : IEquatable<TypeLayoutRefle
     public override int GetHashCode() => unchecked((int)Handle);
     public override string ToString() => $"0x{Handle:x}";
 
-    // ---------------- Properties ---------------- //
+    // ---------------- Public Interface ---------------- //
 
     public TypeReflection Type
     {
@@ -160,7 +160,35 @@ public readonly partial struct TypeLayoutReflection : IEquatable<TypeLayoutRefle
         }
     }
 
-    // ---------------- Methods ---------------- //
+    public bool IsArray => Type.IsArray;
+
+    public TypeLayoutReflection UnwrapArray()
+    {
+        var typeLayout = this;
+        while (typeLayout.IsArray)
+        {
+            typeLayout = typeLayout.ElementTypeLayout;
+        }
+        return typeLayout;
+    }
+
+    public nuint GetElementCount(ShaderReflection reflection) => Type.GetSpecializedElementCount(reflection);
+
+    public nuint TotalArrayElementCount => Type.TotalArrayElementCount;
+
+    public uint RowCount => Type.RowCount;
+
+    public uint ColumnCount => Type.ColumnCount;
+
+    public SlangScalarType ScalarType => Type.ScalarType;
+
+    public TypeReflection ResourceResultType => Type.ResourceResultType;
+
+    public SlangResourceShape ResourceShape => Type.ResourceShape;
+
+    public SlangResourceAccess ResourceAccess => Type.ResourceAccess;
+
+    public string Name => Type.Name;
 
     public nuint GetSize(SlangParameterCategory category)
     {

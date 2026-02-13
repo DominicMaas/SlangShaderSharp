@@ -30,7 +30,7 @@ public readonly struct BufferReflection : IEquatable<BufferReflection>
     public override int GetHashCode() => unchecked((int)Handle);
     public override string ToString() => $"0x{Handle:x}";
 
-    // ---------------- Methods ---------------- //
+    // ---------------- Public Interface ---------------- //
 
     // ---------------- Native Imports ---------------- //
 }

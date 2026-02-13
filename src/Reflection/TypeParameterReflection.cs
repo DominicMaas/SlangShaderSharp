@@ -33,7 +33,7 @@ public readonly partial struct TypeParameterReflection : IEquatable<TypeParamete
     public override int GetHashCode() => unchecked((int)Handle);
     public override string ToString() => $"0x{Handle:x}";
 
-    // ---------------- Methods ---------------- //
+    // ---------------- Public Interface ---------------- //
 
     public string Name
     {

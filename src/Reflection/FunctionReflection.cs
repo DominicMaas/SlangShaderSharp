@@ -33,7 +33,7 @@ public readonly partial struct FunctionReflection : IEquatable<FunctionReflectio
     public override int GetHashCode() => unchecked((int)Handle);
     public override string ToString() => $"0x{Handle:x}";
 
-    // ---------------- Methods ---------------- //
+    // ---------------- Public Interface ---------------- //
 
     public string Name
     {
@@ -88,6 +88,60 @@ public readonly partial struct FunctionReflection : IEquatable<FunctionReflectio
         if (this == Null) return null;
         var attr = spReflectionFunction_FindUserAttributeByName(this, session, name);
         return attr == AttributeReflection.Null ? null : attr;
+    }
+
+    public nint FindModifier(ModifierID id)
+    {
+        if (this == Null) return 0;
+        return spReflectionFunction_FindModifier(this, id);
+    }
+
+    public GenericReflection GenericContainer
+    {
+        get
+        {
+            if (this == Null) return GenericReflection.Null;
+            return spReflectionFunction_GetGenericContainer(this);
+        }
+    }
+
+    public FunctionReflection ApplySpecializations(GenericReflection generic)
+    {
+        if (this == Null) return FunctionReflection.Null;
+        return spReflectionFunction_applySpecializations(this, generic);
+    }
+
+    public unsafe FunctionReflection SpecializeWithArgTypes(ReadOnlySpan<TypeReflection> args)
+    {
+        if (this == Null) return FunctionReflection.Null;
+        fixed (TypeReflection* pArgs = args)
+        {
+            return spReflectionFunction_specializeWithArgTypes(this, (uint)args.Length, pArgs);
+        }
+    }
+
+    public bool IsOverloaded
+    {
+        get
+        {
+            if (this == Null) return false;
+            return spReflectionFunction_isOverloaded(this);
+        }
+    }
+
+    public uint OverloadCount
+    {
+        get
+        {
+            if (this == Null) return 0;
+            return spReflectionFunction_getOverloadCount(this);
+        }
+    }
+
+    public FunctionReflection GetOverload(uint index)
+    {
+        if (this == Null) return FunctionReflection.Null;
+        return spReflectionFunction_getOverload(this, index);
     }
 
     // ---------------- Native Imports ---------------- //
@@ -157,4 +211,3 @@ internal static class FunctionReflectionMarshaller
     public static nint ConvertToUnmanaged(FunctionReflection managed) => managed.Handle;
     public static FunctionReflection ConvertToManaged(nint unmanaged) => new(unmanaged);
 }
-

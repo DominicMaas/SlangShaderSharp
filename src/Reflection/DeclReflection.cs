@@ -34,7 +34,7 @@ public readonly partial struct DeclReflection : IEquatable<DeclReflection>, IRea
     public override int GetHashCode() => unchecked((int)Handle);
     public override string ToString() => $"0x{Handle:x}";
 
-    // ---------------- Methods ---------------- //
+    // ---------------- Public Interface ---------------- //
 
     public string Name
     {
@@ -52,6 +52,21 @@ public readonly partial struct DeclReflection : IEquatable<DeclReflection>, IRea
             if (this == Null) return DeclReflectionKind.Unsupported;
             return spReflectionDecl_getKind(this);
         }
+    }
+
+    public int ChildrenCount
+    {
+        get
+        {
+            if (this == Null) return 0;
+            return (int)spReflectionDecl_getChildrenCount(this);
+        }
+    }
+
+    public DeclReflection GetChild(uint index)
+    {
+        if (this == Null) return DeclReflection.Null;
+        return spReflectionDecl_getChild(this, index);
     }
 
     public TypeReflection Type
@@ -88,7 +103,6 @@ public readonly partial struct DeclReflection : IEquatable<DeclReflection>, IRea
             if (this == Null) return Null;
             return spReflectionDecl_getParent(this);
         }
-
     }
 
     public nint FindModifier(ModifierID id)
@@ -99,23 +113,9 @@ public readonly partial struct DeclReflection : IEquatable<DeclReflection>, IRea
 
     // ---------------- IReadOnlyList Implementation ---------------- //
 
-    public int Count
-    {
-        get
-        {
-            if (this == Null) return 0;
-            return (int)spReflectionDecl_getChildrenCount(this);
-        }
-    }
+    public int Count => ChildrenCount;
 
-    public DeclReflection this[int index]
-    {
-        get
-        {
-            if (this == Null) return Null;
-            return spReflectionDecl_getChild(this, (uint)index);
-        }
-    }
+    public DeclReflection this[int index] => GetChild((uint)index);
 
     public IEnumerator<DeclReflection> GetEnumerator()
     {
@@ -135,7 +135,7 @@ public readonly partial struct DeclReflection : IEquatable<DeclReflection>, IRea
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     [return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]
-    private static unsafe partial string spReflectionDecl_getName(DeclReflection decl);
+    private static partial string spReflectionDecl_getName(DeclReflection decl);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]

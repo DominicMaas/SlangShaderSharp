@@ -33,6 +33,110 @@ public readonly partial struct GenericReflection : IEquatable<GenericReflection>
     public override int GetHashCode() => unchecked((int)Handle);
     public override string ToString() => $"0x{Handle:x}";
 
+    // ---------------- Public Interface ---------------- //
+
+    public DeclReflection AsDecl()
+    {
+        if (this == Null) return DeclReflection.Null;
+        return spReflectionGeneric_asDecl(this);
+    }
+
+    public string Name
+    {
+        get
+        {
+            if (this == Null) return string.Empty;
+            return spReflectionGeneric_GetName(this);
+        }
+    }
+
+    public uint TypeParameterCount
+    {
+        get
+        {
+            if (this == Null) return 0;
+            return spReflectionGeneric_GetTypeParameterCount(this);
+        }
+    }
+
+    public VariableReflection GetTypeParameter(uint index)
+    {
+        if (this == Null) return VariableReflection.Null;
+        return spReflectionGeneric_GetTypeParameter(this, index);
+    }
+
+    public uint ValueParameterCount
+    {
+        get
+        {
+            if (this == Null) return 0;
+            return spReflectionGeneric_GetValueParameterCount(this);
+        }
+    }
+
+    public VariableReflection GetValueParameter(uint index)
+    {
+        if (this == Null) return VariableReflection.Null;
+        return spReflectionGeneric_GetValueParameter(this, index);
+    }
+
+    public uint GetTypeParameterConstraintCount(VariableReflection typeParam)
+    {
+        if (this == Null) return 0;
+        return spReflectionGeneric_GetTypeParameterConstraintCount(this, typeParam);
+    }
+
+    public TypeReflection GetTypeParameterConstraintType(VariableReflection typeParam, uint index)
+    {
+        if (this == Null) return TypeReflection.Null;
+        return spReflectionGeneric_GetTypeParameterConstraintType(this, typeParam, index);
+    }
+
+    public DeclReflection InnerDecl
+    {
+        get
+        {
+            if (this == Null) return DeclReflection.Null;
+            return spReflectionGeneric_GetInnerDecl(this);
+        }
+    }
+
+    public DeclReflectionKind InnerKind
+    {
+        get
+        {
+            if (this == Null) return DeclReflectionKind.Unsupported;
+            return spReflectionGeneric_GetInnerKind(this);
+        }
+    }
+
+    public GenericReflection OuterGenericContainer
+    {
+        get
+        {
+            if (this == Null) return GenericReflection.Null;
+            return spReflectionGeneric_GetOuterGenericContainer(this);
+        }
+    }
+
+    public TypeReflection GetConcreteType(VariableReflection typeParam)
+    {
+        if (this == Null) return TypeReflection.Null;
+        return spReflectionGeneric_GetConcreteType(this, typeParam);
+    }
+
+    public long GetConcreteIntVal(VariableReflection valueParam)
+    {
+        if (this == Null) return 0;
+        return spReflectionGeneric_GetConcreteIntVal(this, valueParam);
+    }
+
+    public GenericReflection ApplySpecializations(GenericReflection generic)
+    {
+        if (this == Null) return GenericReflection.Null;
+        return spReflectionGeneric_applySpecializations(this, generic);
+    }
+
     // ---------------- Native Imports ---------------- //
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
@@ -74,7 +178,7 @@ public readonly partial struct GenericReflection : IEquatable<GenericReflection>
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial SlangDeclKind spReflectionGeneric_GetInnerKind(GenericReflection generic);
+    private static partial DeclReflectionKind spReflectionGeneric_GetInnerKind(GenericReflection generic);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
