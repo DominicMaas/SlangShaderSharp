@@ -4,18 +4,12 @@ An in-development C# binding for the Slang shading language that targets .NET 8+
 
 Now available on NuGet: https://www.nuget.org/packages/SlangShaderSharp/
 
-Not all bindings have been implemented yet! Notably missing are the ones for reflection.
-
-- Some types may also be incorrect (especially around Slang types and things like size_t)
- 
+Not all bindings have been implemented (see below - notable reflection), and not all bindings have been tested. Please raise an issue on GitHub if you encounter any issues.
 
 ## Missing Bindings
 
-- SlangTerminatedChars
-- ICompileRequest
 - Attribute/UserAttribute
 - Reflection APIs
-- IModulePrecompileService_Experimental
 
 ## Versioning
 
