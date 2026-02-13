@@ -13,11 +13,9 @@ Not all bindings have been implemented yet! Notably missing are the ones for ref
 
 - SlangTerminatedChars
 - ICompileRequest
-- IByteCodeRunner
 - Attribute/UserAttribute
 - Reflection APIs
 - IModulePrecompileService_Experimental
-- slang_createByteCodeRunner
 
 ## Versioning
 

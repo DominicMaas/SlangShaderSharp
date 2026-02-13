@@ -140,6 +140,13 @@ public partial class Slang
     public static partial string GetLastInternalErrorMessage();
 
     /// <summary>
+    ///     Create a byte code runner that can execute Slang byte code.
+    /// </summary>
+    [LibraryImport(LibraryName, EntryPoint = "slang_createByteCodeRunner", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    public static partial SlangResult CreateByteCodeRunner(in ByteCodeRunnerDesc desc, out IByteCodeRunner byteCodeRunner);
+
+    /// <summary>
     ///      Disassemble a Slang byte code blob into human-readable text.
     /// </summary>
     [LibraryImport(LibraryName, EntryPoint = "slang_disassembleByteCode", StringMarshalling = StringMarshalling.Utf8)]
