@@ -22,12 +22,13 @@
   <PropertyGroup>
     <PackageId>SlangShaderSharp</PackageId>
     <Authors>Dominic Maas</Authors>
-    <Description>C# bindings for the Slang Shader Language compiler</Description>
+    <Description>Fully Managed C# bindings for the Slang Shader Language compiler built on-top of Source Generated COM Wrappers.</Description>
     <PackageProjectUrl>https://github.com/DominicMaas/SlangShaderSharp</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <RepositoryUrl>https://github.com/DominicMaas/SlangShaderSharp</RepositoryUrl>
     <PackageLicenseExpression>Apache-2.0 WITH LLVM-exception</PackageLicenseExpression>
+	<PackageTags>slang;shader;dxc;shader-compiler;hlsl;glsl;spirv;compiler</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
