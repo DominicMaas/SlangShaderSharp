@@ -24,7 +24,7 @@ public partial interface IGlobalSession
     /// </summary>
     [PreserveSig]
     SlangResult CreateSession(
-        SessionDesc description,
+        in SessionDesc description,
         out ISession session);
 
     /// <summary>
@@ -282,7 +282,7 @@ public partial interface IGlobalSession
     /// </summary>
     [PreserveSig]
     SlangResult GetSessionDescDigest(
-        SessionDesc sessionDesc,
+        ref SessionDesc sessionDesc,
         out ISlangBlob blob);
 
     /// <summary>

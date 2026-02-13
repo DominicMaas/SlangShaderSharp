@@ -91,7 +91,7 @@ public unsafe partial interface ISession
     [PreserveSig]
     SlangResult CreateCompositeComponentType(
         nint* componentTypes,
-        long componentTypeCount,
+        nint componentTypeCount,
         out IComponentType compositeComponentType,
         out ISlangBlob? diagnostics);
 
@@ -194,7 +194,7 @@ public unsafe partial interface ISession
         TypeReflection type,
         TypeReflection interfaceType,
         out ITypeConformance conformance,
-        long conformanceIdOverride,
+        nint conformanceIdOverride,
         out ISlangBlob? diagnostics);
 
     /// <summary>
@@ -208,10 +208,10 @@ public unsafe partial interface ISession
         out ISlangBlob? diagnostics);
 
     [PreserveSig]
-    long GetLoadedModuleCount();
+    nint GetLoadedModuleCount();
 
     [PreserveSig]
-    IModule? GetLoadedModule(long index);
+    IModule? GetLoadedModule(nint index);
 
     /// <summary>
     ///     Checks if a precompiled binary module is up-to-date with the current compiler
@@ -262,8 +262,8 @@ public unsafe partial interface ISession
     SlangResult GetDynamicObjectRTTIBytes(
         TypeReflection type,
         TypeReflection interfaceType,
-        out long rttiDataBuffer,
-        long bufferSizeInBytes);
+        nint rttiDataBuffer,
+        uint bufferSizeInBytes);
 
     /// <summary>
     ///     Read module info (name and version) from a module blob
@@ -274,9 +274,9 @@ public unsafe partial interface ISession
     [PreserveSig]
     SlangResult LoadModuleInfoFromIRBlob(
         ISlangBlob source,
-        out long moduleVersion,
-        out string moduleCompilerVersion,
-        out string moduleName);
+        out nint moduleVersion,
+        out IntPtr moduleCompilerVersion,
+        out IntPtr moduleName);
 }
 
 public static class ISessionExtensions

@@ -49,23 +49,24 @@ public unsafe struct SessionDesc
     public SessionDesc() { }
 }
 
+[StructLayout(LayoutKind.Sequential)]
 internal unsafe struct SessionDescUnmanaged
 {
     public nuint structureSize;
     public TargetDescUnmanaged* targets;
-    public long targetCount;
+    public nint targetCount;
     public SessionFlags flags;
     public SlangMatrixLayoutMode defaultMatrixLayoutMode;
     public byte** searchPaths;
-    public long searchPathCount;
+    public nint searchPathCount;
     public PreprocessorMacroDescUnmanaged* preprocessorMacros;
-    public long preprocessorMacroCount;
+    public nint preprocessorMacroCount;
     public nint fileSystem;
-    public bool enableEffectAnnotations;
-    public bool allowGLSLSyntax;
+    public byte enableEffectAnnotations;
+    public byte allowGLSLSyntax;
     public CompilerOptionEntryUnmanaged* compilerOptionEntries;
     public uint compilerOptionEntryCount;
-    public bool skipSPIRVValidation;
+    public byte skipSPIRVValidation;
 }
 
 [CustomMarshaller(typeof(SessionDesc), MarshalMode.Default, typeof(SessionDescMarshaller))]
@@ -85,11 +86,11 @@ internal static unsafe class SessionDescMarshaller
             preprocessorMacros = PreprocessorMacroDescMarshaller.ConvertToUnmanagedArray(managed.PreprocessorMacros, out var preprocessorMacroCount),
             preprocessorMacroCount = preprocessorMacroCount,
             //FileSystem = managed.FileSystem != null ? ISlangFileSystemMarshaller,
-            enableEffectAnnotations = managed.EnableEffectAnnotations,
-            allowGLSLSyntax = managed.AllowGLSLSyntax,
+            enableEffectAnnotations = managed.EnableEffectAnnotations ? (byte)1 : (byte)0,
+            allowGLSLSyntax = managed.AllowGLSLSyntax ? (byte)1 : (byte)0,
             compilerOptionEntries = CompilerOptionEntryMarshaller.ConvertToUnmanagedArray(managed.CompilerOptionEntries, out var compilerOptionEntryCount),
             compilerOptionEntryCount = (uint)compilerOptionEntryCount,
-            skipSPIRVValidation = managed.SkipSPIRVValidation
+            skipSPIRVValidation = managed.SkipSPIRVValidation ? (byte)1 : (byte)0
         };
     }
 
@@ -103,10 +104,10 @@ internal static unsafe class SessionDescMarshaller
             SearchPaths = ConvertStringArrayToManaged(unmanaged.searchPaths, (int)unmanaged.searchPathCount),
             PreprocessorMacros = PreprocessorMacroDescMarshaller.ConvertToManagedArray(unmanaged.preprocessorMacros, (int)unmanaged.preprocessorMacroCount),
             //FileSystem = unmanaged.FileSystem,
-            EnableEffectAnnotations = unmanaged.enableEffectAnnotations,
-            AllowGLSLSyntax = unmanaged.allowGLSLSyntax,
+            EnableEffectAnnotations = unmanaged.enableEffectAnnotations == 1,
+            AllowGLSLSyntax = unmanaged.allowGLSLSyntax == 1,
             CompilerOptionEntries = CompilerOptionEntryMarshaller.ConvertToManagedArray(unmanaged.compilerOptionEntries, (int)unmanaged.compilerOptionEntryCount),
-            SkipSPIRVValidation = unmanaged.skipSPIRVValidation
+            SkipSPIRVValidation = unmanaged.skipSPIRVValidation == 1
         };
     }
 
