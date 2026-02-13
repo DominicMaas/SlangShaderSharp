@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using SlangShaderSharp.Internal;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
 namespace SlangShaderSharp;
@@ -24,7 +25,7 @@ public partial interface IGlobalSession
     [PreserveSig]
     SlangResult CreateSession(
         SessionDesc description,
-        out ISession sesion);
+        out ISession session);
 
     /// <summary>
     ///     Look up the internal ID of a profile by its `name`.
@@ -63,6 +64,60 @@ public partial interface IGlobalSession
     [Obsolete("Use SetLanguagePrelude instead")]
     void SetDownstreamCompilerPrelude(
         SlangPassThrough passThrough,
+        string preludeText);
+
+    /// <summary>
+    ///     Get the 'prelude' for generated code for a 'downstream compiler'.
+    /// </summary>
+    /// <param name="passThrough">The downstream compiler for generated code that will have the prelude applied to it.</param>
+    /// <param name="prelude">Blob that holds the string of the prelude.</param>
+    [PreserveSig]
+    [Obsolete("Use GetLanguagePrelude instead")]
+    void GetDownstreamCompilerPrelude(
+      SlangPassThrough passThrough,
+      out ISlangBlob prelude);
+
+    /// <summary>
+    ///     Get the build version 'tag' string. The string is the same as produced via `git describe
+    ///     --tags` for the project. If Slang is built separately from the automated build scripts the
+    ///     contents will by default be 'unknown'. Any string can be set by changing the contents of
+    ///     'slang-tag-version.h' file and recompiling the project.
+    ///
+    ///     This method will return exactly the same result as the free function spGetBuildTagString.
+    /// </summary>
+    /// <returns>The build tag string</returns>
+    [PreserveSig]
+    [return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]
+    string GetBuildTagString();
+
+    /// <summary>
+    ///     For a given source language set the default compiler.
+    ///     If a default cannot be chosen (for example the target cannot be achieved by the default),
+    ///     the default will not be used.
+    /// </summary>
+    /// <param name="sourceLanguage">the source language</param>
+    /// <param name="defaultCompiler">the default compiler for that language</param>
+    [PreserveSig]
+    SlangResult SetDefaultDownstreamCompiler(
+        SlangSourceLanguage sourceLanguage,
+        SlangPassThrough defaultCompiler);
+
+    /// <summary>
+    ///     For a source type get the default compiler
+    /// </summary>
+    /// <param name="sourceLanguage">the source language</param>
+    /// <returns>The downstream compiler for that source language</returns>
+    [PreserveSig]
+    SlangPassThrough GetDefaultDownstreamCompiler(SlangSourceLanguage sourceLanguage);
+
+    /// <summary>
+    ///     Set the 'prelude' placed before generated code for a specific language type.
+    /// </summary>
+    /// <param name="sourceLanguage">The language the prelude should be inserted on.</param>
+    /// <param name="preludeText">The text added pre-pended verbatim before the generated source</param>
+    [PreserveSig]
+    void SetLanguagePrelude(
+        SlangSourceLanguage sourceLanguage,
         string preludeText);
 
     /// <summary>
@@ -215,7 +270,6 @@ public partial interface IGlobalSession
     /// <param name="argv">An input array of command line arguments to parse.</param>
     /// <param name="sessionDesc">A pointer to a SessionDesc struct to receive parsed session desc.</param>
     /// <param name="auxAllocation">Auxiliary memory allocated to hold data used in the session desc.</param>
-    /// <returns></>
     [PreserveSig]
     SlangResult ParseCommandLineArguments(
         int argc,

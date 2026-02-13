@@ -17,7 +17,7 @@ public unsafe partial interface IMetadata : ISlangCastable
         SlangParameterCategory category,
         uint spaceIndex,
         uint registerIndex,
-        [MarshalAs(UnmanagedType.Bool)] out bool used);
+        [MarshalAs(UnmanagedType.I1)] out bool used);
 
     /// <summary>
     ///     Returns the debug build identifier for a base and debug spirv pair.
