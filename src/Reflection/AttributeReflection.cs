@@ -33,7 +33,7 @@ public readonly partial struct AttributeReflection : IEquatable<AttributeReflect
     public override int GetHashCode() => unchecked((int)Handle);
     public override string ToString() => $"0x{Handle:x}";
 
-    // ---------------- Methods ---------------- //
+    // ---------------- Public Interface ---------------- //
 
     public string Name
     {
@@ -59,34 +59,28 @@ public readonly partial struct AttributeReflection : IEquatable<AttributeReflect
         return spReflectionUserAttribute_GetArgumentType(this, index);
     }
 
-    public int? GetArgumentValueInt(uint index)
+    public int GetArgumentValueInt(uint index)
     {
-        if (this == Null) return null;
-
-        if (!spReflectionUserAttribute_GetArgumentValueInt(this, index, out var value).Succeeded)
-            return null;
-
+        if (this == Null) return 0;
+        spReflectionUserAttribute_GetArgumentValueInt(this, index, out var value);
         return value;
     }
 
-    public float? GetArgumentValueFloat(uint index)
+    public float GetArgumentValueFloat(uint index)
     {
-        if (this == Null) return null;
-
-        if (!spReflectionUserAttribute_GetArgumentValueFloat(this, index, out var value).Succeeded)
-            return null;
-
+        if (this == Null) return 0.0f;
+        spReflectionUserAttribute_GetArgumentValueFloat(this, index, out var value);
         return value;
     }
 
-    public string? GetArgumentValueString(uint index)
+    public string GetArgumentValueString(uint index)
     {
-        if (this == Null) return null;
+        if (this == Null) return string.Empty;
 
         var ptr = spReflectionUserAttribute_GetArgumentValueString(this, index, out var size);
-        if (ptr == nint.Zero) return null;
+        if (ptr == nint.Zero) return string.Empty;
 
-        return Marshal.PtrToStringUTF8(ptr, (int)size);
+        return Marshal.PtrToStringUTF8(ptr, (int)size) ?? string.Empty;
     }
 
     // ---------------- Native Imports ---------------- //
