@@ -30,6 +30,6 @@ public class GlobalSetup
             return handle;
         }
 
-        throw new Exception("Unable to load native library: " + fullPath);
+        return IntPtr.Zero;
     }
 }

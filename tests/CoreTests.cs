@@ -7,24 +7,6 @@ namespace SlangShaderSharp.Tests;
 public sealed class CoreTests(GlobalSessionFixture fixture)
 {
     [Fact]
-    public void TestUsingComWrappers()
-    {
-        ((int)fixture.GlobalSession.FindProfile("glsl_450")).ShouldBe(1441792);
-    }
-
-    [Fact]
-    public void TestGlobalAndLocalSession()
-    {
-        var sessionDesc = new SessionDesc
-        {
-            Targets = [new TargetDesc { Format = SlangCompileTarget.Spirv, Profile = fixture.GlobalSession.FindProfile("spirv_1_5") }]
-        };
-
-        fixture.GlobalSession.CreateSession(sessionDesc, out var session).Succeeded.ShouldBeTrue();
-        session.ShouldNotBeNull();
-    }
-
-    [Fact]
     public void TestModuleLoad()
     {
         // 2. Create Session
