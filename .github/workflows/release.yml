@@ -122,8 +122,8 @@ jobs:
 
       # Push the package
       - name: NuGet Push (Package)
-        run: dotnet nuget push artifacts/SlangShaderSharp.${{ env.VERSION }}.nupkg --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
+        run: dotnet nuget push SlangShaderSharp.${{ env.VERSION }}.nupkg --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
 
       - name: NuGet Push (Symbols)
-        run: dotnet nuget push artifacts/SlangShaderSharp.${{ env.VERSION }}.snupkg --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
+        run: dotnet nuget push SlangShaderSharp.${{ env.VERSION }}.snupkg --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
 
