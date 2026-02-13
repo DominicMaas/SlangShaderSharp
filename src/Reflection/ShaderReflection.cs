@@ -239,6 +239,19 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
         return spReflection_ToJson(this, null!, out blob);
     }
 
+    /// <summary>
+    ///     Get the descriptor set/space index allocated for the bindless resource heap.
+    ///     Returns -1 if the program does not use bindless resource heap.
+    /// </summary>
+    public nint BindlessSpaceIndex
+    {
+        get
+        {
+            if (this == Null) return -1;
+            return spReflection_getBindlessSpaceIndex(this);
+        }
+    }
+
     // ---------------- Native Imports ----------------
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
@@ -346,6 +359,10 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial SlangResult spReflection_ToJson(ShaderReflection reflection, ICompileRequest compileRequest, out ISlangBlob blob);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial nint spReflection_getBindlessSpaceIndex(ShaderReflection reflection);
 
 }
 
