@@ -135,7 +135,7 @@ public partial interface IGlobalSession
     /// </summary>
     [PreserveSig]
     [Obsolete("No Reason Specified")]
-    void CreateCompileRequest(out ICompileRequest compileRequest);
+    SlangResult CreateCompileRequest(out ICompileRequest compileRequest);
 
     /// <summary>
     ///  Add new builtin declarations to be used in subsequent compiles.

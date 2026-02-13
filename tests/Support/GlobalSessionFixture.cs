@@ -6,8 +6,6 @@ public sealed class GlobalSessionFixture : IDisposable
 {
     public IGlobalSession GlobalSession { get; }
 
-    public object GlobalLock { get; } = new();
-
     public GlobalSessionFixture()
     {
         Slang.CreateGlobalSession(Slang.ApiVersion, out var globalSession).ShouldBe(SlangResult.SLANG_OK);

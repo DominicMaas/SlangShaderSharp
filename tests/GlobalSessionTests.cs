@@ -77,8 +77,8 @@ public class GlobalSessionTests(GlobalSessionFixture fixture)
     [Fact]
     public void CreateCompileRequest()
     {
-        // TODO: Enable this once we have completed the bindings for ICompileRequest
-        //fixture.GlobalSession.CreateCompileRequest(out var compileRequest);
+        // TODO: Uncomment once bug is fixed in slang: https://github.com/shader-slang/slang/issues/10009
+        //fixture.GlobalSession.CreateCompileRequest(out var compileRequest).ShouldBe(SlangResult.SLANG_OK);
         //compileRequest.ShouldNotBeNull();
     }
 

@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using SlangShaderSharp.Internal;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
 namespace SlangShaderSharp;
@@ -216,7 +217,199 @@ public partial interface ICompileRequest
         void* libData,
         nuint libDataSize);
 
-    // TODO: The rest of this interface
+    /// <summary>
+    ///     Add a source string span to the given translation unit.
+    ///     The source span is pointer based.
+    /// </summary>
+    [PreserveSig]
+    void AddTranslationUnitSourceStringSpan(
+        int translationUnitIndex,
+        string path,
+        nint sourceBegin,
+        nint sourceEnd);
+
+    /// <summary>
+    ///     Add a blob of source code to the given translation unit.
+    /// </summary>
+    [PreserveSig]
+    void AddTranslationUnitSourceBlob(
+        int translationUnitIndex,
+        string path,
+        ISlangBlob sourceBlob);
+
+    /// <summary>
+    ///     Add an entry point in a particular translation unit.
+    /// </summary>
+    [PreserveSig]
+    int AddEntryPoint(
+        int translationUnitIndex,
+        string name,
+        SlangStage stage);
+
+    /// <summary>
+    ///     Add an entry point in a particular translation unit,
+    ///     with additional arguments that specify the concrete
+    ///     type names for entry-point generic type parameters.
+    /// </summary>
+    [PreserveSig]
+    int AddEntryPointEx(
+        int translationUnitIndex,
+        string name,
+        SlangStage stage,
+        int genericArgCount,
+        [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPUTF8Str)] string[] genericArgs);
+
+    /// <summary>
+    ///     Specify the arguments to use for global generic parameters.
+    /// </summary>
+    [PreserveSig]
+    SlangResult SetGlobalGenericArgs(
+        int genericArgCount,
+        [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPUTF8Str)] string[] genericArgs);
+
+    /// <summary>
+    ///     Specify the concrete type to be used for a global "existential slot."
+    /// </summary>
+    [PreserveSig]
+    SlangResult SetTypeNameForGlobalExistentialTypeParam(
+        int slotIndex,
+        string typeName);
+
+    /// <summary>
+    ///     Specify the concrete type to be used for an entry-point "existential slot."
+    /// </summary>
+    [PreserveSig]
+    SlangResult SetTypeNameForEntryPointExistentialTypeParam(
+        int entryPointIndex,
+        int slotIndex,
+        string typeName);
+
+    /// <summary>
+    ///     Enable or disable an experimental, best-effort GLSL frontend.
+    /// </summary>
+    [PreserveSig]
+    void SetAllowGLSLInput([MarshalAs(UnmanagedType.I1)] bool value);
+
+    /// <summary>
+    ///     Execute the compilation request.
+    /// </summary>
+    [PreserveSig]
+    SlangResult Compile();
+
+    /// <summary>
+    ///     Get any diagnostic messages reported by the compiler.
+    ///     Returns a pointer to a null-terminated string.
+    /// </summary>
+    [PreserveSig]
+    [return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]
+    string GetDiagnosticOutput();
+
+    /// <summary>
+    ///     Get diagnostic messages reported by the compiler.
+    /// </summary>
+    [PreserveSig]
+    SlangResult GetDiagnosticOutputBlob(out ISlangBlob outBlob);
+
+    /// <summary>
+    ///     Get the number of files that this compilation depended on.
+    /// </summary>
+    [PreserveSig]
+    int GetDependencyFileCount();
+
+    /// <summary>
+    ///     Get the path to a file this compilation depended on.
+    /// </summary>
+    [PreserveSig]
+    [return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]
+    string GetDependencyFilePath(int index);
+
+    /// <summary>
+    ///     Get the number of translation units associated with the compilation request.
+    /// </summary>
+    [PreserveSig]
+    int GetTranslationUnitCount();
+
+    /// <summary>
+    ///     Get the output source code associated with a specific entry point.
+    /// </summary>
+    [PreserveSig]
+    [return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]
+    string GetEntryPointSource(int entryPointIndex);
+
+    /// <summary>
+    ///     Get the output bytecode associated with a specific entry point.
+    /// </summary>
+    [PreserveSig]
+    nint GetEntryPointCode(
+        int entryPointIndex,
+        out nuint outSize);
+
+    /// <summary>
+    ///     Get the output code associated with a specific entry point.
+    /// </summary>
+    [PreserveSig]
+    SlangResult GetEntryPointCodeBlob(
+        int entryPointIndex,
+        int targetIndex,
+        out ISlangBlob outBlob);
+
+    /// <summary>
+    ///     Get entry point 'callable' functions accessible through the ISlangSharedLibrary interface.
+    /// </summary>
+    [PreserveSig]
+    SlangResult GetEntryPointHostCallable(
+        int entryPointIndex,
+        int targetIndex,
+        out ISlangSharedLibrary outSharedLibrary);
+
+    /// <summary>
+    ///     Get the output code associated with a specific target.
+    /// </summary>
+    [PreserveSig]
+    SlangResult GetTargetCodeBlob(
+        int targetIndex,
+        out ISlangBlob outBlob);
+
+    /// <summary>
+    ///     Get 'callable' functions for a target accessible through the ISlangSharedLibrary interface.
+    /// </summary>
+    [PreserveSig]
+    SlangResult GetTargetHostCallable(
+        int targetIndex,
+        out ISlangSharedLibrary outSharedLibrary);
+
+    /// <summary>
+    ///     Get the output bytecode associated with an entire compile request.
+    /// </summary>
+    [PreserveSig]
+    nint GetCompileRequestCode(out nuint outSize);
+
+    /// <summary>
+    ///     Get the compilation result as a file system.
+    /// </summary>
+    [PreserveSig]
+    ISlangMutableFileSystem GetCompileRequestResultAsFileSystem();
+
+    /// <summary>
+    ///     Return the container code as a blob.
+    /// </summary>
+    [PreserveSig]
+    SlangResult GetContainerCode(out ISlangBlob outBlob);
+
+    /// <summary>
+    ///     Load repro from memory specified.
+    /// </summary>
+    [PreserveSig]
+    SlangResult LoadRepro(
+        ISlangFileSystem fileSystem,
+        nint data,
+        nuint size);
+
+    /// <summary>
+    ///     Save repro state.
+    /// </summary>
+    [PreserveSig]
+    SlangResult SaveRepro(out ISlangBlob outBlob);
 
     /// <summary>
     ///     Enable repro capture.
@@ -351,6 +544,12 @@ public partial interface ICompileRequest
     void OverrideDiagnosticSeverity(
         nint messageId,
         SlangSeverity overrideSeverity);
+
+    /// <summary>
+    ///     Returns the currently active flags of the request's diagnostic sink.
+    /// </summary>
+    [PreserveSig]
+    SlangDiagnosticFlags GetDiagnosticFlags();
 
     /// <summary>
     ///     Sets the flags of the request's diagnostic sink.
