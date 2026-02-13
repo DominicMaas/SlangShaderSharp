@@ -262,7 +262,7 @@ public unsafe partial interface ISession
     SlangResult GetDynamicObjectRTTIBytes(
         TypeReflection type,
         TypeReflection interfaceType,
-        nint rttiDataBuffer,
+        uint* rttiDataBuffer,
         uint bufferSizeInBytes);
 
     /// <summary>
