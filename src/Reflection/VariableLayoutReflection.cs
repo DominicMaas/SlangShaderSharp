@@ -93,7 +93,7 @@ public readonly partial struct VariableLayoutReflection : IEquatable<VariableLay
         return TypeLayout.GetCategoryByIndex(index);
     }
 
-    public nuint GetOffset(SlangParameterCategory category)
+    public nuint GetOffset(SlangParameterCategory category = SlangParameterCategory.Uniform)
     {
         if (this == Null) return 0;
         return spReflectionVariableLayout_GetOffset(this, category);
