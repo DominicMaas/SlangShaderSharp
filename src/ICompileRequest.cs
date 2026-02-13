@@ -204,7 +204,60 @@ public partial interface ICompileRequest
         int translationUnitIndex,
         string path);
 
+    [PreserveSig]
+    void AddTranslationUnitSourceString(
+        int translationUnitIndex,
+        string path,
+        string source);
+
+    [PreserveSig]
+    unsafe SlangResult AddLibraryReference(
+        string basePath,
+        void* libData,
+        nuint libDataSize);
+
     // TODO: The rest of this interface
+
+    /// <summary>
+    ///     Enable repro capture.
+    ///
+    ///     Should be set after any ISlangFileSystem has been set, but before any compilation. It ensures
+    ///     that everything that the ISlangFileSystem accesses will be correctly recorded. Note that if a
+    ///     ISlangFileSystem/ISlangFileSystemExt isn't explicitly set (ie the default is used), then the
+    ///     request will automatically be set up to record everything appropriate.
+    /// </summary>
+    /// <returns></returns>
+    [PreserveSig]
+    SlangResult EnableReproCapture();
+
+    /// <summary>
+    ///     Get the (linked) program for a compile request.
+    ///
+    ///     The linked program will include all of the global-scope modules for the
+    ///     translation units in the program, plus any modules that they `import`
+    ///     (transitively), specialized to any global specialization arguments that
+    ///     were provided via the API.
+    /// </summary>
+    [PreserveSig]
+    SlangResult GetProgram(out IComponentType program);
+
+    /// <summary>
+    ///     Get the (partially linked) component type for an entry point.
+    ///
+    ///     The returned component type will include the entry point at the
+    ///     given index, and will be specialized using any specialization arguments
+    ///     that were provided for it via the API.
+    ///
+    ///     The returned component will* not* include the modules representing
+    ///     the global scope and its dependencies/specialization, so a client
+    ///     program will typically want to compose this component type with
+    ///     the one returned by `spCompileRequest_getProgram` to get a complete
+    ///     and usable component type from which kernel code can be requested.
+    /// </summary>
+    [PreserveSig]
+    SlangResult GetEntryPoint(
+        nint entryPointIndex,
+        out IComponentType entryPoint);
 
     /// <summary>
     ///     Get the (un-linked) module for a translation unit.
@@ -221,7 +274,7 @@ public partial interface ICompileRequest
     /// </summary>
     [PreserveSig]
     SlangResult GetModule(
-        int translationUnitIndex,
+        nint translationUnitIndex,
         out IModule module);
 
     /// <summary>
@@ -247,7 +300,7 @@ public partial interface ICompileRequest
     /// </summary>
     [PreserveSig]
     SlangResult AddTargetCapability(
-        int targetIndex,
+        nint targetIndex,
         SlangCapabilityID capability);
 
     /// <summary>
@@ -264,11 +317,11 @@ public partial interface ICompileRequest
 
     [PreserveSig]
     SlangResult IsParameterLocationUsed(
-        int entryPointIndex,
-        int targetIndex,
+        nint entryPointIndex,
+        nint targetIndex,
         SlangParameterCategory category,
-        uint spaceIndex,
-        uint registerIndex,
+        nuint spaceIndex,
+        nuint registerIndex,
         [MarshalAs(UnmanagedType.I1)] out bool used);
 
     /// <summary>
@@ -276,7 +329,7 @@ public partial interface ICompileRequest
     /// </summary>
     [PreserveSig]
     void SetTargetLineDirectiveMode(
-        int targetIndex,
+        nint targetIndex,
         SlangLineDirectiveMode value);
 
     /// <summary>
@@ -296,7 +349,7 @@ public partial interface ICompileRequest
     /// <param name="overrideSeverity">New severity of the message. If the message is originally Error or Fatal, the new severity cannot be lower than that.</param>
     [PreserveSig]
     void OverrideDiagnosticSeverity(
-        int messageId,
+        nint messageId,
         SlangSeverity overrideSeverity);
 
     /// <summary>
