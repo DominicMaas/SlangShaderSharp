@@ -173,5 +173,11 @@ public enum CompilerOptionName
     /// <summary> bool </summary>
     ReportDynamicDispatchSites,
 
+    /// <summary> bool, enable machine-readable diagnostic output (implies EnableRichDiagnostics) </summary>
+    EnableMachineReadableDiagnostics,
+
+    /// <summary> intValue0: SlangDiagnosticColor (always, never, auto) </summary>
+    DiagnosticColor,
+
     CountOf,
 }
