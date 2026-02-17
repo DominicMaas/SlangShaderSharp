@@ -9,6 +9,7 @@ on:
 
 jobs:
   createPullRequest:
+    name: Create Pull Request
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -23,8 +24,9 @@ jobs:
         uses: peter-evans/create-pull-request@v8
         with:
           commit-message: Update Slang
-          branch: slang-path/${{ inputs.version }}
+          branch: slang-update/${{ inputs.version }}
           title: "Update Slang to ${{ inputs.version }}"
           body: Auto Generated PR to update Slang to version ${{ inputs.version }}
+          sign-commits: true
           assignees: DominicMaas
           reviewers: DominicMaas
