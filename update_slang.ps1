@@ -1,6 +1,6 @@
 param(
     [Parameter(Mandatory=$true)]
-    [string]$Version,
+    [string]$Version
 )
 
 mkdir $env:TEMP\slang
