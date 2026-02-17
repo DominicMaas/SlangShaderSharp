@@ -15,6 +15,8 @@ jobs:
 
       - name: Make changes to pull request
         shell: pwsh
+        env:
+          TEMP: ${{ runner.temp }}
         run: ./update_slang.ps1 -Version ${{ inputs.version }}
 
       - name: Create Pull Request
