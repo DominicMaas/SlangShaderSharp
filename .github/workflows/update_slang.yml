@@ -1,0 +1,28 @@
+name: Update Slang
+run-name: Updating Slang to ${{ inputs.version }}
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        type: string
+        description: Version
+
+jobs:
+  createPullRequest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Make changes to pull request
+        shell: pwsh
+        run: ./update_slang.ps1 -Version ${{ inputs.version }}
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          commit-message: Update Slang
+          branch: slang-path/${{ inputs.version }}
+          title: "Update Slang to ${{ inputs.version }}"
+          body: Auto Generated PR to update Slang to version ${{ inputs.version }}
+          assignees: DominicMaas
+          reviewers: DominicMaas
