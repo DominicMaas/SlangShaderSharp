@@ -7,6 +7,7 @@
   <Folder Name="/Solution Items/">
     <File Path=".github/workflows/release.yml" />
     <File Path=".github/workflows/test.yml" />
+    <File Path=".github/workflows/update_slang.yml" />
     <File Path="LICENSE.md" />
     <File Path="README.md" />
     <File Path="update_slang.ps1" />
