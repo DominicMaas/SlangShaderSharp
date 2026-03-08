@@ -1,6 +1,6 @@
 # SlangShaderSharp
 
-An in-development C# binding for the Slang shading language that targets .NET 8+ built on-top of Source Generated COM Wrappers.
+A C# binding for the Slang shading language that targets .NET 8+ built on-top of Source Generated COM Wrappers.
 
 Now available on NuGet: https://www.nuget.org/packages/SlangShaderSharp/
 
@@ -90,12 +90,3 @@ Slang.Shutdown();
 
 - `ReadOnlySpan<byte> Buffer` - View the blob data as a safe read-only span.
 - `string AsString` - Converts the blob data to a UTF-8 string.
-
-## Updating Bindings
-
-> Eventually this should be moved to a GitHub Action.
-
-1. Update `update_slang.ps1` to point towards the desired Slang version.
-2. Run `update_slang.ps1`.
-3. Adjust any bindings as needed to incorporate any changes in the header files (diff compare the header files to make this easy!)
-
