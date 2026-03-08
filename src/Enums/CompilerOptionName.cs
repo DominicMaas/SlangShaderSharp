@@ -99,6 +99,8 @@ public enum CompilerOptionName
     AllowGLSL,
     EnableExperimentalPasses,
     BindlessSpaceIndex,
+    SpirvResourceHeapStride,
+    SpirvSamplerHeapStride,
     ArchiveType,
     CompileCoreModule,
     Doc,
