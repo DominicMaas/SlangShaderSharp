@@ -30,6 +30,26 @@ public struct CompilerOptionValue
             StringValue1 = value1
         };
     }
+
+    public static CompilerOptionValue FromEnum<T>(T value0, T? value1 = null) where T : struct, Enum
+    {
+        return new CompilerOptionValue
+        {
+            Kind = CompilerOptionValueKind.Int,
+            IntValue0 = Convert.ToInt32(value0),
+            IntValue1 = value1.HasValue ? Convert.ToInt32(value1.Value) : 0
+        };
+    }
+
+    public static CompilerOptionValue FromEnum<T1, T2>(T1 value0, T2? value1 = null) where T1 : struct, Enum where T2 : struct, Enum
+    {
+        return new CompilerOptionValue
+        {
+            Kind = CompilerOptionValueKind.Int,
+            IntValue0 = Convert.ToInt32(value0),
+            IntValue1 = value1.HasValue ? Convert.ToInt32(value1.Value) : 0
+        };
+    }
 }
 
 internal unsafe struct CompilerOptionValueUnmanaged

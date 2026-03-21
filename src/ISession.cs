@@ -277,6 +277,14 @@ public unsafe partial interface ISession
         out nint moduleVersion,
         out IntPtr moduleCompilerVersion,
         out IntPtr moduleName);
+
+    /// <summary>
+    ///     Get the source location of a declaration.
+    /// </summary>
+    [PreserveSig]
+    SlangResult GetDeclSourceLocation(
+        DeclReflection decel,
+        out SourceLocation location);
 }
 
 public static class ISessionExtensions
