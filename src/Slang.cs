@@ -136,6 +136,84 @@ public partial class Slang
     public static partial void Shutdown();
 
     /// <summary>
+    ///      Enable or disable the record layer for API call recording.
+    ///      When enabled, API calls are captured for later replay.
+    ///      The record layer can also be enabled by setting the SLANG_RECORD_LAYER=1 environment variable.
+    ///
+    ///     Environment variables:
+    ///     - SLANG_RECORD_LAYER=1: Enable recording on startup
+    ///     - SLANG_RECORD_PATH=<path>: Use the exact path specified for recording output
+    ///       instead of generating a timestamped folder under .slang-replays/
+    /// </summary>
+    [LibraryImport(LibraryName, EntryPoint = "slang_enableRecordLayer", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    public static partial void EnableRecordLayer([MarshalAs(UnmanagedType.I1)] bool enable);
+
+    /// <summary>
+    ///     Check if the record layer is currently enabled.
+    /// </summary>
+    [LibraryImport(LibraryName, EntryPoint = "slang_isRecordLayerEnabled", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    [return: MarshalAs(UnmanagedType.I1)]
+    public static partial bool IsRecordLayerEnabled();
+
+    /// <summary>
+    ///      Set the base directory for replay files (default: ".slang-replays").
+    ///      Must be called before enabling recording.
+    /// </summary>
+    /// <param name="path">Path to the replay directory.</param>
+    [LibraryImport(LibraryName, EntryPoint = "slang_setReplayDirectory", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    public static partial void SetReplayDirectory(string path);
+
+    /// <summary>
+    ///     Get the current replay base directory.
+    /// </summary>
+    /// <returns>Path to the replay directory.</returns>
+    [LibraryImport(LibraryName, EntryPoint = "slang_getReplayDirectory", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    [return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]
+    public static partial string GetReplayDirectory();
+
+    /// <summary>
+    ///     Get the path to the current recording session folder.
+    /// </summary>
+    /// <returns>Path to the current replay folder, or nullptr if not recording.</returns>
+    [LibraryImport(LibraryName, EntryPoint = "slang_getCurrentReplayPath", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    [return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]
+    public static partial string GetCurrentReplayPath();
+
+    /// <summary>
+    ///     Load a replay from a folder path (reads stream.bin).
+    ///     Switches to playback mode on success.
+    /// </summary>
+    /// <param name="folderPath">Path to the replay folder.</param>
+    /// <returns>SLANG_OK on success, SLANG_E_NOT_FOUND if stream.bin doesn't exist.</returns>
+    [LibraryImport(LibraryName, EntryPoint = "slang_loadReplay", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    public static partial SlangResult LoadReplay(string folderPath);
+
+    /// <summary>
+    ///     Load the most recent replay from the replay directory.
+    ///     Switches to playback mode on success.
+    /// </summary>
+    /// <returns>SLANG_OK on success, SLANG_E_NOT_FOUND if no replays exist.</returns>
+    [LibraryImport(LibraryName, EntryPoint = "slang_loadLatestReplay", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    public static partial SlangResult LoadLatestReplay();
+
+    /// <summary>
+    ///     Insert a labeled marker into the replay stream.
+    ///     Useful for debugging replay streams. Marks a point with a human-readable label.
+    ///     No-op if the record layer is not active.
+    /// </summary>
+    /// <param name="label">The marker label string.</param>
+    [LibraryImport(LibraryName, EntryPoint = "slang_replayMarker", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    public static partial void ReplayMarker(string label);
+
+    /// <summary>
     ///     Return the last signaled internal error message.
     /// </summary>
     [LibraryImport(LibraryName, EntryPoint = "slang_getLastInternalErrorMessage", StringMarshalling = StringMarshalling.Utf8)]
