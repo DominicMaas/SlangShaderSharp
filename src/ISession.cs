@@ -268,7 +268,7 @@ public unsafe partial interface ISession
     SlangResult GetDynamicObjectRTTIBytes(
         TypeReflection type,
         TypeReflection interfaceType,
-        out uint rttiDataBuffer,
+        uint* rttiDataBuffer,
         uint bufferSizeInBytes);
 
     /// <summary>
@@ -347,6 +347,17 @@ public static class ISessionExtensions
             }
 
             return session.CreateCompositeComponentType(pointers, componentTypes.Length, out compositeComponentType, out diagnostics);
+        }
+
+        public unsafe SlangResult GetDynamicObjectRTTIBytes(
+            TypeReflection type,
+            TypeReflection interfaceType,
+            Span<byte> rttiData)
+        {
+            fixed (byte* p = rttiData)
+            {
+                return session.GetDynamicObjectRTTIBytes(type, interfaceType, (uint*)p, (uint)rttiData.Length);
+            }
         }
     }
 }
