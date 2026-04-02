@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using SlangShaderSharp.Internal;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
 namespace SlangShaderSharp;
@@ -44,6 +45,7 @@ public unsafe partial interface ISession
     ///     Load a module as it would be by code using `import`.
     /// </summary>
     [PreserveSig]
+    [return: MarshalUsing(typeof(NoFreeComInterfaceMarshaller<IModule>))]
     IModule? LoadModule(
         string moduleName,
         out ISlangBlob? diagnostics);
@@ -52,10 +54,11 @@ public unsafe partial interface ISession
     ///     Load a module from Slang source code.
     /// </summary>
     [PreserveSig]
+    [return: MarshalUsing(typeof(NoFreeComInterfaceMarshaller<IModule>))]
     IModule? LoadModuleFromSource(
         string moduleName,
         string path,
-        ISlangBlob source,
+        ISlangBlob? source,
         out ISlangBlob? diagnostics);
 
     /// <summary>
@@ -201,6 +204,7 @@ public unsafe partial interface ISession
     ///     Load a module from a Slang module blob.
     /// </summary>
     [PreserveSig]
+    [return: MarshalUsing(typeof(NoFreeComInterfaceMarshaller<IModule>))]
     IModule? LoadModuleFromIRBlob(
         string moduleName,
         string path,
@@ -211,6 +215,7 @@ public unsafe partial interface ISession
     nint GetLoadedModuleCount();
 
     [PreserveSig]
+    [return: MarshalUsing(typeof(NoFreeComInterfaceMarshaller<IModule>))]
     IModule? GetLoadedModule(nint index);
 
     /// <summary>
@@ -227,6 +232,7 @@ public unsafe partial interface ISession
     ///     Load a module from a string.
     /// </summary>
     [PreserveSig]
+    [return: MarshalUsing(typeof(NoFreeComInterfaceMarshaller<IModule>))]
     IModule? LoadModuleFromSourceString(
         string moduleName,
         string path,

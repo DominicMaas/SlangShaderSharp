@@ -56,7 +56,8 @@ public partial class Slang
     /// <returns>The loaded module on success, or nullptr on failure.</returns>
     [LibraryImport(LibraryName, EntryPoint = "slang_loadModuleFromSource", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    public static partial IModule? LoadModuleFromSource(IGlobalSession session, string moduleName, string path, ReadOnlySpan<byte> source, nuint sourceSize, out ISlangBlob? diagnostics);
+    [return: MarshalUsing(typeof(NoFreeComInterfaceMarshaller<IModule>))]
+    public static partial IModule? LoadModuleFromSource(ISession session, string moduleName, string path, ReadOnlySpan<byte> source, nuint sourceSize, out ISlangBlob? diagnostics);
 
     /// <summary>
     ///     Load a module from IR data.
@@ -70,7 +71,8 @@ public partial class Slang
     /// <returns>The loaded module on success, or nullptr on failure.</returns>
     [LibraryImport(LibraryName, EntryPoint = "slang_loadModuleFromIRBlob", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    public static partial IModule? LoadModuleFromIRBlob(IGlobalSession session, string moduleName, string path, ReadOnlySpan<byte> source, nuint sourceSize, out ISlangBlob? diagnostics);
+    [return: MarshalUsing(typeof(NoFreeComInterfaceMarshaller<IModule>))]
+    public static partial IModule? LoadModuleFromIRBlob(ISession session, string moduleName, string path, ReadOnlySpan<byte> source, nuint sourceSize, out ISlangBlob? diagnostics);
 
     /// <summary>
     ///     Read module info (name and version) from IR data.
