@@ -105,7 +105,7 @@ internal static unsafe class TargetDescMarshaller
             Flags = unmanaged.flags,
             FloatingPointMode = unmanaged.floatingPointMode,
             LineDirectiveMode = unmanaged.lineDirectiveMode,
-            ForceGLSLScalarBufferLayout = unmanaged.forceGLSLScalarBufferLayout == 1,
+            ForceGLSLScalarBufferLayout = unmanaged.forceGLSLScalarBufferLayout != 0,
             CompilerOptionEntries = ArrayMarshaller<CompilerOptionEntry, CompilerOptionEntryUnmanaged>.AllocateContainerForManagedElements(unmanaged.compilerOptionEntries, (int)unmanaged.compilerOptionEntryCount),
         };
     }
