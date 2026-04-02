@@ -1,6 +1,6 @@
 # SlangShaderSharp
 
-A C# binding for the Slang shading language that targets .NET 8+ built on-top of Source Generated COM Wrappers.
+C# bindings for the Slang shading language that targets .NET 8+ built on-top of Source Generated COM Wrappers.
 
 Now available on NuGet: https://www.nuget.org/packages/SlangShaderSharp/
 

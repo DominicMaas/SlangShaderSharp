@@ -1,7 +1,7 @@
-﻿using System.Runtime.InteropServices.Marshalling;
+﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace SlangShaderSharp;
-
 
 [NativeMarshalling(typeof(SourceLocationMarshaller))]
 public struct SourceLocation
@@ -11,6 +11,7 @@ public struct SourceLocation
     public nint Column;
 }
 
+[StructLayout(LayoutKind.Sequential)]
 internal unsafe struct SourceLocationUnmanaged
 {
     public byte* filePath;
