@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SlangShaderSharp.Tests": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
