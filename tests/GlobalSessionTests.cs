@@ -23,11 +23,43 @@ public class GlobalSessionTests(GlobalSessionFixture fixture)
         session.ShouldNotBeNull();
     }
 
+    [Fact]
+    public void EnsureSessionMatchGlobalSession()
+    {
+        var sessionDesc = new SessionDesc
+        {
+            Targets = [new TargetDesc { Format = SlangCompileTarget.Spirv, Profile = fixture.GlobalSession.FindProfile("spirv_1_5") }]
+        };
+
+        fixture.GlobalSession.CreateSession(sessionDesc, out var session).Succeeded.ShouldBeTrue();
+        session.ShouldNotBeNull();
+
+        session.GetGlobalSession().ShouldBeSameAs(fixture.GlobalSession);
+    }
+
+
+    [Fact]
+    public void SessionsShouldNotMatch()
+    {
+        fixture.GlobalSession.CreateSession(new SessionDesc
+        {
+            Targets = [new TargetDesc { Format = SlangCompileTarget.Spirv, Profile = fixture.GlobalSession.FindProfile("spirv_1_5") }]
+        }, out var session1).Succeeded.ShouldBeTrue();
+        session1.ShouldNotBeNull();
+
+        fixture.GlobalSession.CreateSession(new SessionDesc
+        {
+            Targets = [new TargetDesc { Format = SlangCompileTarget.Spirv, Profile = fixture.GlobalSession.FindProfile("spirv_1_5") }]
+        }, out var session2).Succeeded.ShouldBeTrue();
+        session2.ShouldNotBeNull();
+
+        session1.ShouldNotBeSameAs(session2);
+    }
 
     [Fact]
     public void FindProfile()
     {
-        ((int)fixture.GlobalSession.FindProfile("glsl_450")).ShouldBe(1441792);
+        ((int)fixture.GlobalSession.FindProfile("glsl_450")).ShouldBe(1507328);
     }
 
     [Fact]
