@@ -1,4 +1,5 @@
 
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
 namespace SlangShaderSharp;
@@ -47,6 +48,7 @@ public struct TargetDesc
     public TargetDesc() { }
 }
 
+[StructLayout(LayoutKind.Sequential)]
 internal unsafe struct TargetDescUnmanaged
 {
     public nuint structureSize;
@@ -55,7 +57,7 @@ internal unsafe struct TargetDescUnmanaged
     public SlangTargetFlags flags;
     public SlangFloatingPointMode floatingPointMode;
     public SlangLineDirectiveMode lineDirectiveMode;
-    public bool forceGLSLScalarBufferLayout;
+    public byte forceGLSLScalarBufferLayout;
     public CompilerOptionEntryUnmanaged* compilerOptionEntries;
     public uint compilerOptionEntryCount;
 }
@@ -73,7 +75,7 @@ internal static unsafe class TargetDescMarshaller
             flags = managed.Flags,
             floatingPointMode = managed.FloatingPointMode,
             lineDirectiveMode = managed.LineDirectiveMode,
-            forceGLSLScalarBufferLayout = managed.ForceGLSLScalarBufferLayout,
+            forceGLSLScalarBufferLayout = managed.ForceGLSLScalarBufferLayout ? (byte)1 : (byte)0,
             compilerOptionEntries = ArrayMarshaller<CompilerOptionEntry, CompilerOptionEntryUnmanaged>.AllocateContainerForUnmanagedElements(managed.CompilerOptionEntries, out var count),
             compilerOptionEntryCount = (uint)count,
         };
@@ -103,7 +105,7 @@ internal static unsafe class TargetDescMarshaller
             Flags = unmanaged.flags,
             FloatingPointMode = unmanaged.floatingPointMode,
             LineDirectiveMode = unmanaged.lineDirectiveMode,
-            ForceGLSLScalarBufferLayout = unmanaged.forceGLSLScalarBufferLayout,
+            ForceGLSLScalarBufferLayout = unmanaged.forceGLSLScalarBufferLayout == 1,
             CompilerOptionEntries = ArrayMarshaller<CompilerOptionEntry, CompilerOptionEntryUnmanaged>.AllocateContainerForManagedElements(unmanaged.compilerOptionEntries, (int)unmanaged.compilerOptionEntryCount),
         };
     }

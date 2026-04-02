@@ -27,6 +27,7 @@ public struct SlangGlobalSessionDesc
     /// <summary>
     ///     Whether to enable GLSL support.
     /// </summary>
+    [MarshalAs(UnmanagedType.U1)]
     public bool EnableGLSL = false;
 
     /// <summary>

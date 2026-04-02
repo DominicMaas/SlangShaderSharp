@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
 namespace SlangShaderSharp;
@@ -9,6 +10,7 @@ public struct PreprocessorMacroDesc(string? name, string? value)
     public string? Value = value;
 }
 
+[StructLayout(LayoutKind.Sequential)]
 internal unsafe struct PreprocessorMacroDescUnmanaged
 {
     public byte* name;
