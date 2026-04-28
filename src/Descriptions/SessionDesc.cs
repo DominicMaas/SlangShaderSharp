@@ -85,7 +85,7 @@ internal static unsafe class SessionDescMarshaller
             searchPathCount = managed.SearchPaths?.Length ?? 0,
             preprocessorMacros = PreprocessorMacroDescMarshaller.ConvertToUnmanagedArray(managed.PreprocessorMacros, out var preprocessorMacroCount),
             preprocessorMacroCount = preprocessorMacroCount,
-            //FileSystem = managed.FileSystem != null ? ISlangFileSystemMarshaller,
+            fileSystem = new nint(ComInterfaceMarshaller<ISlangFileSystem>.ConvertToUnmanaged(managed.FileSystem)),
             enableEffectAnnotations = managed.EnableEffectAnnotations ? (byte)1 : (byte)0,
             allowGLSLSyntax = managed.AllowGLSLSyntax ? (byte)1 : (byte)0,
             compilerOptionEntries = CompilerOptionEntryMarshaller.ConvertToUnmanagedArray(managed.CompilerOptionEntries, out var compilerOptionEntryCount),
@@ -103,7 +103,7 @@ internal static unsafe class SessionDescMarshaller
             DefaultMatrixLayoutMode = unmanaged.defaultMatrixLayoutMode,
             SearchPaths = ConvertStringArrayToManaged(unmanaged.searchPaths, (int)unmanaged.searchPathCount),
             PreprocessorMacros = PreprocessorMacroDescMarshaller.ConvertToManagedArray(unmanaged.preprocessorMacros, (int)unmanaged.preprocessorMacroCount),
-            //FileSystem = unmanaged.FileSystem,
+            FileSystem = ComInterfaceMarshaller<ISlangFileSystem>.ConvertToManaged(unmanaged.fileSystem.ToPointer()),
             EnableEffectAnnotations = unmanaged.enableEffectAnnotations == 1,
             AllowGLSLSyntax = unmanaged.allowGLSLSyntax == 1,
             CompilerOptionEntries = CompilerOptionEntryMarshaller.ConvertToManagedArray(unmanaged.compilerOptionEntries, (int)unmanaged.compilerOptionEntryCount),
@@ -117,6 +117,7 @@ internal static unsafe class SessionDescMarshaller
         FreeStringArray(unmanaged.searchPaths, (int)unmanaged.searchPathCount);
         PreprocessorMacroDescMarshaller.FreeArray(unmanaged.preprocessorMacros, (int)unmanaged.preprocessorMacroCount);
         CompilerOptionEntryMarshaller.FreeArray(unmanaged.compilerOptionEntries, (int)unmanaged.compilerOptionEntryCount);
+        ComInterfaceMarshaller<ISlangFileSystem>.Free(unmanaged.fileSystem.ToPointer());
     }
 
     private static byte** ConvertStringArrayToUnmanaged(string[]? strings)
