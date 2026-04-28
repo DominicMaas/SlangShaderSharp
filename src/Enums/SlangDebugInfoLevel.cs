@@ -10,15 +10,15 @@ public enum SlangDebugInfoLevel : uint
     /// <summary>
     ///     Emit as little debug information as possible, while still supporting stack trackers.
     /// </summary>
-    Minimal,
+    Minimal = 1,
 
     /// <summary>
     ///     Emit whatever is the standard level of debug information for each target.
     /// </summary>
-    Standard,
+    Standard = 2,
 
     /// <summary>
     ///     Emit as much debug information as possible for each target.
     /// </summary>
-    Maximal
+    Maximal = 3
 }

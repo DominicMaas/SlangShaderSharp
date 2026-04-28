@@ -5,11 +5,11 @@
 /// </summary>
 public enum SlangArchiveType : int
 {
-    Undefined,
-    Zip,
+    Undefined = 0,
+    Zip = 1,
     /// <summary> Riff container with no compression </summary>
-    Riff,
-    RiffDeflate,
-    RiffLZ4,
+    Riff = 2,
+    RiffDeflate = 3,
+    RiffLZ4 = 4,
     CountOf
 }

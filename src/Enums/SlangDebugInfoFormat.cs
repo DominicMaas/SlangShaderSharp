@@ -8,32 +8,32 @@ public enum SlangDebugInfoFormat : uint
     /// <summary>
     ///     Use the default debugging format for the target
     /// </summary>
-    Default,
+    Default = 0,
 
     /// <summary>
     ///     CodeView C7 format (typically means debugging information is embedded in the binary)
     /// </summary>
-    C7,
+    C7 = 1,
 
     /// <summary>
     ///     Program database
     /// </summary>
-    PDB,
+    PDB = 2,
 
     /// <summary>
     ///     Stabbs
     /// </summary>
-    Stabs,
+    Stabs = 3,
 
     /// <summary>
     ///     COFF debug info
     /// </summary>
-    COFF,
+    COFF = 4,
 
     /// <summary>
     ///     DWARF debug info (we may want to support specifying the version)
     /// </summary>
-    DWARF,
+    DWARF = 5,
 
     CountOf
 }

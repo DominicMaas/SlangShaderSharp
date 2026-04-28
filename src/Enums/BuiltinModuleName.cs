@@ -2,6 +2,6 @@
 
 public enum BuiltinModuleName
 {
-    Core,
-    Glsl
+    Core = 0,
+    Glsl = 1
 }

@@ -16,25 +16,25 @@ public enum SlangSeverity : int
     /// <summary>
     ///     An informative message.
     /// </summary>
-    Note,
+    Note = 1,
 
     /// <summary>
     ///     A warning, which indicates a possible problem.
     /// </summary>
-    Warning,
+    Warning = 2,
 
     /// <summary>
     ///     An error, indicating that compilation failed.
     /// </summary>
-    Error,
+    Error = 3,
 
     /// <summary>
     ///     An unrecoverable error, which forced compilation to abort.
     /// </summary>
-    Fatal,
+    Fatal = 4,
 
     /// <summary>
     ///      An internal error, indicating a logic error in the compiler.
     /// </summary>
-    Internal,
+    Internal = 5,
 }

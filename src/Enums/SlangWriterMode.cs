@@ -2,6 +2,6 @@
 
 public enum SlangWriterMode : uint
 {
-    Text,
-    Binary
+    Text = 0,
+    Binary = 1
 }

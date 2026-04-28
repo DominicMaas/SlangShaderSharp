@@ -3,6 +3,6 @@ namespace SlangShaderSharp;
 public enum SlangMatrixLayoutMode : uint
 {
     Unknown = 0,
-    RowMajor,
-    ColumnMajor,
+    RowMajor = 1,
+    ColumnMajor = 2,
 }

@@ -10,11 +10,11 @@ public enum SlangContainerFormat : int
     /// <summary>
     ///     Don't generate a container.
     /// </summary>
-    None,
+    None = 0,
 
     /// <summary>
     ///     Generate a container in the `.slang-module` format,
     ///     which includes reflection information, compiled kernels, etc.
     /// </summary>
-    SlangModule
+    SlangModule = 1
 }

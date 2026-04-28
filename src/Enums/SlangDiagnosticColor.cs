@@ -5,15 +5,15 @@ public enum SlangDiagnosticColor
     /// <summary>
     ///      Use color if output sink is a tty
     /// </summary>
-    Auto,
+    Auto = 0,
 
     /// <summary>
     ///     Always use color
     /// </summary>
-    Always,
+    Always = 1,
 
     /// <summary>
     ///      Never use color
     /// </summary>
-    Never,
+    Never = 2,
 }

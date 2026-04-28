@@ -2,16 +2,16 @@
 
 public enum SlangSourceLanguage : int
 {
-    Unknown,
-    Slang,
-    Hlsl,
-    Glsl,
-    C,
-    Cpp,
-    Cuda,
-    Spirv,
-    Metal,
-    Wgsl,
-    Llvm,
+    Unknown = 0,
+    Slang = 1,
+    Hlsl = 2,
+    Glsl = 3,
+    C = 4,
+    Cpp = 5,
+    Cuda = 6,
+    Spirv = 7,
+    Metal = 8,
+    Wgsl = 9,
+    Llvm = 10,
     CountOf
 }

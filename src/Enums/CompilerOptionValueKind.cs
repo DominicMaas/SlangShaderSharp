@@ -2,6 +2,6 @@
 
 public enum CompilerOptionValueKind
 {
-    Int,
-    String,
+    Int = 0,
+    String = 1,
 }
