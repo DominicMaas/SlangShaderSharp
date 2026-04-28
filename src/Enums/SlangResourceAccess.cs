@@ -1,6 +1,5 @@
 ﻿namespace SlangShaderSharp;
 
-[Flags]
 public enum SlangResourceAccess : uint
 {
     None = 0,
