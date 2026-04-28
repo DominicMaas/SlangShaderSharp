@@ -2,9 +2,9 @@
 
 public enum ContainerType
 {
-    None,
-    UnsizedArray,
-    StructuredBuffer,
-    ConstantBuffer,
-    ParameterBlock
+    None = 0,
+    UnsizedArray = 1,
+    StructuredBuffer = 2,
+    ConstantBuffer = 3,
+    ParameterBlock = 4
 }

@@ -8,16 +8,16 @@ public enum OSPathKind : byte
     /// <summary>
     ///     Paths do not map to the file system
     /// </summary>
-    None,
+    None = 0,
 
     /// <summary>
     ///     Paths map directly to the file system
     /// </summary>
-    Direct,
+    Direct = 1,
 
     /// <summary>
     ///     Only paths gained via PathKind::OperatingSystem map to the operating
     ///     system file system
     /// </summary>
-    OperatingSystem
+    OperatingSystem = 2
 }

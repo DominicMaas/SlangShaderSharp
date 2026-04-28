@@ -8,10 +8,10 @@ public enum SlangPathType : uint
     /// <summary>
     ///     Path specified specifies a directory.
     /// </summary>
-    Directory,
+    Directory = 0,
 
     /// <summary>
     ///     Path specified is to a file.
     /// </summary>
-    File,
+    File = 1,
 }

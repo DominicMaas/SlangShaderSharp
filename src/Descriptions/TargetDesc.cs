@@ -76,7 +76,7 @@ internal static unsafe class TargetDescMarshaller
             floatingPointMode = managed.FloatingPointMode,
             lineDirectiveMode = managed.LineDirectiveMode,
             forceGLSLScalarBufferLayout = managed.ForceGLSLScalarBufferLayout ? (byte)1 : (byte)0,
-            compilerOptionEntries = ArrayMarshaller<CompilerOptionEntry, CompilerOptionEntryUnmanaged>.AllocateContainerForUnmanagedElements(managed.CompilerOptionEntries, out var count),
+            compilerOptionEntries = CompilerOptionEntryMarshaller.ConvertToUnmanagedArray(managed.CompilerOptionEntries, out var count),
             compilerOptionEntryCount = (uint)count,
         };
     }
@@ -106,7 +106,7 @@ internal static unsafe class TargetDescMarshaller
             FloatingPointMode = unmanaged.floatingPointMode,
             LineDirectiveMode = unmanaged.lineDirectiveMode,
             ForceGLSLScalarBufferLayout = unmanaged.forceGLSLScalarBufferLayout != 0,
-            CompilerOptionEntries = ArrayMarshaller<CompilerOptionEntry, CompilerOptionEntryUnmanaged>.AllocateContainerForManagedElements(unmanaged.compilerOptionEntries, (int)unmanaged.compilerOptionEntryCount),
+            CompilerOptionEntries = CompilerOptionEntryMarshaller.ConvertToManagedArray(unmanaged.compilerOptionEntries, (int)unmanaged.compilerOptionEntryCount),
         };
     }
 
@@ -128,11 +128,16 @@ internal static unsafe class TargetDescMarshaller
 
     public static void Free(TargetDescUnmanaged unmanaged)
     {
-        ArrayMarshaller<CompilerOptionEntry, CompilerOptionEntryUnmanaged>.Free(unmanaged.compilerOptionEntries);
+        CompilerOptionEntryMarshaller.FreeArray(unmanaged.compilerOptionEntries, (int)unmanaged.compilerOptionEntryCount);
     }
 
     public static void FreeArray(TargetDescUnmanaged* unmanaged, int count)
     {
+        if (unmanaged == null || count <= 0)
+        {
+            return;
+        }
+
         for (int i = 0; i < count; i++)
         {
             Free(unmanaged[i]);

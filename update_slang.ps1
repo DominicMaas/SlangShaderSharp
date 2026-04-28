@@ -23,11 +23,25 @@ Expand-Archive -Path "$slangDir/linux-x86_64.zip"     -DestinationPath "$slangDi
 
 # Copy binaries to destination folders
 Copy-Item -Path "$slangDir/windows-aarch64/bin/slang-compiler.dll"                  -Destination "./runtimes/win-arm64/native/slang-compiler.dll"        -Force
+Copy-Item -Path "$slangDir/windows-aarch64/bin/slang-glslang.dll"                   -Destination "./runtimes/win-arm64/native/slang-glslang.dll"         -Force
+
 Copy-Item -Path "$slangDir/windows-x86_64/bin/slang-compiler.dll"                   -Destination "./runtimes/win-x64/native/slang-compiler.dll"          -Force
+Copy-Item -Path "$slangDir/windows-x86_64/bin/slang-glslang.dll"                    -Destination "./runtimes/win-x64/native/slang-glslang.dll"           -Force
+
+
 Copy-Item -Path "$slangDir/macos-x86_64/lib/libslang-compiler.0.$($Version).dylib"  -Destination "./runtimes/osx-x64/native/libslang-compiler.dylib"     -Force
+Copy-Item -Path "$slangDir/macos-x86_64/lib/libslang-glslang-$($Version).dylib"     -Destination "./runtimes/osx-x64/native/libslang-glslang.dylib"      -Force
+
+
 Copy-Item -Path "$slangDir/macos-aarch64/lib/libslang-compiler.0.$($Version).dylib" -Destination "./runtimes/osx-arm64/native/libslang-compiler.dylib"   -Force
+Copy-Item -Path "$slangDir/macos-aarch64/lib/libslang-glslang-$($Version).dylib"    -Destination "./runtimes/osx-arm64/native/libslang-glslang.dylib"    -Force
+
+
 Copy-Item -Path "$slangDir/linux-aarch64/lib/libslang-compiler.so.0.$($Version)"    -Destination "./runtimes/linux-arm64/native/libslang-compiler.so"    -Force
+Copy-Item -Path "$slangDir/linux-aarch64/lib/libslang-glslang-$($Version).so"       -Destination "./runtimes/linux-arm64/native/libslang-glslang.so"     -Force
+
 Copy-Item -Path "$slangDir/linux-x86_64/lib/libslang-compiler.so.0.$($Version)"     -Destination "./runtimes/linux-x64/native/libslang-compiler.so"      -Force
+Copy-Item -Path "$slangDir/linux-x86_64/lib/libslang-glslang-$($Version).so"        -Destination "./runtimes/linux-x64/native/libslang-glslang.so"       -Force
 
 # Copy Header Files
 Copy-Item -Path "$slangDir/windows-x86_64/include/slang.h"                      -Destination "./headers/slang.h"                     -Force

@@ -74,6 +74,11 @@ internal static unsafe class CompilerOptionEntryMarshaller
 
     public static void FreeArray(CompilerOptionEntryUnmanaged* unmanaged, int count)
     {
+        if (unmanaged == null || count <= 0)
+        {
+            return;
+        }
+
         for (int i = 0; i < count; i++)
         {
             Free(unmanaged[i]);

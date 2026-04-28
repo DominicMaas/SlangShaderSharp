@@ -3,8 +3,8 @@
 public enum SlangBindableResourceType : int
 {
     SlangNonBindable = 0,
-    SlangTexture,
-    SlangSampler,
-    SlangUniformBuffer,
-    SlangStorageBuffer,
+    SlangTexture = 1,
+    SlangSampler = 2,
+    SlangUniformBuffer = 3,
+    SlangStorageBuffer = 4,
 }

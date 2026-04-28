@@ -81,6 +81,11 @@ internal static unsafe class PreprocessorMacroDescMarshaller
 
     public static void FreeArray(PreprocessorMacroDescUnmanaged* unmanaged, int count)
     {
+        if (unmanaged == null || count <= 0)
+        {
+            return;
+        }
+
         for (int i = 0; i < count; i++)
         {
             Free(unmanaged[i]);

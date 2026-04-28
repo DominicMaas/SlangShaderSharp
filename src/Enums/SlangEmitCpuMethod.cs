@@ -3,6 +3,6 @@
 public enum SlangEmitCpuMethod
 {
     Default = 0,
-    CpuViaCpp,
-    CpuViaLlvm,
+    CpuViaCpp = 1,
+    CpuViaLlvm = 2,
 }

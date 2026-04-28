@@ -2,147 +2,147 @@ namespace SlangShaderSharp;
 
 public enum SlangCompileTarget : int
 {
-    TargetUnknown,
-    TargetNone,
-    Glsl,
+    TargetUnknown = 0,
+    TargetNone = 1,
+    Glsl = 2,
 
     [Obsolete("just use `SLANG_GLSL`")]
-    GlslVulkanDeprecated,
+    GlslVulkanDeprecated = 3,
 
     [Obsolete("No Reason Specified")]
-    GlslVulkanOneDescDeprecated,
-    Hlsl,
-    Spirv,
-    SpirvAsm,
-    Dxbc,
-    DxbcAsm,
-    Dxil,
-    DxilAsm,
+    GlslVulkanOneDescDeprecated = 4,
+    Hlsl = 5,
+    Spirv = 6,
+    SpirvAsm = 7,
+    Dxbc = 8,
+    DxbcAsm = 9,
+    Dxil = 10,
+    DxilAsm = 11,
 
     /// <summary>
     ///     The C language
     /// </summary>
-    CSource,
+    CSource = 12,
 
     /// <summary>
     ///     C++ code for shader kernels.
     /// </summary>
-    CppSource,
+    CppSource = 13,
 
     /// <summary>
     ///     Standalone binary executable (for hosting CPU/OS)
     /// </summary>
-    HostExecutable,
+    HostExecutable = 14,
 
     /// <summary>
     ///     A shared library/Dll for shader kernels (for hosting CPU/OS)
     /// </summary>
-    ShaderSharedLibrary,
+    ShaderSharedLibrary = 15,
 
     /// <summary>
     ///     A CPU target that makes the compiled shader code available to be run immediately
     /// </summary>
-    ShaderHostCallable,
+    ShaderHostCallable = 16,
 
     /// <summary>
     ///     Cuda source
     /// </summary>
-    CudaSource,
+    CudaSource = 17,
 
     /// <summary>
     ///     PTX
     /// </summary>
-    PTX,
+    PTX = 18,
 
     /// <summary>
     ///     Object code that contains CUDA functions.
     /// </summary>
-    CudaObjectCode,
+    CudaObjectCode = 19,
 
     /// <summary>
     ///     Object code that can be used for later linking (kernel/shader)
     /// </summary>
-    ObjectCode,
+    ObjectCode = 20,
 
     /// <summary>
     ///     C++ code for host library or executable.
     /// </summary>
-    HostCppSource,
+    HostCppSource = 21,
 
     /// <summary>
     ///     Host callable host code (ie non kernel/shader)
     /// </summary>
-    HostHostCallable,
+    HostHostCallable = 22,
 
     /// <summary>
     ///      C++ PyTorch binding code.
     /// </summary>
-    CppPyTorchBinding,
+    CppPyTorchBinding = 23,
 
     /// <summary>
     ///     Metal shading language
     /// </summary>
-    Metal,
+    Metal = 24,
 
     /// <summary>
     ///     Metal library
     /// </summary>
-    MetalLib,
+    MetalLib = 25,
 
     /// <summary>
     ///     Metal library assembly
     /// </summary>
-    MetalLibAsm,
+    MetalLibAsm = 26,
 
     /// <summary>
     ///     A shared library/Dll for host code (for hosting CPU/OS)
     /// </summary>
-    HostSharedLibrary,
+    HostSharedLibrary = 27,
 
     /// <summary>
     ///     WebGPU shading language
     /// </summary>
-    Wgsl,
+    Wgsl = 28,
 
     /// <summary>
     ///     SPIR-V assembly via WebGPU shading language
     /// </summary>
-    WgslSpirvAsm,
+    WgslSpirvAsm = 29,
 
     /// <summary>
     ///     SPIR-V via WebGPU shading language
     /// </summary>
-    WgslSpirv,
+    WgslSpirv = 30,
 
     /// <summary>
     ///     Bytecode that can be interpreted by the Slang VM
     /// </summary>
-    HostVM,
+    HostVM = 31,
 
     /// <summary>
     ///     C++ header for shader kernels.
     /// </summary>
-    CppHeader,
+    CppHeader = 32,
 
     /// <summary>
     ///     Cuda header
     /// </summary>
-    CudaHeader,
+    CudaHeader = 33,
 
     /// <summary>
     ///     Host object code
     /// </summary>
-    HostObjectCode,
+    HostObjectCode = 34,
 
     /// <summary>
     ///     Host LLVM IR assembly
     /// </summary>
-    HostLvvmIR,
+    HostLvvmIR = 35,
 
     /// <summary>
     ///     Host LLVM IR assembly (kernel/shader)
     /// </summary>
-    ShaderLvvmIR,
+    ShaderLvvmIR = 36,
 
     CountOf,
 }

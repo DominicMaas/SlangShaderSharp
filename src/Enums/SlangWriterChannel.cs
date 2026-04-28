@@ -5,8 +5,8 @@
 /// </summary>
 public enum SlangWriterChannel : uint
 {
-    Diagnostic,
-    StandardOutput,
-    StandardError,
+    Diagnostic = 0,
+    StandardOutput = 1,
+    StandardError = 2,
     CountOf
 }
