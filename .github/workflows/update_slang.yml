@@ -23,6 +23,8 @@ jobs:
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v8
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_SCOPED_TOKEN }}
         with:
           commit-message: Update Slang
           branch: slang-update/${{ inputs.version }}
