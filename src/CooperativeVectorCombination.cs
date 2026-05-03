@@ -19,7 +19,7 @@ public struct CooperativeVectorCombination
     /// <summary>
     ///     <see cref="SlangScalarType.None"/> means the operation has no bias operand/matrix.
     /// </summary>
-    public SlangScalarType NiasInterpretation = SlangScalarType.None;
+    public SlangScalarType BiasInterpretation = SlangScalarType.None;
 
     public SlangScalarType ResultType = SlangScalarType.None;
 
