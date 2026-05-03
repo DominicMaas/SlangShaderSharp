@@ -25,7 +25,7 @@ namespace SlangShaderSharp;
 /// </summary>
 [GeneratedComInterface(StringMarshalling = StringMarshalling.Utf8)]
 [Guid("64c4d536-d949-49c3-9fde-3f0f9c6f0131")]
-public partial interface ICooperativeTypesMetadata
+public partial interface ICooperativeTypesMetadata : ISlangCastable
 {
     [PreserveSig]
     nuint GetCooperativeMatrixTypeCount();
