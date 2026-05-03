@@ -19,3 +19,24 @@ public partial interface ISlangCastable
     [PreserveSig]
     unsafe void* CastAs(Guid guid);
 }
+
+public static class ISlangCastableExtensions
+{
+    extension(ISlangCastable castable)
+    {
+        public unsafe TInterface? CastAs<TInterface>() where TInterface : class
+        {
+            var ptr = castable.CastAs(typeof(TInterface).GUID);
+            if (ptr is null)
+                return null;
+
+            return ComInterfaceMarshaller<TInterface>.ConvertToManaged(ptr);
+        }
+
+        public bool TryCastAs<TInterface>(out TInterface? value) where TInterface : class
+        {
+            value = castable.CastAs<TInterface>();
+            return value is not null;
+        }
+    }
+}

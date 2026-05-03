@@ -24,7 +24,8 @@ public class Repro10(GlobalSessionFixture fixture)
             DefaultMatrixLayoutMode = SlangMatrixLayoutMode.RowMajor,
             CompilerOptionEntries = [
                 new(CompilerOptionName.EmitSpirvDirectly, CompilerOptionValue.FromInt(1)),
-                new(CompilerOptionName.MatrixLayoutRow, CompilerOptionValue.FromInt(1)),
+                new(CompilerOptionName.MatrixLayoutRow, CompilerOptionValue.FromEnum(SlangMatrixLayoutMode.RowMajor)),
+                new(CompilerOptionName.DownstreamArgs, CompilerOptionValue.FromString("Test")),
             ],
         };
 

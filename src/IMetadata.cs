@@ -15,8 +15,8 @@ public unsafe partial interface IMetadata : ISlangCastable
     [PreserveSig]
     SlangResult IsParameterLocationUsed(
         SlangParameterCategory category,
-        uint spaceIndex,
-        uint registerIndex,
+        nuint spaceIndex,
+        nuint registerIndex,
         [MarshalAs(UnmanagedType.I1)] out bool used);
 
     /// <summary>
