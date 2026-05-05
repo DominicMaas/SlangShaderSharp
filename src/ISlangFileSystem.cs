@@ -16,7 +16,7 @@ namespace SlangShaderSharp;
 /// </summary>
 [GeneratedComInterface(StringMarshalling = StringMarshalling.Utf8)]
 [Guid("003a09fc-3a4d-4ba0-ad60-1fd863a915ab")]
-public partial interface ISlangFileSystem
+public unsafe partial interface ISlangFileSystem : ISlangCastable
 {
     /// <summary>
     ///     Load a file from `path` and return a blob of its contents
