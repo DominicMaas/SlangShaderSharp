@@ -149,7 +149,39 @@ public readonly struct SlangResult(int value) : IEquatable<SlangResult>
     public bool Equals(SlangResult other) => _result == other._result;
     public override bool Equals(object? obj) => obj is SlangResult other && Equals(other);
     public override int GetHashCode() => unchecked(_result);
-    public override string ToString() => $"{_result}";
+
+    public override string ToString()
+    {
+        var name = GetSymbolicName();
+        return name != null
+            ? $"{name} (0x{_result:X8})"
+            : $"0x{_result:X8}";
+    }
+
+    /// <summary>
+    /// Get the symbolic name of this result code, if known.
+    /// </summary>
+    public string? GetSymbolicName()
+    {
+        if (this == SLANG_OK) return nameof(SLANG_OK);
+        if (this == SLANG_FAIL) return nameof(SLANG_FAIL);
+        if (this == SLANG_E_NOT_IMPLEMENTED) return nameof(SLANG_E_NOT_IMPLEMENTED);
+        if (this == SLANG_E_NO_INTERFACE) return nameof(SLANG_E_NO_INTERFACE);
+        if (this == SLANG_E_ABORT) return nameof(SLANG_E_ABORT);
+        if (this == SLANG_E_INVALID_HANDLE) return nameof(SLANG_E_INVALID_HANDLE);
+        if (this == SLANG_E_INVALID_ARG) return nameof(SLANG_E_INVALID_ARG);
+        if (this == SLANG_E_OUT_OF_MEMORY) return nameof(SLANG_E_OUT_OF_MEMORY);
+        if (this == SLANG_E_BUFFER_TOO_SMALL) return nameof(SLANG_E_BUFFER_TOO_SMALL);
+        if (this == SLANG_E_UNINITIALIZED) return nameof(SLANG_E_UNINITIALIZED);
+        if (this == SLANG_E_PENDING) return nameof(SLANG_E_PENDING);
+        if (this == SLANG_E_CANNOT_OPEN) return nameof(SLANG_E_CANNOT_OPEN);
+        if (this == SLANG_E_NOT_FOUND) return nameof(SLANG_E_NOT_FOUND);
+        if (this == SLANG_E_INTERNAL_FAIL) return nameof(SLANG_E_INTERNAL_FAIL);
+        if (this == SLANG_E_NOT_AVAILABLE) return nameof(SLANG_E_NOT_AVAILABLE);
+        if (this == SLANG_E_TIME_OUT) return nameof(SLANG_E_TIME_OUT);
+
+        return null; // Unknown error code
+    }
 }
 
 [CustomMarshaller(typeof(SlangResult), MarshalMode.Default, typeof(SlangResultMarshaller))]

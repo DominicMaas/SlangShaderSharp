@@ -1,6 +1,7 @@
 ﻿using SlangShaderSharp.Internal;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
+using System.Text;
 
 namespace SlangShaderSharp;
 
@@ -612,4 +613,32 @@ public partial interface ICompileRequest
     void SetTargetForceCLayout(
         int targetIndex,
         [MarshalAs(UnmanagedType.I1)] bool value);
+}
+
+public static class ICompileRequestExtensions
+{
+    extension(ICompileRequest compileRequest)
+    {
+        public unsafe ReadOnlySpan<byte> GetCompileRequestCodeAsSpan()
+        {
+            var pointer = compileRequest.GetCompileRequestCode(out var size);
+            if (pointer == nint.Zero || size == nuint.Zero)
+            {
+                return [];
+            }
+
+            return new ReadOnlySpan<byte>(pointer.ToPointer(), (int)size);
+        }
+
+        public unsafe string? GetCompileRequestCodeAsUtf8String()
+        {
+            var pointer = compileRequest.GetCompileRequestCode(out var size);
+            if (pointer == nint.Zero || size == nuint.Zero)
+            {
+                return null;
+            }
+
+            return Encoding.UTF8.GetString((byte*)pointer, (int)size);
+        }
+    }
 }
