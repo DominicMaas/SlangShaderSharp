@@ -48,7 +48,7 @@ public class FileSystemTests(GlobalSessionFixture fixture)
 
         // Get the compiled result as a string, this will allocate a new string on the managed side and copy the data from the
         // compile request, so it should be used with care
-        request.GetCompileRequestCodeAsAsUtf8String().ShouldNotBeNullOrWhiteSpace();
+        request.GetCompileRequestCodeAsUtf8String().ShouldNotBeNullOrWhiteSpace();
     }
 }
 
