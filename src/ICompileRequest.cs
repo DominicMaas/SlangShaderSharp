@@ -630,7 +630,7 @@ public static class ICompileRequestExtensions
             return new ReadOnlySpan<byte>(pointer.ToPointer(), (int)size);
         }
 
-        public unsafe string? GetCompileRequestCodeAsString()
+        public unsafe string? GetCompileRequestCodeAsAsUtf8String()
         {
             var pointer = compileRequest.GetCompileRequestCode(out var size);
             if (pointer == nint.Zero || size == nuint.Zero)

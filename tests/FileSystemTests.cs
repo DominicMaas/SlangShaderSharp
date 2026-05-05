@@ -48,7 +48,7 @@ public class FileSystemTests(GlobalSessionFixture fixture)
 
         // Get the compiled result as a string, this will allocate a new string on the managed side and copy the data from the
         // compile request, so it should be used with care
-        request.GetCompileRequestCodeAsString().ShouldNotBeNullOrWhiteSpace();
+        request.GetCompileRequestCodeAsAsUtf8String().ShouldNotBeNullOrWhiteSpace();
     }
 }
 
@@ -81,7 +81,7 @@ public partial class MyFileSystem : ISlangFileSystem
     public SlangResult LoadFile(string path, out ISlangBlob outBlob)
     {
         // Here is a virtual module
-        if (string.Equals(path, "VFS/MyModule.slang"))
+        if (string.Equals(path, "VFS/MyModule.slang", StringComparison.OrdinalIgnoreCase))
         {
             outBlob = Slang.CreateBlob("""
                 module MyModule;
@@ -96,7 +96,7 @@ public partial class MyFileSystem : ISlangFileSystem
         }
 
         // Here is the main slang shader that imports the virtual module
-        if (string.Equals(path, "VFS/MyShader.slang"))
+        if (string.Equals(path, "VFS/MyShader.slang", StringComparison.OrdinalIgnoreCase))
         {
             outBlob = Slang.CreateBlob("""
                 import MyModule;
