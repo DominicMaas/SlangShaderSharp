@@ -4,7 +4,7 @@ using System.Runtime.InteropServices.Marshalling;
 namespace SlangShaderSharp;
 
 /// <summary>
-///     Coverage-buffer binding info returned by <see cref="ICoverageTracingMetadata::getBufferInfo" />.
+///     Coverage-buffer binding info returned by <see cref="ICoverageTracingMetadata.GetBufferInfo" />.
 /// </summary>
 [NativeMarshalling(typeof(CoverageBufferInfoMarshaller))]
 public struct CoverageBufferInfo
