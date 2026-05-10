@@ -38,11 +38,35 @@ public partial class Slang
     }
 
     /// <summary>
-    ///     Create a blob from binary data.
+    ///     Create a blob from a string.
     /// </summary>
-    /// <param name="data">Binary data to store in the blob. Must not be null or empty.</param>
+    /// <param name="data">String to store in the blob. Must not be null or empty.</param>
     /// <returns>The created blob on success, or nullptr on failure.</returns>
-    public static unsafe ISlangBlob CreateBlob(string data) => CreateBlob(Encoding.UTF8.GetBytes(data));
+    public static ISlangBlob CreateBlob(string data) => CreateBlob(Encoding.UTF8.GetBytes(data));
+
+    /// <summary>
+    ///     Serialize an `ICoverageTracingMetadata` artifact into the canonical
+    ///     `.coverage-mapping.json` shape. Same bytes that `slangc` writes
+    ///     alongside compiled output when `-trace-coverage` is on, available
+    ///     in-process for hosts compiling via the C++ API.
+    ///
+    ///     The returned JSON is consumable by:
+    ///     - `slang-coverage-rt` (C library) for accumulation + LCOV emission
+    ///     - `tools/shader-coverage/slang-coverage-to-lcov.py` (Python)
+    ///     - any tool expecting the version-1 manifest format
+    /// </summary>
+    /// <param name="metadata">
+    ///     The coverage metadata, obtained via casting to <see cref="ICoverageTracingMetadata"/> on the artifact's <see cref="IMetadata"/>. Must not be null.
+    /// </param>
+    /// <param name="blob">
+    ///     The JSON bytes. Caller releases when done.
+    /// </param>
+    /// <returns>
+    ///     <see cref="SlangResult.SLANG_OK"/> on success, <see cref="SlangResult.SLANG_E_INVALID_ARG"/> for null arguments.
+    /// </returns>
+    [LibraryImport(LibraryName, EntryPoint = "slang_writeCoverageManifestJson", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    public static partial SlangResult WriteCoverageManifestJson(ICoverageTracingMetadata metadata, out ISlangBlob blob);
 
     /// <summary>
     ///     Load a module from source code with size specification.

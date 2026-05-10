@@ -7,19 +7,36 @@ public enum CompilerOptionName
 {
     /// <summary> stringValue0: macro name; stringValue1: macro value </summary>
     MacroDefine = 0,
+
     DepFile = 1,
     EntryPointName = 2,
     Specialize = 3,
     Help = 4,
     HelpStyle = 5,
+
+    /// <summary> stringValue: additional include path. </summary>
     Include = 6,
+
     Language = 7,
+
+    /// <summary> bool </summary>
     MatrixLayoutColumn = 8,
+
+    /// <summary> bool </summary>
     MatrixLayoutRow = 9,
+
+    /// <summary> bool </summary>
     ZeroInitialize = 10,
+
+    /// <summary> bool </summary>
     IgnoreCapabilities = 11,
+
+    /// <summary> bool </summary>
     RestrictiveCapabilityCheck = 12,
+
+    /// <summary> stringValue0: module name. </summary>
     ModuleName = 13,
+
     Output = 14,
     Profile = 15,
     Stage = 16,
@@ -115,14 +132,32 @@ public enum CompilerOptionName
     ParameterBlocksUseRegisterSpaces = 106,
     LanguageVersion = 107,
     TypeConformance = 108,
+
+    /// <summary> bool, experimental </summary>
     EnableExperimentalDynamicDispatch = 109,
+
+    /// <summary> bool </summary>
     EmitReflectionJSON = 110,
+
+    /// <summary> historical sentinel; value must not be reused </summary>
     CountOfParsableOptions = 111,
+
+    /// <summary> intValue0: DebugInfoFormat (derived from -g; no direct CLI flag) </summary>
     DebugInformationFormat = 112,
+
+    /// <summary> intValue0: kind; intValue1: shift (derived from -fvk-x-shift; no direct CLI flag) </summary>
     VulkanBindShiftAll = 113,
+
+    /// <summary> bool </summary>
     GenerateWholeProgram = 114,
+
+    /// <summary> bool, when set, will only load precompiled modules if up-to-date with source. (API-only; no direct CLI flag) </summary>
     UseUpToDateBinaryModule = 115,
+
+    /// <summary> bool </summary>
     EmbedDownstreamIR = 116,
+
+    /// <summary> bool </summary>
     ForceDXLayout = 117,
 
     /// <summary> enum SlangEmitSpirvMethod (derived; no direct CLI flag) </summary>
@@ -149,6 +184,7 @@ public enum CompilerOptionName
     /// <summary> bool </summary>
     UseMSVCStyleBitfieldPacking = 128,
 
+    /// <summary> bool </summary>
     ForceCLayout = 129,
 
     /// <summary> bool, enable experimental features </summary>
@@ -195,6 +231,12 @@ public enum CompilerOptionName
 
     /// <summary> intValue0: SlangDiagnosticColor (always, never, auto) </summary>
     DiagnosticColor = 144,
+
+    /// <summary> bool: insert per-statement execution counters </summary>
+    TraceCoverage = 145,
+
+    /// <summary> intValue0: register index; intValue1: register space — explicit binding for the synthesized __slang_coverage buffer </summary>
+    TraceCoverageBinding = 146,
 
     CountOf,
 }
