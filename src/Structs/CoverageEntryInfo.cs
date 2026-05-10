@@ -39,7 +39,8 @@ internal static unsafe class CoverageEntryInfoMarshaller
         {
             // Use the leading `structSize` for ABI-versioned struct growth
             structSize = (nuint)sizeof(CoverageEntryInfoUnmanaged),
-            file = Utf8StringMarshaller.ConvertToUnmanaged(managed.File),
+            // `file` is an output pointer owned by the metadata object; only `structSize` needs initialization.
+            file = null,
             line = managed.Line
         };
     }
