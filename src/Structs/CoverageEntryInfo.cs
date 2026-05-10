@@ -55,6 +55,8 @@ internal static unsafe class CoverageEntryInfoMarshaller
 
     public static void Free(CoverageEntryInfoUnmanaged unmanaged)
     {
-        Utf8StringMarshaller.Free(unmanaged.file);
+        // `file` is a non-owning pointer returned by Slang and remains valid
+        // only for the lifetime of the associated metadata. It must not be
+        // freed by this marshaller.
     }
 }
