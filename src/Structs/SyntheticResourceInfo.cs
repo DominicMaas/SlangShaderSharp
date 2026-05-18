@@ -125,7 +125,8 @@ internal static unsafe class SyntheticResourceInfoMarshaller
             binding = managed.Binding,
             uniformOffset = managed.UniformOffset,
             uniformStride = managed.UniformStride,
-            debugName = Utf8StringMarshaller.ConvertToUnmanaged(managed.DebugName),
+            // `debugName` is an output pointer owned by the metadata object; only `structSize` really needs initialization.
+            debugName = null,
         };
     }
 
