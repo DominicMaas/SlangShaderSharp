@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
-namespace SlangShaderSharp.Structs;
+namespace SlangShaderSharp;
 
 [NativeMarshalling(typeof(SyntheticResourceInfoMarshaller))]
 public struct SyntheticResourceInfo

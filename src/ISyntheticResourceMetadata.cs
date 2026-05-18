@@ -1,5 +1,4 @@
-﻿using SlangShaderSharp.Structs;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
 namespace SlangShaderSharp;
