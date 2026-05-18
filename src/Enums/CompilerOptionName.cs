@@ -235,8 +235,20 @@ public enum CompilerOptionName
     /// <summary> bool: insert per-statement execution counters </summary>
     TraceCoverage = 145,
 
-    /// <summary> intValue0: register index; intValue1: register space — explicit binding for the synthesized __slang_coverage buffer </summary>
+    /// <summary>
+    ///     intValue0: register index; intValue1: register space — explicit
+    ///     binding for the synthesized __slang_coverage buffer. Consumed
+    ///     only when TraceCoverage is enabled; the slangc CLI spelling also
+    ///     enables TraceCoverage.
+    /// </summary>
     TraceCoverageBinding = 146,
+
+    /// <summary>
+    ///     intValue0: descriptor/register space reserved by the host when
+    ///     auto-allocating the synthesized __slang_coverage buffer. This is
+    ///     a repeatable hint consumed only when TraceCoverage is enabled.
+    /// </summary>
+    TraceCoverageReservedSpace = 147,
 
     CountOf,
 }

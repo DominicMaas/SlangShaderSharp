@@ -6,7 +6,8 @@ namespace SlangShaderSharp;
 /// <summary>
 ///     Coverage tracing metadata produced when `-trace-coverage` is active.
 ///
-///     Each counter slot in the synthesized coverage buffer maps to a source
+///     The current implementation reports line-oriented hit-count coverage:
+///     each counter slot in the synthesized coverage buffer maps to a source
 ///     `(file, line)` pair. The interface lets hosts read that mapping at
 ///     compile time so they can attribute counter values back to source lines
 ///     at runtime without a separate sidecar file. The metadata is retrieved
@@ -18,6 +19,11 @@ public unsafe partial interface ICoverageTracingMetadata : ISlangCastable
 {
     /// <summary>
     ///     Number of counter slots in the synthesized coverage buffer.
+    ///     In the current implementation this is the number of line-
+    ///     oriented source-location counter slots. Generic specializations
+    ///     and other cloned instances of the same source line aggregate
+    ///     into that source line's slot. Future revisions may extend the
+    ///     entry model without changing the interface shape.
     /// </summary>
     [PreserveSig]
     uint GetCounterCount();
