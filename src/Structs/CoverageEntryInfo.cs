@@ -10,14 +10,17 @@ namespace SlangShaderSharp;
 public struct CoverageEntryInfo
 {
     /// <summary>
-    ///     Source file for this counter slot, or null if the slot
+    ///     Source file for this counter entry, or null if the entry
     ///     could not be attributed to a real source file.
     /// </summary>
     public string? File;
 
     /// <summary>
-    ///     1-based source line for this counter slot, or 0 if the slot
-    ///     could not be attributed to a real source line.
+    ///     1-based source line for this coverage entry, or 0 if the entry
+    ///     could not be attributed to a real source line. The current
+    ///     implementation reports line-oriented entries; future revisions
+    ///     may attach additional fields describing branch/function/region
+    ///     semantics.
     /// </summary>
     public uint Line;
 }
