@@ -19,6 +19,8 @@ public partial class Slang
 
     public static readonly nuint UnknownSize = UnboundedSize - 1;
 
+    public static readonly uint InvalidCoverageCounterIndex = uint.MaxValue;
+
     [LibraryImport(LibraryName, EntryPoint = "slang_createBlob", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static unsafe partial ISlangBlob CreateBlob(void* data, nuint size);

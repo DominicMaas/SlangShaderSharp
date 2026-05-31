@@ -18,12 +18,11 @@ namespace SlangShaderSharp;
 public unsafe partial interface ICoverageTracingMetadata : ISlangCastable
 {
     /// <summary>
-    ///     Number of counter slots in the synthesized coverage buffer.
-    ///     In the current implementation this is the number of line-
-    ///     oriented source-location counter slots. Generic specializations
-    ///     and other cloned instances of the same source line aggregate
-    ///     into that source line's slot. Future revisions may extend the
-    ///     entry model without changing the interface shape.
+    ///     Number of runtime counter slots in the synthesized coverage
+    ///     buffer. This can differ from <see cref="ICoverageTracingMetadata.GetEntryCount"/> once a coverage
+    ///     mode has counterless metadata entries, shares one counter across
+    ///     several source entries, or reports entries whose counts are
+    ///     derived from other counters.
     /// </summary>
     [PreserveSig]
     uint GetCounterCount();
@@ -41,4 +40,14 @@ public unsafe partial interface ICoverageTracingMetadata : ISlangCastable
     /// </summary>
     [PreserveSig]
     SlangResult GetBufferInfo(ref CoverageBufferInfo info);
+
+    /// <summary>
+    ///     Number of source coverage entries available through
+    ///     <see cref="ICoverageTracingMetadata.GetEntryInfo"/>. The current line/function/branch producers have
+    ///     one entry per counter, but future source-region coverage may
+    ///     expose entries that do not map one-to-one with runtime counter
+    ///     slots.
+    /// </summary>
+    [PreserveSig]
+    uint GetEntryCount();
 }
