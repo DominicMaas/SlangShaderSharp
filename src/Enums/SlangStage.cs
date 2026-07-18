@@ -18,7 +18,7 @@ public enum SlangStage : uint
     Mesh = 13,
     Amplification = 14,
     Dispatch = 15,
-    Mode = 16,
+    Node = 16,
 
     Count,
 
