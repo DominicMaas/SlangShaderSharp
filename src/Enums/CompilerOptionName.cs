@@ -232,7 +232,7 @@ public enum CompilerOptionName
     /// <summary> intValue0: SlangDiagnosticColor (always, never, auto) </summary>
     DiagnosticColor = 144,
 
-    /// <summary> bool: insert per-statement execution counters </summary>
+    /// <summary> bool: insert per-statement line coverage counters </summary>
     TraceCoverage = 145,
 
     /// <summary>
@@ -249,6 +249,16 @@ public enum CompilerOptionName
     ///     a repeatable hint consumed only when TraceCoverage is enabled.
     /// </summary>
     TraceCoverageReservedSpace = 147,
+
+    /// <summary>
+    ///      bool: insert per-function-entry coverage counters
+    /// </summary>
+    TraceFunctionCoverage = 148,
+
+    /// <summary>
+    ///     bool: insert per-branch-arm coverage counters
+    /// </summary>
+    TraceBranchCoverage = 149,
 
     CountOf,
 }
