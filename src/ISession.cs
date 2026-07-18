@@ -52,13 +52,19 @@ public unsafe partial interface ISession
 
     /// <summary>
     ///     Load a module from Slang source code.
+    ///
+    ///     <paramref name="source"/> is required and must be non-null; the native compiler
+    ///     asserts on a null blob. <paramref name="path"/> is used for diagnostics and as the
+    ///     base directory for resolving relative <c>import</c>s — it is not read from disk.
+    ///     To load a module from a file, read the file into a blob (see <see cref="Slang.CreateBlob(ReadOnlySpan{byte})"/>),
+    ///     or use <see cref="LoadModule(string, out ISlangBlob?)"/> to load by name via the search paths.
     /// </summary>
     [PreserveSig]
     [return: MarshalUsing(typeof(NoFreeComInterfaceMarshaller<IModule>))]
     IModule? LoadModuleFromSource(
         string moduleName,
         string path,
-        ISlangBlob? source,
+        ISlangBlob source,
         out ISlangBlob? diagnostics);
 
     /// <summary>
