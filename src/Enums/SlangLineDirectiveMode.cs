@@ -13,7 +13,7 @@ public enum SlangLineDirectiveMode : uint
     None = 1,
 
     /// <summary>
-    ///     Use the standard line directive modeEmit standard C-style `#line` directives.
+    ///     Emit standard C-style `#line` directives.
     /// </summary>
     Standard = 2,
 

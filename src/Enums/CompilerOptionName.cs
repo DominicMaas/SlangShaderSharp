@@ -117,8 +117,8 @@ public enum CompilerOptionName
     AllowGLSL = 91,
     EnableExperimentalPasses = 92,
     BindlessSpaceIndex = 93,
-    SpirvResourceHeapStride = 94,
-    SpirvSamplerHeapStride = 95,
+    SPIRVResourceHeapStride = 94,
+    SPIRVSamplerHeapStride = 95,
     ArchiveType = 96,
     CompileCoreModule = 97,
     Doc = 98,
@@ -236,17 +236,17 @@ public enum CompilerOptionName
     TraceCoverage = 145,
 
     /// <summary>
-    ///     intValue0: register index; intValue1: register space — explicit
+    ///     intValue0: register index; intValue1: register space - explicit
     ///     binding for the synthesized __slang_coverage buffer. Consumed
-    ///     only when TraceCoverage is enabled; the slangc CLI spelling also
-    ///     enables TraceCoverage.
+    ///     only when any coverage mode is enabled; the slangc CLI spelling
+    ///     also enables TraceCoverage.
     /// </summary>
     TraceCoverageBinding = 146,
 
     /// <summary>
     ///     intValue0: descriptor/register space reserved by the host when
     ///     auto-allocating the synthesized __slang_coverage buffer. This is
-    ///     a repeatable hint consumed only when TraceCoverage is enabled.
+    ///     a repeatable hint consumed only when any coverage mode is enabled.
     /// </summary>
     TraceCoverageReservedSpace = 147,
 

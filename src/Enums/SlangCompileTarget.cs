@@ -137,12 +137,12 @@ public enum SlangCompileTarget : int
     /// <summary>
     ///     Host LLVM IR assembly
     /// </summary>
-    HostLvvmIR = 35,
+    HostLlvmIR = 35,
 
     /// <summary>
     ///     Host LLVM IR assembly (kernel/shader)
     /// </summary>
-    ShaderLvvmIR = 36,
+    ShaderLlvmIR = 36,
 
     CountOf,
 }

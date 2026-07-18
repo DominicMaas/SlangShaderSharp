@@ -44,5 +44,5 @@ public enum SlangImageFormat : uint
     R8ui,
     R64ui,
     R64i,
-    BGRA8i,
+    BGRA8,
 }
