@@ -89,6 +89,11 @@ public readonly partial struct VariableReflection : IEquatable<VariableReflectio
         }
     }
 
+    /// <summary>
+    ///     Gets an integer default value. For specialized generic static constants,
+    ///     the semantic value is resolved under the current specialization first;
+    ///     literal initializers are used as a fallback when no integer value resolves.
+    /// </summary>
     public SlangResult GetDefaultValueInt(out long value)
     {
         value = default;
@@ -96,6 +101,11 @@ public readonly partial struct VariableReflection : IEquatable<VariableReflectio
         return spReflectionVariable_GetDefaultValueInt(this, out value);
     }
 
+    /// <summary>
+    ///     Gets a floating-point default value from a literal initializer. Unlike
+    ///     getDefaultValueInt, this API does not currently resolve specialized
+    ///     generic semantic values before checking the initializer.
+    /// </summary>
     public SlangResult GetDefaultValueFloat(out float value)
     {
         value = default;
