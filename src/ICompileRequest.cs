@@ -126,7 +126,7 @@ public partial interface ICompileRequest
     [PreserveSig]
     void SetWriter(
         SlangWriterChannel channel,
-        out ISlangWriter writer);
+        ISlangWriter writer);
 
     [PreserveSig]
     ISlangWriter GetWriter(SlangWriterChannel channel);

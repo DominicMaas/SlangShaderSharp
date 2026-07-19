@@ -4,7 +4,7 @@ using System.Runtime.InteropServices.Marshalling;
 namespace SlangShaderSharp;
 
 /// <summary>
-///      Per-counter-slot attribution returned by <see cref="ICoverageTracingMetadata.GetEntryInfo" />.
+///      Source coverage entry attribution returned by <see cref="ICoverageTracingMetadata.GetEntryInfo" />.
 /// </summary>
 [NativeMarshalling(typeof(CoverageEntryInfoMarshaller))]
 public struct CoverageEntryInfo
