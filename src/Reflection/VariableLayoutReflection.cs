@@ -168,11 +168,29 @@ public readonly partial struct VariableLayoutReflection : IEquatable<VariableLay
         }
     }
 
+    /// <summary>
+    ///     Deprecated. The native C++ wrapper is marked deprecated and returns null;
+    ///     this binding calls the underlying (retained) C entry point.
+    /// </summary>
+    [Obsolete("Deprecated in the native API; the C++ wrapper returns null.")]
+    public VariableLayoutReflection PendingDataLayout
+    {
+        get
+        {
+            if (this == Null) return Null;
+            return spReflectionVariableLayout_getPendingDataLayout(this);
+        }
+    }
+
     // ---------------- Native Imports ---------------- //
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial VariableReflection spReflectionVariableLayout_GetVariable(VariableLayoutReflection vars);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial VariableLayoutReflection spReflectionVariableLayout_getPendingDataLayout(VariableLayoutReflection vars);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]

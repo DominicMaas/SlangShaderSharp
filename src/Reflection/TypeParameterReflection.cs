@@ -62,7 +62,7 @@ public readonly partial struct TypeParameterReflection : IEquatable<TypeParamete
         }
     }
 
-    public TypeReflection GetConstraintByIndex(int index)
+    public TypeReflection GetConstraintByIndex(uint index)
     {
         if (this == Null) return TypeReflection.Null;
         return spReflectionTypeParameter_GetConstraintByIndex(this, index);
@@ -85,7 +85,7 @@ public readonly partial struct TypeParameterReflection : IEquatable<TypeParamete
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial TypeReflection spReflectionTypeParameter_GetConstraintByIndex(TypeParameterReflection typeParam, int index);
+    private static partial TypeReflection spReflectionTypeParameter_GetConstraintByIndex(TypeParameterReflection typeParam, uint index);
 }
 
 [CustomMarshaller(typeof(TypeParameterReflection), MarshalMode.Default, typeof(TypeParameterReflectionMarshaller))]

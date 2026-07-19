@@ -83,7 +83,7 @@ public readonly partial struct FunctionReflection : IEquatable<FunctionReflectio
         return spReflectionFunction_GetUserAttribute(this, index);
     }
 
-    public AttributeReflection? FindAttributeByName(ISession session, string name)
+    public AttributeReflection? FindAttributeByName(IGlobalSession session, string name)
     {
         if (this == Null) return null;
         var attr = spReflectionFunction_FindUserAttributeByName(this, session, name);
@@ -94,6 +94,12 @@ public readonly partial struct FunctionReflection : IEquatable<FunctionReflectio
     {
         if (this == Null) return 0;
         return spReflectionFunction_FindModifier(this, id);
+    }
+
+    public DeclReflection AsDecl()
+    {
+        if (this == Null) return DeclReflection.Null;
+        return spReflectionFunction_asDecl(this);
     }
 
     public GenericReflection GenericContainer
@@ -116,7 +122,7 @@ public readonly partial struct FunctionReflection : IEquatable<FunctionReflectio
         if (this == Null) return FunctionReflection.Null;
         fixed (TypeReflection* pArgs = args)
         {
-            return spReflectionFunction_specializeWithArgTypes(this, (uint)args.Length, pArgs);
+            return spReflectionFunction_specializeWithArgTypes(this, (nint)args.Length, pArgs);
         }
     }
 
@@ -173,11 +179,15 @@ public readonly partial struct FunctionReflection : IEquatable<FunctionReflectio
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial AttributeReflection spReflectionFunction_FindUserAttributeByName(FunctionReflection type, ISession session, string name);
+    private static partial AttributeReflection spReflectionFunction_FindUserAttributeByName(FunctionReflection type, IGlobalSession session, string name);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial nint spReflectionFunction_FindModifier(FunctionReflection func, ModifierID id);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial DeclReflection spReflectionFunction_asDecl(FunctionReflection func);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
@@ -189,7 +199,7 @@ public readonly partial struct FunctionReflection : IEquatable<FunctionReflectio
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static unsafe partial FunctionReflection spReflectionFunction_specializeWithArgTypes(FunctionReflection func, uint argCount, TypeReflection* args);
+    private static unsafe partial FunctionReflection spReflectionFunction_specializeWithArgTypes(FunctionReflection func, nint argCount, TypeReflection* args);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]

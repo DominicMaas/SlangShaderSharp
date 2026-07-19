@@ -241,7 +241,35 @@ public readonly partial struct TypeLayoutReflection : IEquatable<TypeLayoutRefle
     public bool IsBindingRangeSpecializable(nint index)
     {
         if (this == Null) return false;
-        return spReflectionTypeLayout_isBindingRangeSpecializable(this, index);
+        return spReflectionTypeLayout_isBindingRangeSpecializable(this, index) != 0;
+    }
+
+    /// <summary>
+    ///     Deprecated. The native C++ wrapper is marked deprecated and returns null;
+    ///     this binding calls the underlying (retained) C entry point.
+    /// </summary>
+    [Obsolete("Deprecated in the native API; the C++ wrapper returns null.")]
+    public TypeLayoutReflection PendingDataTypeLayout
+    {
+        get
+        {
+            if (this == Null) return Null;
+            return spReflectionTypeLayout_getPendingDataTypeLayout(this);
+        }
+    }
+
+    /// <summary>
+    ///     Deprecated. The native C++ wrapper is marked deprecated and returns null;
+    ///     this binding calls the underlying (retained) C entry point.
+    /// </summary>
+    [Obsolete("Deprecated in the native API; the C++ wrapper returns null.")]
+    public VariableLayoutReflection SpecializedTypePendingDataVarLayout
+    {
+        get
+        {
+            if (this == Null) return VariableLayoutReflection.Null;
+            return spReflectionTypeLayout_getSpecializedTypePendingDataVarLayout(this);
+        }
     }
 
     public nint GetBindingRangeBindingCount(nint index)
@@ -436,8 +464,15 @@ public readonly partial struct TypeLayoutReflection : IEquatable<TypeLayoutRefle
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    [return: MarshalAs(UnmanagedType.I1)]
-    private static partial bool spReflectionTypeLayout_isBindingRangeSpecializable(TypeLayoutReflection type, nint index);
+    private static partial nint spReflectionTypeLayout_isBindingRangeSpecializable(TypeLayoutReflection type, nint index);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial TypeLayoutReflection spReflectionTypeLayout_getPendingDataTypeLayout(TypeLayoutReflection type);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial VariableLayoutReflection spReflectionTypeLayout_getSpecializedTypePendingDataVarLayout(TypeLayoutReflection type);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]

@@ -74,7 +74,7 @@ public readonly partial struct VariableReflection : IEquatable<VariableReflectio
         return spReflectionVariable_GetUserAttribute(this, index);
     }
 
-    public AttributeReflection FindAttributeByName(ISession session, string name)
+    public AttributeReflection FindAttributeByName(IGlobalSession session, string name)
     {
         if (this == Null) return AttributeReflection.Null;
         return spReflectionVariable_FindUserAttributeByName(this, session, name);
@@ -153,7 +153,7 @@ public readonly partial struct VariableReflection : IEquatable<VariableReflectio
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial AttributeReflection spReflectionVariable_FindUserAttributeByName(VariableReflection var, ISession session, string name);
+    private static partial AttributeReflection spReflectionVariable_FindUserAttributeByName(VariableReflection var, IGlobalSession session, string name);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]

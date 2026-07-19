@@ -83,7 +83,7 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
         return spGetReflection(request);
     }
 
-    public uint EntryPointCount
+    public nuint EntryPointCount
     {
         get
         {
@@ -92,7 +92,7 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
         }
     }
 
-    public EntryPointReflection GetEntryPointByIndex(uint index)
+    public EntryPointReflection GetEntryPointByIndex(nuint index)
     {
         if (this == Null) return EntryPointReflection.Null;
         return spReflection_getEntryPointByIndex(this, index);
@@ -154,7 +154,7 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
 
         fixed (FunctionReflection* pCandidates = candidates)
         {
-            var result = spReflection_TryResolveOverloadedFunction(this, candidates.Length, pCandidates);
+            var result = spReflection_TryResolveOverloadedFunction(this, (uint)candidates.Length, pCandidates);
             return result == FunctionReflection.Null ? null : result;
         }
     }
@@ -216,7 +216,7 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
         return spReflection_isSubType(this, subType, superType);
     }
 
-    public uint HashedStringCount
+    public nuint HashedStringCount
     {
         get
         {
@@ -225,7 +225,7 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
         }
     }
 
-    public string? GetHashedString(uint index)
+    public string? GetHashedString(nuint index)
     {
         if (this == Null) return null;
         var result = spReflection_getHashedString(this, index, out var count);
@@ -309,15 +309,15 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial uint spReflection_getEntryPointCount(ShaderReflection reflection);
+    private static partial nuint spReflection_getEntryPointCount(ShaderReflection reflection);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial EntryPointReflection spReflection_getEntryPointByIndex(ShaderReflection reflection, uint index);
+    private static partial EntryPointReflection spReflection_getEntryPointByIndex(ShaderReflection reflection, nuint index);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial uint spReflection_getGlobalConstantBufferBinding(ShaderReflection reflection);
+    private static partial nuint spReflection_getGlobalConstantBufferBinding(ShaderReflection reflection);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
@@ -337,7 +337,7 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static unsafe partial FunctionReflection spReflection_TryResolveOverloadedFunction(ShaderReflection reflection, int candidateCount, FunctionReflection* candidates);
+    private static unsafe partial FunctionReflection spReflection_TryResolveOverloadedFunction(ShaderReflection reflection, uint candidateCount, FunctionReflection* candidates);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
@@ -366,12 +366,12 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial uint spReflection_getHashedStringCount(ShaderReflection reflection);
+    private static partial nuint spReflection_getHashedStringCount(ShaderReflection reflection);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     [return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]
-    private static partial string spReflection_getHashedString(ShaderReflection reflection, uint index, out nuint count);
+    private static partial string spReflection_getHashedString(ShaderReflection reflection, nuint index, out nuint count);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
