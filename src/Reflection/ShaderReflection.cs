@@ -83,7 +83,7 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
         return spGetReflection(request);
     }
 
-    public uint EntryPointCount
+    public nuint EntryPointCount
     {
         get
         {
@@ -92,7 +92,7 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
         }
     }
 
-    public EntryPointReflection GetEntryPointByIndex(uint index)
+    public EntryPointReflection GetEntryPointByIndex(nuint index)
     {
         if (this == Null) return EntryPointReflection.Null;
         return spReflection_getEntryPointByIndex(this, index);
@@ -154,7 +154,7 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
 
         fixed (FunctionReflection* pCandidates = candidates)
         {
-            var result = spReflection_TryResolveOverloadedFunction(this, candidates.Length, pCandidates);
+            var result = spReflection_TryResolveOverloadedFunction(this, (uint)candidates.Length, pCandidates);
             return result == FunctionReflection.Null ? null : result;
         }
     }
@@ -216,7 +216,7 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
         return spReflection_isSubType(this, subType, superType);
     }
 
-    public uint HashedStringCount
+    public nuint HashedStringCount
     {
         get
         {
@@ -225,7 +225,7 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
         }
     }
 
-    public string? GetHashedString(uint index)
+    public string? GetHashedString(nuint index)
     {
         if (this == Null) return null;
         var result = spReflection_getHashedString(this, index, out var count);
@@ -258,8 +258,15 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
     }
 
     /// <summary>
-    ///     Get the descriptor set/space index allocated for the bindless resource heap.
-    ///     Returns -1 if the program does not use bindless resource heap.
+    ///     Get the descriptor set/space index reserved for the bindless resource heap.
+    ///
+    ///     This is a layout/reflection reservation made before final target lowering and
+    ///     optimization. It can remain non-negative even when the emitted target code no
+    ///     longer uses a bindless heap/resource-handle path. Query `IBindlessResourceMetadata`
+    ///     from target metadata to determine whether such a path survived in the compiled
+    ///     target IR.
+    ///
+    ///     Returns -1 only when no bindless heap space was reserved for the program layout.
     /// </summary>
     public nint BindlessSpaceIndex
     {
@@ -302,15 +309,15 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial uint spReflection_getEntryPointCount(ShaderReflection reflection);
+    private static partial nuint spReflection_getEntryPointCount(ShaderReflection reflection);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial EntryPointReflection spReflection_getEntryPointByIndex(ShaderReflection reflection, uint index);
+    private static partial EntryPointReflection spReflection_getEntryPointByIndex(ShaderReflection reflection, nuint index);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial uint spReflection_getGlobalConstantBufferBinding(ShaderReflection reflection);
+    private static partial nuint spReflection_getGlobalConstantBufferBinding(ShaderReflection reflection);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
@@ -330,7 +337,7 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static unsafe partial FunctionReflection spReflection_TryResolveOverloadedFunction(ShaderReflection reflection, int candidateCount, FunctionReflection* candidates);
+    private static unsafe partial FunctionReflection spReflection_TryResolveOverloadedFunction(ShaderReflection reflection, uint candidateCount, FunctionReflection* candidates);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
@@ -359,12 +366,12 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial uint spReflection_getHashedStringCount(ShaderReflection reflection);
+    private static partial nuint spReflection_getHashedStringCount(ShaderReflection reflection);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     [return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]
-    private static partial string spReflection_getHashedString(ShaderReflection reflection, uint index, out nuint count);
+    private static partial string spReflection_getHashedString(ShaderReflection reflection, nuint index, out nuint count);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]

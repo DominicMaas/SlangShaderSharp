@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using SlangShaderSharp.Internal;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
 namespace SlangShaderSharp;
@@ -11,10 +12,14 @@ public partial interface ISlangProfiler
     nuint GetEntryCount();
 
     [PreserveSig]
+    [return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]
     string GetEntryName(uint index);
 
+    // Native returns C `long`, which is 32-bit on Windows (MSVC) and 64-bit on
+    // LP64 (Linux/macOS). `int` reads the low register and is correct on all: on
+    // Windows it matches the 32-bit return, elsewhere the millisecond value fits in 32 bits.
     [PreserveSig]
-    long GetEntryTimeMs(uint index);
+    int GetEntryTimeMs(uint index);
 
     [PreserveSig]
     uint GetEntryInvocationTimes(uint index);

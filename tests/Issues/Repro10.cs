@@ -31,7 +31,8 @@ public class Repro10(GlobalSessionFixture fixture)
 
         fixture.GlobalSession.CreateSession(sessionDesc, out var session).Check();
 
-        var module = session.LoadModuleFromSource(moduleName, fileName, null, out _)!;
+        var source = Slang.CreateBlob(File.ReadAllBytes(fileName));
+        var module = session.LoadModuleFromSource(moduleName, fileName, source, out _)!;
         module!.GetTargetCode(0, out var spirv, out _).Check();
 
         return spirv.Buffer.ToArray();

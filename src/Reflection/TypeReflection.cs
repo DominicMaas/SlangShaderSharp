@@ -230,6 +230,21 @@ public readonly partial struct TypeReflection : IEquatable<TypeReflection>
         }
     }
 
+    public nint SpecializedTypeArgCount
+    {
+        get
+        {
+            if (this == Null) return 0;
+            return spReflectionType_getSpecializedTypeArgCount(this);
+        }
+    }
+
+    public TypeReflection GetSpecializedTypeArgType(nint index)
+    {
+        if (this == Null) return Null;
+        return spReflectionType_getSpecializedTypeArgType(this, index);
+    }
+
     // ---------------- Native Imports ---------------- //
 
 
@@ -252,6 +267,14 @@ public readonly partial struct TypeReflection : IEquatable<TypeReflection>
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial nuint spReflectionType_GetSpecializedElementCount(TypeReflection type, ShaderReflection reflection);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial nint spReflectionType_getSpecializedTypeArgCount(TypeReflection type);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial TypeReflection spReflectionType_getSpecializedTypeArgType(TypeReflection type, nint index);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]

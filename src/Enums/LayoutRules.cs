@@ -1,6 +1,6 @@
 ﻿namespace SlangShaderSharp;
 
-public enum LayoutRules : int
+public enum LayoutRules : uint
 {
     Default = 0,
     MetalArgumentBufferTier2 = 1,

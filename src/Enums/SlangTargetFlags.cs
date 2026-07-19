@@ -3,6 +3,7 @@
 /// <summary>
 ///     Flags to control code generation behavior of a compilation target
 /// </summary>
+[Flags]
 public enum SlangTargetFlags : uint
 {
     /// <summary>

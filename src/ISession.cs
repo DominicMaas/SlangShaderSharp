@@ -52,13 +52,19 @@ public unsafe partial interface ISession
 
     /// <summary>
     ///     Load a module from Slang source code.
+    ///
+    ///     <paramref name="source"/> is required and must be non-null; the native compiler
+    ///     asserts on a null blob. <paramref name="path"/> is used for diagnostics and as the
+    ///     base directory for resolving relative <c>import</c>s — it is not read from disk.
+    ///     To load a module from a file, read the file into a blob (see <see cref="Slang.CreateBlob(ReadOnlySpan{byte})"/>),
+    ///     or use <see cref="LoadModule(string, out ISlangBlob?)"/> to load by name via the search paths.
     /// </summary>
     [PreserveSig]
     [return: MarshalUsing(typeof(NoFreeComInterfaceMarshaller<IModule>))]
     IModule? LoadModuleFromSource(
         string moduleName,
         string path,
-        ISlangBlob? source,
+        ISlangBlob source,
         out ISlangBlob? diagnostics);
 
     /// <summary>
@@ -221,6 +227,12 @@ public unsafe partial interface ISession
     /// <summary>
     ///     Checks if a precompiled binary module is up-to-date with the current compiler
     ///     option settings and the source file contents.
+    ///
+    ///     When the module's primary source file cannot be located on the search paths, the
+    ///     binary module is treated as a standalone artifact and reported as up-to-date so
+    ///     that callers distributing precompiled-only modules can load them. In that case the
+    ///     compiler-version and option-set hash carried in the binary are NOT compared. If a
+    ///     later (secondary) dependency is missing the module is still reported as stale.
     /// </summary>
     [PreserveSig]
     [return: MarshalAs(UnmanagedType.I1)]

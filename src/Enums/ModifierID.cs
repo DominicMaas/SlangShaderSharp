@@ -10,7 +10,7 @@ public enum ModifierID : uint
     Extern,
     Differentiable,
     Mutating,
-    I,
+    In,
     Out,
     InOut,
 }

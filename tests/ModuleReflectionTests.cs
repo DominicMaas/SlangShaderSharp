@@ -115,7 +115,7 @@ public class ModuleReflectionTests(GlobalSessionFixture fixture)
         var shaderReflection = vertexEntryPoint.GetLayout(0, out var layoutError);
         shaderReflection.ShouldNotBe(ShaderReflection.Null, layoutError?.AsString ?? "Unknown Error");
 
-        shaderReflection.EntryPointCount.ShouldBe((uint)1);
+        shaderReflection.EntryPointCount.ShouldBe((nuint)1);
 
         shaderReflection.FindEntryPointByName("computeMain").ShouldNotBeNull();
         shaderReflection.FindEntryPointByName("computeMain_no_exist").ShouldBeNull();

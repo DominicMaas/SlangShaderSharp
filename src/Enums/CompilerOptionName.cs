@@ -117,8 +117,8 @@ public enum CompilerOptionName
     AllowGLSL = 91,
     EnableExperimentalPasses = 92,
     BindlessSpaceIndex = 93,
-    SpirvResourceHeapStride = 94,
-    SpirvSamplerHeapStride = 95,
+    SPIRVResourceHeapStride = 94,
+    SPIRVSamplerHeapStride = 95,
     ArchiveType = 96,
     CompileCoreModule = 97,
     Doc = 98,
@@ -236,17 +236,17 @@ public enum CompilerOptionName
     TraceCoverage = 145,
 
     /// <summary>
-    ///     intValue0: register index; intValue1: register space — explicit
+    ///     intValue0: register index; intValue1: register space - explicit
     ///     binding for the synthesized __slang_coverage buffer. Consumed
-    ///     only when TraceCoverage is enabled; the slangc CLI spelling also
-    ///     enables TraceCoverage.
+    ///     only when any coverage mode is enabled; the slangc CLI spelling
+    ///     also enables TraceCoverage.
     /// </summary>
     TraceCoverageBinding = 146,
 
     /// <summary>
     ///     intValue0: descriptor/register space reserved by the host when
     ///     auto-allocating the synthesized __slang_coverage buffer. This is
-    ///     a repeatable hint consumed only when TraceCoverage is enabled.
+    ///     a repeatable hint consumed only when any coverage mode is enabled.
     /// </summary>
     TraceCoverageReservedSpace = 147,
 
@@ -259,6 +259,66 @@ public enum CompilerOptionName
     ///     bool: insert per-branch-arm coverage counters
     /// </summary>
     TraceBranchCoverage = 149,
+
+    /// <summary>
+    ///     stringValue0: explicit path for the slangc coverage manifest sidecar.
+    ///     When unset, slangc writes <output>.coverage-manifest.json next to
+    ///     file outputs that carry coverage metadata. This option is output
+    ///     policy only and is excluded from compiler cache keys. It requires
+    ///     at least one coverage tracing mode, is rejected for container
+    ///     outputs, and errors if the selected outputs produce no coverage
+    ///     metadata. Explicit paths are valid only when exactly one compiled
+    ///     artifact carries coverage metadata and must not overlap any emitted
+    ///     artifact path. Query/set with the string option APIs.
+    /// </summary>
+    CoverageManifestOutput = 150,
+
+    /// <summary>
+    ///     intValue0: per-slot byte width of the synthesized __slang_coverage
+    ///     buffer. Accepts 4 (uint32) or 8 (uint64). Omitting the option
+    ///     yields 8 when any coverage mode is enabled. Use 4 to opt down to
+    ///     uint32 when the runtime driver lacks 64-bit shader atomic support
+    ///     (notably MoltenVK on Apple Silicon, where Vulkan exposes
+    ///     shaderBufferInt64Atomics = false). uint32 counters wrap silently
+    ///     at 2^32 hits per slot; uint64 counters effectively do not wrap
+    ///     within any practical run. The corresponding CLI flag
+    ///     `-trace-coverage-counter-width <bits>` takes a bit count (32/64)
+    ///     and stores the matching byte width here.
+    /// </summary>
+    TraceCoverageCounterByteWidth = 151,
+
+    /// <summary>
+    ///     bool: record boolean coverage (CoverageCounterMode::Boolean) instead of exact
+    ///     execution counts. Each counter is written with a plain non-atomic store
+    ///     of `1`, eliminating atomic contention (much faster, and avoids the GPU
+    ///     watchdog timeouts heavy coverage can trigger) at the cost of exact
+    ///     counts. Off by default.
+    /// </summary>
+    TraceCoverageBoolean = 152,
+
+    /// <summary>
+    ///     CLI-only query option `-<compiler>-version`: prints the version of the downstream
+    ///     <compiler> Slang would actually load for that pass-through (via
+    ///     IGlobalSession::getDownstreamCompilerVersion). It takes no value and is never stored on
+    ///     an option set; it only drives the print-and-continue handler in the command-line parser.
+    /// </summary>
+    CompilerVersion = 153,
+
+    /// <summary>
+    ///     bool: when set, emit each SPIRV resource descriptor-heap runtime array's
+    ///     ArrayStride as the maximum of image and buffer descriptor sizes, so a
+    ///     single heap shared by buffers and images is indexed at the device's unified
+    ///     stride. Opt-in; mutually exclusive with a non-zero
+    ///     `-spirv-resource-heap-stride` (combining the two is an error).
+    /// </summary>
+    SPIRVUnifiedDescriptorHeapStride = 154,
+
+    /// <summary>
+    ///     intValue0: a SlangWarningLevel group to enable (e.g. <see cref="SlangWarningLevel.Pedantic"/>).
+    ///     Repeatable: enabling multiple groups is additive, matching how -Wall/-Wextra/-Wpedantic
+    ///     combine on the command line. CLI spellings: -Wall, -Wextra, -Wpedantic.
+    /// </summary>
+    WarningLevel = 155,
 
     CountOf,
 }

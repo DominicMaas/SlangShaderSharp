@@ -74,7 +74,8 @@ public class SessionTests
     {
         _session.GetLoadedModuleCount().ShouldBe(0);
 
-        var module = _session.LoadModuleFromSource("MyShader", "Assets/MyShader.slang", null, out _)!;
+        var source = Slang.CreateBlob(File.ReadAllBytes("Assets/MyShader.slang"));
+        var module = _session.LoadModuleFromSource("MyShader", "Assets/MyShader.slang", source, out _)!;
         module.ShouldNotBeNull();
 
         module.GetTargetCode(0, out var spirv, out _).ShouldBe(SlangResult.SLANG_OK);
