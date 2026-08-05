@@ -152,6 +152,7 @@ public unsafe partial interface IComponentType
     /// <param name="entryPointIndex">The index of the entry point to get code for.</param>
     /// <param name="targetIndex">The index of the target to get code for (default: zero).</param>
     /// <param name="sharedLibrary">A pointer to a ISharedLibrary interface which functions can be queried on.</param>
+    /// <param name="diagnostics">A blob to receive diagnostic messages.</param>
     /// <returns>A `SlangResult` to indicate success or failure.</returns>
     [PreserveSig]
     SlangResult GetEntryPointHostCallable(int entryPointIndex,

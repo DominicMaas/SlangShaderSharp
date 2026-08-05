@@ -80,6 +80,10 @@ public readonly partial struct VariableReflection : IEquatable<VariableReflectio
         return spReflectionVariable_FindUserAttributeByName(this, session, name);
     }
 
+    /// <summary>
+    ///     Deprecated: call <see cref="GetDefaultValueBlob"/> and check for a null blob instead.
+    /// </summary>
+    [Obsolete("Call GetDefaultValueBlob and check for a null blob instead.")]
     public bool HasDefaultValue
     {
         get
@@ -90,10 +94,13 @@ public readonly partial struct VariableReflection : IEquatable<VariableReflectio
     }
 
     /// <summary>
+    ///     Deprecated: use <see cref="GetDefaultValueBlob"/> instead.
+    ///
     ///     Gets an integer default value. For specialized generic static constants,
     ///     the semantic value is resolved under the current specialization first;
     ///     literal initializers are used as a fallback when no integer value resolves.
     /// </summary>
+    [Obsolete("Use GetDefaultValueBlob instead.")]
     public SlangResult GetDefaultValueInt(out long value)
     {
         value = default;
@@ -102,15 +109,53 @@ public readonly partial struct VariableReflection : IEquatable<VariableReflectio
     }
 
     /// <summary>
+    ///     Deprecated: use <see cref="GetDefaultValueBlob"/> instead.
+    ///
     ///     Gets a floating-point default value from a literal initializer. Unlike
-    ///     getDefaultValueInt, this API does not currently resolve specialized
+    ///     GetDefaultValueInt, this API does not currently resolve specialized
     ///     generic semantic values before checking the initializer.
     /// </summary>
+    [Obsolete("Use GetDefaultValueBlob instead.")]
     public SlangResult GetDefaultValueFloat(out float value)
     {
         value = default;
         if (this == Null) return SlangResult.SLANG_E_INVALID_HANDLE;
         return spReflectionVariable_GetDefaultValueFloat(this, out value);
+    }
+
+    /// <summary>
+    ///     Retrieves a variable's default initializer as a packed byte blob.
+    ///
+    ///     If the variable has no explicit initializer, returns <see cref="SlangResult.SLANG_OK"/> and sets
+    ///     <paramref name="blob"/> to <c>null</c>. Otherwise <paramref name="blob"/> receives an
+    ///     <see cref="ISlangBlob"/> holding the initializer's bytes; the caller owns that reference. Returns
+    ///     <see cref="SlangResult.SLANG_E_NOT_AVAILABLE"/> when the initializer cannot be represented as a
+    ///     default-value blob.
+    ///
+    ///     Scalars, vectors, matrices, fixed-size arrays, structs/aggregates, and enums are supported.
+    ///     Values are packed in natural scalar/field order with no aggregate padding: matrices
+    ///     row-by-row, base-class fields before derived fields, and a field with no explicit initializer
+    ///     as its zero/default representation. Encoding is target-independent: <c>bool</c> occupies 4 bytes
+    ///     to match Slang's GPU scalar layout, <c>intptr_t</c>/<c>uintptr_t</c> always occupy 8 bytes
+    ///     signed/unsigned (consumers on narrower-pointer targets must narrow explicitly), and enums use
+    ///     their underlying tag type.
+    ///
+    ///     Scalars are stored in host byte order (little-endian on all supported platforms), and the
+    ///     buffer is aligned to at least the maximum scalar alignment, which covers every scalar type
+    ///     encoded by this API. After checking the blob size, callers may reinterpret
+    ///     <see cref="ISlangBlob.GetBufferPointer"/> directly as the payload element type.
+    /// </summary>
+    public SlangResult GetDefaultValueBlob(out ISlangBlob? blob)
+    {
+        blob = null;
+        if (this == Null) return SlangResult.SLANG_E_INVALID_HANDLE;
+
+        // `slang::VariableReflection::getDefaultValueBlob` is a non-inline C++ member function rather
+        // than an `spReflection*` C entry point, so it is exported under a C++-mangled name. The
+        // implicit `this` becomes a leading handle argument under both the MSVC and Itanium ABIs.
+        return OperatingSystem.IsWindows()
+            ? getDefaultValueBlob_Msvc(this, out blob)
+            : getDefaultValueBlob_Itanium(this, out blob);
     }
 
     public GenericReflection GenericContainer
@@ -167,6 +212,16 @@ public readonly partial struct VariableReflection : IEquatable<VariableReflectio
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial SlangResult spReflectionVariable_GetDefaultValueFloat(VariableReflection var, out float value);
+
+    // slang::VariableReflection::getDefaultValueBlob(ISlangBlob**) — MSVC mangling (win-x64, win-arm64).
+    [LibraryImport(Slang.LibraryName, EntryPoint = "?getDefaultValueBlob@VariableReflection@slang@@QEAAHPEAPEAUISlangBlob@@@Z", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial SlangResult getDefaultValueBlob_Msvc(VariableReflection var, out ISlangBlob? blob);
+
+    // slang::VariableReflection::getDefaultValueBlob(ISlangBlob**) — Itanium mangling (linux-*, osx-*).
+    [LibraryImport(Slang.LibraryName, EntryPoint = "_ZN5slang18VariableReflection19getDefaultValueBlobEPP10ISlangBlob", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial SlangResult getDefaultValueBlob_Itanium(VariableReflection var, out ISlangBlob? blob);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]

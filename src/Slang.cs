@@ -142,15 +142,12 @@ public partial class Slang
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     public static partial SlangResult CreateGlobalSessionWithoutCoreModule(nint apiVersion, out IGlobalSession globalSession);
 
-    /// <summary>
-    ///      Returns a blob that contains the serialized core module.
-    ///      Returns nullptr if there isn't an embedded core module.
-    ///
-    ///     NOTE! API is experimental and not ready for production code
-    /// </summary>
-    [LibraryImport(LibraryName, EntryPoint = "slang_getEmbeddedCoreModule", StringMarshalling = StringMarshalling.Utf8)]
-    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    public static partial ISlangBlob GetEmbeddedCoreModule();
+    // NOTE: `slang_getEmbeddedCoreModule` (slang.h) is deliberately NOT bound. Unlike every other
+    // `slang_*` free function it is declared without `SLANG_EXTERN_C`, so it is exported only under
+    // a C++-mangled name, and the header flags it as experimental and not production-ready. Binding
+    // it would mean depending on a mangled symbol that encodes the signature (and, under MSVC, the
+    // return type), so any upstream signature change would break it silently at first call.
+    // See the C++-mangled entry points note in CONTRIBUTING.md.
 
     /// <summary>
     ///     Cleanup all global allocations used by Slang, to prevent memory leak detectors from
@@ -170,7 +167,7 @@ public partial class Slang
     ///
     ///     Environment variables:
     ///     - SLANG_RECORD_LAYER=1: Enable recording on startup
-    ///     - SLANG_RECORD_PATH=<path>: Use the exact path specified for recording output
+    ///     - SLANG_RECORD_PATH=&lt;path&gt;: Use the exact path specified for recording output
     ///       instead of generating a timestamped folder under .slang-replays/
     /// </summary>
     [LibraryImport(LibraryName, EntryPoint = "slang_enableRecordLayer", StringMarshalling = StringMarshalling.Utf8)]

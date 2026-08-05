@@ -337,4 +337,119 @@ public class ModuleReflectionTests(GlobalSessionFixture fixture)
             }
         }
     }
+
+    /// <summary>
+    ///     Covers <see cref="VariableReflection.GetDefaultValueBlob"/>, which binds a C++-mangled
+    ///     member function rather than an <c>spReflection*</c> C entry point.
+    /// </summary>
+    [Fact]
+    public void DefaultValueBlobTests()
+    {
+        var sessionDesc = new SessionDesc
+        {
+            Targets = [new TargetDesc { Format = SlangCompileTarget.Wgsl }],
+        };
+
+        fixture.GlobalSession.CreateSession(sessionDesc, out var session).Succeeded.ShouldBeTrue();
+
+        var module = session.LoadModuleFromSource("defaults", "defaults.slang", Slang.CreateBlob("""
+            static const int kInt = 42;
+            static const float2 kFloat2 = float2(1.0f, 2.0f);
+            static const bool kBool = true;
+
+            RWStructuredBuffer<float> result;
+
+            [shader("compute")]
+            [numthreads(1,1,1)]
+            void computeMain(uint3 threadId : SV_DispatchThreadID)
+            {
+                result[threadId.x] = kInt + kFloat2.x + (kBool ? 1.0f : 0.0f);
+            }
+            """u8), out var moduleLoadError);
+
+        module.ShouldNotBeNull(moduleLoadError?.AsString ?? "Unknown Error");
+
+        var reflectionModule = module.GetModuleReflection();
+        reflectionModule.ShouldNotBe(DeclReflection.Null);
+
+        VariableReflection FindVariable(string name)
+        {
+            foreach (var child in reflectionModule)
+            {
+                if (child.Kind == DeclReflectionKind.Variable && child.Name == name) return child.AsVariable();
+            }
+
+            throw new InvalidOperationException($"No variable named '{name}' in the module reflection.");
+        }
+
+        // int32 payload
+
+        var kInt = FindVariable("kInt");
+        kInt.GetDefaultValueBlob(out var intBlob).ShouldBe(SlangResult.SLANG_OK);
+        intBlob.ShouldNotBeNull();
+        intBlob.Buffer.Length.ShouldBe(sizeof(int));
+        BitConverter.ToInt32(intBlob.Buffer).ShouldBe(42);
+
+        // Vectors are packed element-by-element with no padding
+
+        var kFloat2 = FindVariable("kFloat2");
+        kFloat2.GetDefaultValueBlob(out var float2Blob).ShouldBe(SlangResult.SLANG_OK);
+        float2Blob.ShouldNotBeNull();
+        float2Blob.Buffer.Length.ShouldBe(sizeof(float) * 2);
+        BitConverter.ToSingle(float2Blob.Buffer[..4]).ShouldBe(1.0f);
+        BitConverter.ToSingle(float2Blob.Buffer[4..]).ShouldBe(2.0f);
+
+        // `bool` occupies 4 bytes to match Slang's GPU scalar layout
+
+        var kBool = FindVariable("kBool");
+        kBool.GetDefaultValueBlob(out var boolBlob).ShouldBe(SlangResult.SLANG_OK);
+        boolBlob.ShouldNotBeNull();
+        boolBlob.Buffer.Length.ShouldBe(4);
+        BitConverter.ToInt32(boolBlob.Buffer).ShouldNotBe(0);
+
+        // No initializer -> SLANG_OK with a null blob
+
+        var result = FindVariable("result");
+        result.GetDefaultValueBlob(out var resultBlob).ShouldBe(SlangResult.SLANG_OK);
+        resultBlob.ShouldBeNull();
+
+        // Null handle is guarded on the managed side
+
+        VariableReflection.Null.GetDefaultValueBlob(out var nullBlob).ShouldBe(SlangResult.SLANG_E_INVALID_HANDLE);
+        nullBlob.ShouldBeNull();
+    }
+
+    /// <summary>
+    ///     `ShaderReflection::getSession()` is not bound (it is only reachable via a C++-mangled
+    ///     symbol); <see cref="IComponentType.GetSession"/> is the supported route, and the component
+    ///     that produced the reflection is always in hand.
+    /// </summary>
+    [Fact]
+    public void GetSessionViaComponentTypeTests()
+    {
+        var sessionDesc = new SessionDesc
+        {
+            Targets = [new TargetDesc { Format = SlangCompileTarget.Wgsl }],
+        };
+
+        fixture.GlobalSession.CreateSession(sessionDesc, out var session).Succeeded.ShouldBeTrue();
+
+        var module = session.LoadModuleFromSource("getsession", "getsession.slang", Slang.CreateBlob("""
+            RWStructuredBuffer<float> result;
+
+            [shader("compute")]
+            [numthreads(1,1,1)]
+            void computeMain(uint3 threadId : SV_DispatchThreadID)
+            {
+                result[threadId.x] = 1.0f;
+            }
+            """u8), out var moduleLoadError);
+
+        module.ShouldNotBeNull(moduleLoadError?.AsString ?? "Unknown Error");
+
+        var shaderReflection = module.GetLayout(0, out var layoutError);
+        shaderReflection.ShouldNotBe(ShaderReflection.Null, layoutError?.AsString ?? "Unknown Error");
+
+        module.GetSession().ShouldNotBeNull();
+    }
 }

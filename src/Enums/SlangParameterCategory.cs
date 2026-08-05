@@ -38,12 +38,12 @@ public enum SlangParameterCategory : uint
     MetalTexture = ShaderResource,
     MetalSampler = SamplerState,
 
-    [Obsolete("No Reason Specified")]
+    [Obsolete("Deprecated in the native API; use VaryingInput instead.")]
     VertexInput = VaryingInput,
 
-    [Obsolete("No Reason Specified")]
+    [Obsolete("Deprecated in the native API; use VaryingOutput instead.")]
     FragmentOutput = VaryingOutput,
 
-    [Obsolete("No Reason Specified")]
+    [Obsolete("Deprecated in the native API; use Subpass instead.")]
     CountV1 = Subpass,
 }

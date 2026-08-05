@@ -53,11 +53,14 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
         }
     }
 
-    public ISession? GetSession()
-    {
-        if (this == Null) return null;
-        return spReflection_GetSession(this);
-    }
+    // NOTE: `ShaderReflection::getSession()` (slang.h) is deliberately NOT bound. It is an inline
+    // wrapper over `spReflection_GetSession`, which — unlike every other `spReflection*` function —
+    // is declared outside slang-deprecated.h's `extern "C"` block (it is `#ifdef __cplusplus`-only,
+    // because it returns `slang::ISession*`) and is therefore exported only under a C++-mangled
+    // name. Rather than depend on a mangled symbol, callers should use `IComponentType.GetSession()`,
+    // a proper COM vtable method: any `ShaderReflection` is obtained from
+    // `IComponentType.GetLayout(...)`, so the component that provides it is always in hand.
+    // See the C++-mangled entry points note in CONTRIBUTING.md.
 
     public TypeParameterReflection GetTypeParameterByIndex(uint index)
     {
@@ -286,10 +289,6 @@ public readonly partial struct ShaderReflection : IEquatable<ShaderReflection>
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial uint spReflection_GetTypeParameterCount(ShaderReflection reflection);
-
-    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
-    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
-    private static partial ISession? spReflection_GetSession(ShaderReflection reflection);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
