@@ -6,10 +6,10 @@ public enum SlangCompileTarget : int
     TargetNone = 1,
     Glsl = 2,
 
-    [Obsolete("just use `SLANG_GLSL`")]
+    [Obsolete("Deprecated and removed in the native API; just use Glsl.")]
     GlslVulkanDeprecated = 3,
 
-    [Obsolete("No Reason Specified")]
+    [Obsolete("Deprecated and removed in the native API.")]
     GlslVulkanOneDescDeprecated = 4,
     Hlsl = 5,
     Spirv = 6,

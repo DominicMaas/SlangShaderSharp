@@ -341,17 +341,17 @@ public partial interface IGlobalSession
     ///     loads the downstream library into the process (then memoizes it for subsequent calls).
     ///
     ///     Only some downstream compilers report a numeric version (e.g. NVRTC, DXC, the C/C++ toolchains);
-    ///     others(e.g.the glslang family and Tint) always report `(0,0)`. The version is read uniformly
+    ///     others (e.g. the glslang family and Tint) always report `(0,0)`. The version is read uniformly
     ///     from the loaded compiler's descriptor, so a versionless-but-loaded compiler still returns
-    ///     SLANG_OK with major / minor 0 - which the result alone does not distinguish from a genuine 0.0.
+    ///     SLANG_OK with major/minor 0 - which the result alone does not distinguish from a genuine 0.0.
     /// </summary>
-    /// <param name="passThrough">The downstream compiler to query(e.g.<see cref="SlangPassThrough.Nvrtc"/>).</param>
-    /// <param name="major">Receives the major version number.May be null.</param>
-    /// <param name="minor">Receives the minor version number.May be null.</param>
+    /// <param name="passThrough">The downstream compiler to query (e.g. <see cref="SlangPassThrough.Nvrtc"/>).</param>
+    /// <param name="major">Receives the major version number. May be null.</param>
+    /// <param name="minor">Receives the minor version number. May be null.</param>
     /// <returns>
-    ///    <see cref="SlangResult.SLANG_OK"/> if the compiler was located and loaded(see the versionless note above).
+    ///    <see cref="SlangResult.SLANG_OK"/> if the compiler was located and loaded (see the versionless note above).
     ///    <see cref="SlangResult.SLANG_E_NOT_FOUND"/> if the compiler could not be located or loaded, and likewise for
-    ///    <see cref="SlangResult.SLANG_PASS_THROUGH_NONE"/> or an out-of-range value -the result code alone does not distinguish an
+    ///    <see cref="SlangPassThrough.None"/> or an out-of-range value - the result code alone does not distinguish an
     ///    invalid argument from a compiler that is simply not installed.
     /// </returns>
     [PreserveSig]

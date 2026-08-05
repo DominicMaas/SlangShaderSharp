@@ -25,8 +25,8 @@ public struct CoverageBufferInfo
 
     /// <summary>
     ///     Byte width of one counter slot in the synthesized buffer:
-    ///     `4` for a `RWStructuredBuffer<uint>`, `8` for a
-    ///     `RWStructuredBuffer<uint64_t>`. The host reads back
+    ///     `4` for a `RWStructuredBuffer&lt;uint&gt;`, `8` for a
+    ///     `RWStructuredBuffer&lt;uint64_t&gt;`. The host reads back
     ///     `getCounterCount() * elementByteWidth` bytes and interprets
     ///     each slot as a little-endian unsigned integer of this width.
     ///     Mirrored on the JSON sidecar as `buffer.element_stride`.

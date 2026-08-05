@@ -126,7 +126,7 @@ public unsafe partial interface ISession
 
     /// <summary>
     ///     Get a container type from `elementType`. For example, given type `T`, returns
-    ///     a type that represents `StructuredBuffer<T>`.
+    ///     a type that represents `StructuredBuffer&lt;T&gt;`.
     /// </summary>
     /// <param name="elementType">The element type to wrap around.</param>
     /// <param name="containerType">The type of the container to wrap `elementType` in.</param>
@@ -256,7 +256,7 @@ public unsafe partial interface ISession
     ///     This header is used to identify the type of the object for dynamic dispatch purpose.
     ///     For example, given the following shader:
     ///
-    ///     <code lang="slang">
+    ///     <code lang="slang"><![CDATA[
     ///     [anyValueSize(32)] dyn interface IFoo { int eval(); }
     ///     struct Impl : IFoo { int eval() { return 1; } }
     ///
@@ -267,7 +267,7 @@ public unsafe partial interface ISession
     ///     {
     ///         cb0.eval();
     ///     }
-    ///     </code>
+    ///     ]]></code>
     ///
     ///     The constant buffer `cb0` should be filled with 16+32=48 bytes of data, where the first
     ///      16 bytes should be the RTTI bytes returned by calling `getDynamicObjectRTTIBytes(type_Impl,

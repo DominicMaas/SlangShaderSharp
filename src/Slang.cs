@@ -167,7 +167,7 @@ public partial class Slang
     ///
     ///     Environment variables:
     ///     - SLANG_RECORD_LAYER=1: Enable recording on startup
-    ///     - SLANG_RECORD_PATH=<path>: Use the exact path specified for recording output
+    ///     - SLANG_RECORD_PATH=&lt;path&gt;: Use the exact path specified for recording output
     ///       instead of generating a timestamped folder under .slang-replays/
     /// </summary>
     [LibraryImport(LibraryName, EntryPoint = "slang_enableRecordLayer", StringMarshalling = StringMarshalling.Utf8)]

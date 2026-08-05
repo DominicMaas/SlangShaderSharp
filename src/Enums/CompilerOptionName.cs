@@ -211,6 +211,7 @@ public enum CompilerOptionName
     ReproFileSystem = 78,
 
     /// <summary> deprecated and removed; value must never be reused </summary>
+    [Obsolete("Deprecated and removed in the native API. Retained only so the value is never reused.")]
     REMOVED_SerialIR = 79,
 
     /// <summary> bool </summary>
@@ -252,6 +253,7 @@ public enum CompilerOptionName
     Doc = 98,
 
     /// <summary> deprecated; value must never be reused </summary>
+    [Obsolete("Deprecated in the native API. Retained only so the value is never reused.")]
     IrCompression = 99,
 
     LoadCoreModule = 100,
@@ -264,6 +266,7 @@ public enum CompilerOptionName
     LoopInversion = 105,
 
     /// <summary> Deprecated; value must never be reused </summary>
+    [Obsolete("Deprecated in the native API; this behavior is now enabled unconditionally. Retained only so the value is never reused.")]
     ParameterBlocksUseRegisterSpaces = 106,
 
     /// <summary> intValue0: SlangLanguageVersion </summary>
