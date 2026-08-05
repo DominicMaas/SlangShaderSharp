@@ -1,4 +1,10 @@
 <Solution>
+  <Folder Name="/Documentation/">
+    <File Path="AGENTS.md" />
+    <File Path="CONTRIBUTING.md" />
+    <File Path="LICENSE.md" />
+    <File Path="README.md" />
+  </Folder>
   <Folder Name="/Headers/">
     <File Path="headers/slang-deprecated.h" />
     <File Path="headers/slang-image-format-defs.h" />
@@ -8,8 +14,6 @@
     <File Path=".github/workflows/release.yml" />
     <File Path=".github/workflows/test.yml" />
     <File Path=".github/workflows/update_slang.yml" />
-    <File Path="LICENSE.md" />
-    <File Path="README.md" />
     <File Path="update_slang.ps1" />
   </Folder>
   <Project Path="src/SlangShaderSharp.csproj" />

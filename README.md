@@ -91,11 +91,6 @@ Slang.Shutdown();
 - `ReadOnlySpan<byte> Buffer` - View the blob data as a safe read-only span.
 - `string AsString` - Converts the blob data to a UTF-8 string.
 
-## Conversion Types
+## Contributing
 
-- SlangUInt32 : uint
-- SlangInt32 : int
-- SlangInt : nint
-- SlangUInt : nuint
-- SlangSSizeT : nint
-- SlangSizeT : nuint
+Development docs — project layout, build & test, how to update the vendored Slang version, the native→managed type-width table, and the binding conventions that keep the managed bindings ABI-compatible — live in [CONTRIBUTING.md](CONTRIBUTING.md).
