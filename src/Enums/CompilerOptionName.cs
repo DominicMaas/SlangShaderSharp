@@ -320,5 +320,25 @@ public enum CompilerOptionName
     /// </summary>
     WarningLevel = 155,
 
+    /// <summary>
+    ///     stringValue0: explicit path for the slangc separate-debug-info sidecar.
+    ///     When unset, slangc derives the sidecar path from the main artifact path.
+    ///     This option is output policy only and is excluded from compiler cache keys.
+    ///     It requires <see cref="EmitSeparateDebug"/> and permits the main artifact to be written to
+    ///     stdout. A value of "-" writes the separate debug information to stdout when
+    ///     the main artifact is written to a file. Query/set with the string option APIs.
+    /// </summary>
+    SeparateDebugInfoOutput = 156,
+
+    /// <summary>
+    ///     bool: embed the shader source text into the debug information independently of
+    ///     the overall <c>-g</c> debug level. At <c>-g1</c> (<see cref="SlangDebugInfoLevel.Minimal"/>)
+    ///     the source is embedded via the core <c>OpSource</c> File+Source operands (no NonSemantic
+    ///     extension); at <c>-g2</c>/<c>-g3</c> source is already embedded so the option is a no-op.
+    ///     Requires debug information: using it with <c>-g0</c>, or without any <c>-g</c> option (both
+    ///     resolve to no debug info), is an error. Only affects SPIR-V output.
+    /// </summary>
+    DebugInfoIncludeSource = 157,
+
     CountOf,
 }

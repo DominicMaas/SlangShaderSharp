@@ -68,6 +68,24 @@ These invariants keep the managed bindings ABI-compatible with the native librar
 - **String ownership.** Slang-owned `const char*` returns must use `[return: MarshalUsing(typeof(NoFreeUtf8StringMarshaller))]` so the marshaller does not free native memory; input strings use `StringMarshalling.Utf8`.
 - **ABI-versioned structs** begin with a `size_t structSize`/`structureSize` field. The C# unmanaged mirror must carry the leading `nuint` field, populate it with `sizeof(<unmanaged>)`, keep field order identical to native, and copy every field in **both** marshaller directions.
 - **Reflection wrappers** are `readonly struct` opaque handles (`nint Handle`) with a custom handle marshaller; P/Invokes use the exact `spReflection*` entry-point name plus `[LibraryImport(LibraryName)]` + `[UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]`.
+- **C++-mangled entry points.** A `SLANG_API` declaration is only exported under a plain C name if it is also `SLANG_EXTERN_C` or sits inside an `extern "C"` block. A few in the vendored headers are neither, so they are exported **C++-mangled**, with a different scheme per toolchain (MSVC on `win-*`, Itanium on `linux-*`/`osx-*`). A mangled name encodes the signature — and under MSVC the return type too — so it is not a stable ABI: an upstream signature change breaks it silently. **Default to not binding these.** Three exist today:
+
+  | Header decl | Why mangled | Binding |
+  | --- | --- | --- |
+  | `slang::VariableReflection::getDefaultValueBlob` (`slang.h`) | non-inline C++ **member** function; no `spReflection*` C counterpart, unlike every sibling method | **bound** — no alternative; the deprecated `GetDefaultValue{Int,Float}` cover scalars only |
+  | `spReflection_GetSession` (`slang-deprecated.h`) | outside the `extern "C"` block (`#ifdef __cplusplus`-only, returns `slang::ISession*`), not `SLANG_EXTERN_C` | **not bound** — use `IComponentType.GetSession()`, a real vtable method |
+  | `slang_getEmbeddedCoreModule` (`slang.h`) | missing `SLANG_EXTERN_C`, unlike every other `slang_*` free function | **not bound** — also flagged experimental upstream |
+
+  When there is genuinely no alternative, bind as **two** `[LibraryImport]` declarations with explicit `EntryPoint` names, dispatching on `OperatingSystem.IsWindows()` (trim-friendly — the dead branch is dropped when publishing for a known platform). For a member function the implicit `this` becomes a leading handle parameter, correct under both ABIs. macOS's extra leading `_` that `nm` shows is Mach-O's implicit prefix and must **not** be included — the Itanium name is shared with Linux.
+
+  These resolve at the *first call*, never at build time, so a wrong name is an `EntryPointNotFoundException` in the consumer's face: **every mangled binding needs a test that actually invokes it.** Read the real names out of the shipped binaries rather than hand-deriving them:
+
+  ```bash
+  llvm-readobj --coff-exports runtimes/win-x64/native/slang-compiler.dll
+  llvm-nm --defined-only --extern-only runtimes/linux-x64/native/libslang-compiler.so
+  ```
+
+  When updating Slang, re-check by extracting every `SLANG_API` declaration name from the headers and diffing against those export tables. Anything in a header but absent from the exports under its plain name is either mangled (see above) or behind an `#if 0` (do not bind — e.g. the seven `spReflectionTypeLayout_getSubObjectRange*` declarations).
 - **`loadModuleFromSource` requires a non-null source blob** (native asserts otherwise). Its `path` argument is used only for diagnostics and as the base directory for resolving `import`s — it is **not** read from disk. To load from a file, read it into a blob first, or use `LoadModule` (by name, via search paths).
 
 After changing a P/Invoke signature or a public method, grep for call sites (including `tests/`) and update them.
