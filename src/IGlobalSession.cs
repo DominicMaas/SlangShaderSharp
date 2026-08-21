@@ -142,6 +142,7 @@ public partial interface IGlobalSession
     ///  Add new builtin declarations to be used in subsequent compiles.
     /// </summary>
     [PreserveSig]
+    [Obsolete("No Reason Specified")]
     void AddBuiltins(
         string sourcePath,
         string sourceString);
