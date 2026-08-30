@@ -25,7 +25,21 @@ public struct SyntheticResourceInfo
 
     /// <summary>
     ///     Number of logical resources in the synthetic binding. Most
-    ///     current instrumentation resources are scalar (`1`).
+    ///     instrumentation resources are scalar (`1`).
+    ///
+    ///     <see cref="Slang.UnboundedSyntheticResourceArraySize"/> when the resource is an
+    ///     unbounded descriptor array whose descriptor count is a host runtime decision the
+    ///     compiler cannot see -- the coverage buffer under
+    ///     <see cref="CompilerOptionName.TraceCoverageBindlessIndex"/> is declared this way
+    ///     deliberately, so that a shader does not constrain how many shaders the host binds
+    ///     alongside it. A host sizing a descriptor array must not read this as a count.
+    ///
+    ///     For coverage, this sentinel and <c>BindlessIndex &gt;= 0</c> are set together and
+    ///     always agree, so testing either one identifies the bindless form. They are separate
+    ///     fields because they answer different questions -- <c>ArraySize</c> describes the
+    ///     binding's shape for any synthetic resource, while <see cref="BindlessIndex"/> says
+    ///     which element this shader uses -- and a future synthetic resource could be an
+    ///     unbounded array without having a per-shader index.
     /// </summary>
     public uint ArraySize = 1;
 
@@ -85,6 +99,21 @@ public struct SyntheticResourceInfo
     /// </summary>
     public string? DebugName = null;
 
+    /// <summary>
+    ///     Index of this shader's element within the synthetic resource's descriptor array,
+    ///     or `-1` when the resource is bound as a single descriptor rather than as an
+    ///     element of an array.
+    ///
+    ///     Coverage sets this from
+    ///     <see cref="CompilerOptionName.TraceCoverageBindlessIndex"/>. In that form
+    ///     <c>__slang_coverage</c> is an unbounded array of buffers, so a single
+    ///     (<see cref="Space"/>, <see cref="Binding"/>) serves every shader in a pipeline and
+    ///     each shader accesses <c>__slang_coverage[bindlessIndex]</c>. Reading it back here
+    ///     saves a host from having to track the value it passed at compile time in order to
+    ///     report on the result.
+    /// </summary>
+    public int BindlessIndex = -1;
+
     public SyntheticResourceInfo()
     { }
 }
@@ -104,6 +133,7 @@ internal unsafe struct SyntheticResourceInfoUnmanaged
     public int uniformOffset;
     public int uniformStride;
     public byte* debugName;
+    public int bindlessIndex;
 }
 
 [CustomMarshaller(typeof(SyntheticResourceInfo), MarshalMode.Default, typeof(SyntheticResourceInfoMarshaller))]
@@ -127,6 +157,7 @@ internal static unsafe class SyntheticResourceInfoMarshaller
             uniformStride = managed.UniformStride,
             // `debugName` is an output pointer owned by the metadata object; only `structSize` really needs initialization.
             debugName = null,
+            bindlessIndex = managed.BindlessIndex,
         };
     }
 
@@ -145,6 +176,7 @@ internal static unsafe class SyntheticResourceInfoMarshaller
             UniformOffset = unmanaged.uniformOffset,
             UniformStride = unmanaged.uniformStride,
             DebugName = Utf8StringMarshaller.ConvertToManaged(unmanaged.debugName),
+            BindlessIndex = unmanaged.bindlessIndex,
         };
     }
 }
