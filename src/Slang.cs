@@ -21,6 +21,13 @@ public partial class Slang
 
     public static readonly uint InvalidCoverageCounterIndex = uint.MaxValue;
 
+    /// <summary>
+    ///     <see cref="SyntheticResourceInfo.ArraySize"/> when the synthetic resource is an
+    ///     unbounded (runtime-sized) descriptor array, so the compiler cannot know how many
+    ///     descriptors the host will supply.
+    /// </summary>
+    public static readonly uint UnboundedSyntheticResourceArraySize = uint.MaxValue;
+
     [LibraryImport(LibraryName, EntryPoint = "slang_createBlob", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static unsafe partial ISlangBlob CreateBlob(void* data, nuint size);
