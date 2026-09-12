@@ -66,30 +66,30 @@ public class ComOwnershipTests
     }
 
     /// <summary>
-    ///     Re-fetches <paramref name="module"/> through <paramref name="reload"/> a few times and requires
-    ///     its reference count to sit still. Every binding here returns a module Slang already owns, so any
-    ///     movement in either direction is the bug.
+    ///     Re-fetches <paramref name="borrowed"/> through <paramref name="refetch"/> a few times and
+    ///     requires its reference count to sit still. Every binding here returns an object Slang already
+    ///     owns, so any movement in either direction is the bug.
     /// </summary>
-    private static void ShouldNotMoveTheReferenceCount(IModule module, string binding, Func<IModule?> reload)
+    private static void ShouldNotMoveTheReferenceCount(object borrowed, string binding, Func<object?> refetch)
     {
-        var expected = ComRefCount.Read(module);
+        var expected = ComRefCount.Read(borrowed);
 
         try
         {
-            // Call 1 is the caller's own load, which established the count above.
+            // Call 1 is the caller's own fetch, which established the count above.
             for (var call = 2; call <= 4; call++)
             {
-                reload().ShouldNotBeNull();
+                refetch().ShouldNotBeNull();
 
-                ComRefCount.Read(module).ShouldBe(expected,
-                    $"{binding} call {call} changed the module's reference count. Slang returns a borrowed " +
-                    $"pointer here, so the return value needs NoFreeComInterfaceMarshaller<IModule>.");
+                ComRefCount.Read(borrowed).ShouldBe(expected,
+                    $"{binding} call {call} moved the reference count of an object Slang still owns, so the " +
+                    $"return value needs NoFreeComInterfaceMarshaller.");
             }
         }
         finally
         {
             // Hand back whatever a leak took, so the assertion above is what fails - not the teardown.
-            ComRefCount.RestoreTo(module, expected);
+            ComRefCount.RestoreTo(borrowed, expected);
         }
     }
 
@@ -276,5 +276,26 @@ public class ComOwnershipTests
 
         ShouldNotMoveTheReferenceCount(module, "Slang.LoadModuleFromIRBlob()",
             () => Slang.LoadModuleFromIRBlob(session, "MyShader", string.Empty, irBytes, (nuint)irBytes.Length, out _));
+    }
+
+    /// <summary>
+    ///     <c>EndToEndCompileRequest::getWriter</c> hands back a writer out of the request's own
+    ///     <c>m_writers</c> set, so the request keeps owning it. Releasing it walks the count straight
+    ///     past zero: 2 -> 1 -> 0 -> -1 over four calls.
+    /// </summary>
+    [Fact]
+    public void GetWriterDoesNotMoveTheReferenceCount()
+    {
+        var session = CreateSession(CreateGlobalSession());
+
+#pragma warning disable CS0618 // ICompileRequest is deprecated upstream, but still bound and still leaks.
+        session.CreateCompileRequest(out var request).ShouldBe(SlangResult.SLANG_OK);
+#pragma warning restore CS0618
+
+        var writer = request.GetWriter(SlangWriterChannel.StandardOutput);
+        writer.ShouldNotBeNull();
+
+        ShouldNotMoveTheReferenceCount(writer, "GetWriter()",
+            () => request.GetWriter(SlangWriterChannel.StandardOutput));
     }
 }
