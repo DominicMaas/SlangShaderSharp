@@ -26,4 +26,4 @@ Confirm against the header, because these fail silently at runtime (not compile 
 
 ## Gotcha
 
-`loadModuleFromSource` needs a non-null source blob (native asserts); `path` is diagnostics/import-base only and is not read from disk. Read a file into a blob, or use `LoadModule`.
+`loadModuleFromSource` reads `path` from disk **only** when `source` is null; with a non-null `source` blob, `path` is diagnostics/import-base only. An unreadable `path` in the null-source form returns null plus a `CannotOpenFile` diagnostic.

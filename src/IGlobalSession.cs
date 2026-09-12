@@ -332,32 +332,33 @@ public partial interface IGlobalSession
         out ISlangBlob blob);
 
     /// <summary>
-    ///     Get the version of the downstream/pass-through compiler that Slang will actually load and
-    ///     use for <paramref name="passThrough"/>, applying the same lazy discovery and library search order used during
-    ///     compilation. This lets a client key its behavior off the exact library Slang selected (for
-    ///     example, the specific NVRTC that will compile CUDA), which can differ from a version the client
-    ///     might discover on its own.
+    ///     Get the on-disk path of the downstream/pass-through compiler that Slang will actually load
+    ///     and use for <paramref name="passThrough"/>, applying the same lazy discovery and library search order used
+    ///     during compilation. This lets a client locate the exact library Slang selected - for example,
+    ///     the specific NVRTC that will compile CUDA - and load it itself to query capabilities (such as
+    ///     the supported architectures) directly.
     ///
     ///     This is not a cheap accessor: the first call for a given <paramref name="passThrough"/> performs discovery and
     ///     loads the downstream library into the process (then memoizes it for subsequent calls).
     ///
-    ///     Only some downstream compilers report a numeric version (e.g. NVRTC, DXC, the C/C++ toolchains);
-    ///     others (e.g. the glslang family and Tint) always report `(0,0)`. The version is read uniformly
-    ///     from the loaded compiler's descriptor, so a versionless-but-loaded compiler still returns
-    ///     SLANG_OK with major/minor 0 - which the result alone does not distinguish from a genuine 0.0.
+    ///     The path is recovered from the loaded shared library, so it is available for the shared-library
+    ///     pass-throughs (e.g. NVRTC, DXC, FXC, glslang). A pass-through backed by an executable located
+    ///     on <c>PATH</c> (e.g. Clang/GCC/VS) or a target without shared-library introspection (e.g. WASM) has
+    ///     no such path and returns <see cref="SlangResult.SLANG_E_NOT_AVAILABLE"/>, which the client must keep distinct
+    ///     from <see cref="SlangResult.SLANG_E_NOT_FOUND"/> (the compiler was not located at all).
     /// </summary>
     /// <param name="passThrough">The downstream compiler to query (e.g. <see cref="SlangPassThrough.Nvrtc"/>).</param>
-    /// <param name="major">Receives the major version number. May be null.</param>
-    /// <param name="minor">Receives the minor version number. May be null.</param>
+    /// <param name="path">On <see cref="SlangResult.SLANG_OK"/> receives the resolved library path as a blob; left untouched on any failure return.</param>
     /// <returns>
-    ///    <see cref="SlangResult.SLANG_OK"/> if the compiler was located and loaded (see the versionless note above).
-    ///    <see cref="SlangResult.SLANG_E_NOT_FOUND"/> if the compiler could not be located or loaded, and likewise for
-    ///    <see cref="SlangPassThrough.None"/> or an out-of-range value - the result code alone does not distinguish an
-    ///    invalid argument from a compiler that is simply not installed.
+    ///    <see cref="SlangResult.SLANG_OK"/> if the compiler was located, loaded, and its path recovered.
+    ///    <see cref="SlangResult.SLANG_E_NOT_FOUND"/> if the compiler could not be located or loaded (and likewise for
+    ///    <see cref="SlangPassThrough.None"/> or an out-of-range value). <see cref="SlangResult.SLANG_E_NOT_AVAILABLE"/> if the compiler was
+    ///    loaded but has no recoverable on-disk path - it is not backed by a shared library (an
+    ///    executable-based command-line compiler such as Clang/GCC/VS, or Metal) or the platform has no
+    ///    shared-library introspection (e.g. WASM).
     /// </returns>
     [PreserveSig]
-    SlangResult GetDownstreamCompilerVersion(
+    SlangResult GetDownstreamCompilerPath(
         SlangPassThrough passThrough,
-        out int major,
-        out int minor);
+        out ISlangBlob path);
 }

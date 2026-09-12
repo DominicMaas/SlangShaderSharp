@@ -86,6 +86,6 @@ These invariants keep the managed bindings ABI-compatible with the native librar
   ```
 
   When updating Slang, re-check by extracting every `SLANG_API` declaration name from the headers and diffing against those export tables. Anything in a header but absent from the exports under its plain name is either mangled (see above) or behind an `#if 0` (do not bind — e.g. the seven `spReflectionTypeLayout_getSubObjectRange*` declarations).
-- **`loadModuleFromSource` requires a non-null source blob** (native asserts otherwise). Its `path` argument is used only for diagnostics and as the base directory for resolving `import`s — it is **not** read from disk. To load from a file, read it into a blob first, or use `LoadModule` (by name, via search paths).
+- **`loadModuleFromSource` reads `path` from disk only when `source` is null.** With a non-null `source` blob, `path` is used only for diagnostics and as the base directory for resolving `import`s — it is **not** read from disk. With a null `source`, the module is loaded from the file at `path`; if that file cannot be read the call returns null and writes a `CannotOpenFile` diagnostic. To load by name via the search paths, use `LoadModule`.
 
 After changing a P/Invoke signature or a public method, grep for call sites (including `tests/`) and update them.

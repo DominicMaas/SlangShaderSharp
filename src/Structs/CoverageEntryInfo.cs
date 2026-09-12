@@ -27,11 +27,25 @@ public struct CoverageEntryInfo
     /// <summary>
     ///     Counter slot used by this entry, or
     ///     <see cref="Slang.InvalidCoverageCounterIndex"/> when the entry has no runtime
-    ///     counter. The current line/function/branch producers use one
-    ///     direct counter per entry. Future source-region coverage may use
-    ///     <see cref="Slang.InvalidCoverageCounterIndex"/> for entries whose count is
-    ///     derived from other counters or represented through tail-extended
-    ///     fields.
+    ///     counter.
+    ///     <para>
+    ///     This is NOT unique per entry. Line coverage coalesces entries that provably
+    ///     execute together (those in one basic block with nothing between them that can
+    ///     abandon the invocation) onto a single counter, which is what keeps instrumented
+    ///     shader code small. Several entries therefore report the same
+    ///     <see cref="CounterIndex"/>, and <see cref="ICoverageTracingMetadata.GetCounterCount"/>
+    ///     is correspondingly smaller than the entry count.
+    ///     </para>
+    ///     <para>
+    ///     Read results per entry (<c>counters[entry.CounterIndex]</c> for each entry), never
+    ///     per counter: a counter does not identify one source location. Sizing a readback
+    ///     buffer from the entry count rather than the counter count is a bug.
+    ///     </para>
+    ///     <para>
+    ///     Function and branch entries always use a dedicated counter. Future coverage modes
+    ///     may use <see cref="Slang.InvalidCoverageCounterIndex"/> for entries whose count is
+    ///     derived from other counters or represented through tail-extended fields.
+    ///     </para>
     /// </summary>
     public uint CounterIndex = Slang.InvalidCoverageCounterIndex;
 

@@ -19,10 +19,12 @@ public unsafe partial interface ICoverageTracingMetadata : ISlangCastable
 {
     /// <summary>
     ///     Number of runtime counter slots in the synthesized coverage
-    ///     buffer. This can differ from <see cref="ICoverageTracingMetadata.GetEntryCount"/> once a coverage
-    ///     mode has counterless metadata entries, shares one counter across
-    ///     several source entries, or reports entries whose counts are
-    ///     derived from other counters.
+    ///     buffer. Never larger than <see cref="ICoverageTracingMetadata.GetEntryCount"/>, and
+    ///     smaller when line coverage shares one counter across the source entries of a
+    ///     straight-line region. Function and branch entries always take a dedicated counter,
+    ///     so the two counts are equal for a compile that enables only those modes, or for
+    ///     line coverage where every marker lands in its own basic block. Size the counter
+    ///     readback buffer from this value, never from the entry count.
     /// </summary>
     [PreserveSig]
     uint GetCounterCount();
@@ -45,10 +47,10 @@ public unsafe partial interface ICoverageTracingMetadata : ISlangCastable
 
     /// <summary>
     ///     Number of source coverage entries available through
-    ///     <see cref="ICoverageTracingMetadata.GetEntryInfo"/>. The current line/function/branch producers have
-    ///     one entry per counter, but future source-region coverage may
-    ///     expose entries that do not map one-to-one with runtime counter
-    ///     slots.
+    ///     <see cref="ICoverageTracingMetadata.GetEntryInfo"/>. Every coverage marker produces
+    ///     one entry, so this is NOT the number of runtime counters: several entries may name
+    ///     the same <see cref="CoverageEntryInfo.CounterIndex"/>. Use
+    ///     <see cref="ICoverageTracingMetadata.GetCounterCount"/> to size the readback buffer.
     /// </summary>
     [PreserveSig]
     uint GetEntryCount();
