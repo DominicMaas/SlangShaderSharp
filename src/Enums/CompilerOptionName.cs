@@ -456,14 +456,6 @@ public enum CompilerOptionName
     TraceCoverageBoolean = 152,
 
     /// <summary>
-    ///     CLI-only query option <c>-&lt;compiler&gt;-version</c>: prints the version of the downstream
-    ///     <c>&lt;compiler&gt;</c> Slang would actually load for that pass-through (via
-    ///     IGlobalSession::getDownstreamCompilerVersion). It takes no value and is never stored on
-    ///     an option set; it only drives the print-and-continue handler in the command-line parser.
-    /// </summary>
-    CompilerVersion = 153,
-
-    /// <summary>
     ///     bool: when set, emit each SPIRV resource descriptor-heap runtime array's
     ///     ArrayStride as the maximum of image and buffer descriptor sizes, so a
     ///     single heap shared by buffers and images is indexed at the device's unified
@@ -522,6 +514,15 @@ public enum CompilerOptionName
     ///     </para>
     /// </summary>
     TraceCoverageBindlessIndex = 158,
+
+    /// <summary>
+    ///     CLI-only query option <c>-get-&lt;compiler&gt;-path</c>: prints the resolved on-disk path of
+    ///     the downstream <c>&lt;compiler&gt;</c> Slang would load for that pass-through (via
+    ///     IGlobalSession::getDownstreamCompilerPath), then continues. It takes no value and is
+    ///     never stored on an option set; it only drives the print-and-continue handler in the
+    ///     command-line parser.
+    /// </summary>
+    GetCompilerPath = 159,
 
     // Do not assign an explicit value to CountOf. It must remain one past the last option,
     // which it derives implicitly from the preceding (highest-valued) enumerator.

@@ -84,6 +84,31 @@ public class GlobalSessionTests(GlobalSessionFixture fixture)
     }
 
     [Fact]
+    public void GetDownstreamCompilerPath()
+    {
+        // glslang ships alongside the compiler, so it is the one pass-through that is
+        // reliably present. This exercises the vtable slot regardless of the outcome.
+        var result = fixture.GlobalSession.GetDownstreamCompilerPath(SlangPassThrough.Glslang, out var path);
+
+        if (result.Succeeded)
+        {
+            path.ShouldNotBeNull();
+            path.AsString.ShouldNotBeNullOrEmpty();
+        }
+        else
+        {
+            result.ShouldBeOneOf(SlangResult.SLANG_E_NOT_FOUND, SlangResult.SLANG_E_NOT_AVAILABLE);
+        }
+    }
+
+    [Fact]
+    public void GetDownstreamCompilerPathForNoneIsNotFound()
+    {
+        fixture.GlobalSession.GetDownstreamCompilerPath(SlangPassThrough.None, out _)
+            .ShouldBe(SlangResult.SLANG_E_NOT_FOUND);
+    }
+
+    [Fact]
     public void SetDefaultDownstreamCompiler()
     {
         fixture.GlobalSession.SetDefaultDownstreamCompiler(SlangSourceLanguage.Cpp, SlangPassThrough.Llvm).ShouldBe(SlangResult.SLANG_OK);

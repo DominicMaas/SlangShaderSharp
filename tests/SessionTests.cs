@@ -81,4 +81,28 @@ public class SessionTests
         module.GetTargetCode(0, out var spirv, out _).ShouldBe(SlangResult.SLANG_OK);
         spirv.Buffer.Length.ShouldBeGreaterThan(0);
     }
+
+    [Fact]
+    public void CompileAndCheckModuleFromDiskWithNullSource()
+    {
+        _session.GetLoadedModuleCount().ShouldBe(0);
+
+        // A null source blob makes the native side read `path` from disk.
+        var module = _session.LoadModuleFromSource("MyShader", "Assets/MyShader.slang", null, out var diagnostics)!;
+        module.ShouldNotBeNull();
+        diagnostics.ShouldBeNull();
+
+        module.GetTargetCode(0, out var spirv, out _).ShouldBe(SlangResult.SLANG_OK);
+        spirv.Buffer.Length.ShouldBeGreaterThan(0);
+    }
+
+    [Fact]
+    public void LoadModuleFromSourceWithNullSourceAndUnreadablePath()
+    {
+        var module = _session.LoadModuleFromSource("Missing", "Assets/DoesNotExist.slang", null, out var diagnostics);
+
+        module.ShouldBeNull();
+        diagnostics.ShouldNotBeNull();
+        diagnostics.AsString.ShouldContain("DoesNotExist.slang");
+    }
 }
