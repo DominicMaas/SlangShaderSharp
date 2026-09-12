@@ -39,6 +39,7 @@ public unsafe partial interface ISession
     /// </summary>
     /// <returns></returns>
     [PreserveSig]
+    [return: MarshalUsing(typeof(NoFreeComInterfaceMarshaller<IGlobalSession>))]
     IGlobalSession GetGlobalSession();
 
     /// <summary>

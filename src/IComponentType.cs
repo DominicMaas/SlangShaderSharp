@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using SlangShaderSharp.Internal;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
 namespace SlangShaderSharp;
@@ -11,6 +12,7 @@ public unsafe partial interface IComponentType
     ///     Get the runtime session that this component type belongs to.
     /// </summary>
     [PreserveSig]
+    [return: MarshalUsing(typeof(NoFreeComInterfaceMarshaller<ISession>))]
     ISession GetSession();
 
     /// <summary>
