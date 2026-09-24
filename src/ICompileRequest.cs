@@ -286,8 +286,13 @@ public partial interface ICompileRequest
         string typeName);
 
     /// <summary>
-    ///     Enable or disable an experimental, best-effort GLSL frontend.
+    ///     Deprecated. When enabled, treat every translation unit in this request as GLSL.
     /// </summary>
+    /// <remarks>
+    ///     Prefer selecting <see cref="SlangSourceLanguage.Glsl"/> when calling <c>AddTranslationUnit</c>.
+    ///     Enabling this emits deprecation diagnostic 117 on compile; if a translation unit was explicitly
+    ///     given a non-GLSL language, diagnostic 129 warns that this setting takes precedence.
+    /// </remarks>
     [PreserveSig]
     void SetAllowGLSLInput([MarshalAs(UnmanagedType.I1)] bool value);
 
