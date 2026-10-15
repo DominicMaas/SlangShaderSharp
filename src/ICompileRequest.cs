@@ -129,6 +129,7 @@ public partial interface ICompileRequest
         ISlangWriter writer);
 
     [PreserveSig]
+    [return: MarshalUsing(typeof(NoFreeComInterfaceMarshaller<ISlangWriter>))]
     ISlangWriter GetWriter(SlangWriterChannel channel);
 
     /// <summary>
