@@ -176,6 +176,11 @@ public partial class Slang
     ///     - SLANG_RECORD_LAYER=1: Enable recording on startup
     ///     - SLANG_RECORD_PATH=&lt;path&gt;: Use the exact path specified for recording output
     ///       instead of generating a timestamped folder under .slang-replays/
+    ///
+    ///     Thread safety: enable or disable the layer only when no other thread is inside a
+    ///     Slang API call. Enable it once during startup (or via SLANG_RECORD_LAYER) before
+    ///     issuing concurrent calls; changing the mode while other threads are mid-call is
+    ///     not supported.
     /// </summary>
     [LibraryImport(LibraryName, EntryPoint = "slang_enableRecordLayer", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
@@ -221,7 +226,11 @@ public partial class Slang
     ///     Switches to playback mode on success.
     /// </summary>
     /// <param name="folderPath">Path to the replay folder.</param>
-    /// <returns>SLANG_OK on success, SLANG_E_NOT_FOUND if stream.bin doesn't exist.</returns>
+    /// <returns>
+    ///     SLANG_OK on success, SLANG_E_NOT_FOUND if stream.bin doesn't exist.
+    ///     SLANG_E_NOT_AVAILABLE when Slang is built with the record-replay layer excluded
+    ///     (SLANG_ENABLE_RECORD_REPLAY=OFF).
+    /// </returns>
     [LibraryImport(LibraryName, EntryPoint = "slang_loadReplay", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     public static partial SlangResult LoadReplay(string folderPath);
@@ -230,7 +239,11 @@ public partial class Slang
     ///     Load the most recent replay from the replay directory.
     ///     Switches to playback mode on success.
     /// </summary>
-    /// <returns>SLANG_OK on success, SLANG_E_NOT_FOUND if no replays exist.</returns>
+    /// <returns>
+    ///     SLANG_OK on success, SLANG_E_NOT_FOUND if no replays exist.
+    ///     SLANG_E_NOT_AVAILABLE when Slang is built with the record-replay layer excluded
+    ///     (SLANG_ENABLE_RECORD_REPLAY=OFF).
+    /// </returns>
     [LibraryImport(LibraryName, EntryPoint = "slang_loadLatestReplay", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     public static partial SlangResult LoadLatestReplay();
