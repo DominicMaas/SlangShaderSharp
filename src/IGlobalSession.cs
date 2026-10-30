@@ -160,6 +160,7 @@ public partial interface IGlobalSession
     /// </summary>
     /// <returns>Gets the currently set loader. If returns nullptr, it's the default loader</returns>
     [PreserveSig]
+    [return: MarshalUsing(typeof(NoFreeComInterfaceMarshaller<ISlangSharedLibraryLoader>))]
     ISlangSharedLibraryLoader GetSharedLibraryLoader();
 
     /// <summary>
