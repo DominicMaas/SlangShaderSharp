@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace SlangShaderSharp.Tests.Support;
 
@@ -28,6 +29,57 @@ internal static class ComRefCount
         {
             Marshal.AddRef(unknown);
             return Marshal.Release(unknown) - 1;
+        }
+        finally
+        {
+            Marshal.Release(unknown);
+        }
+    }
+
+    /// <summary>
+    ///     The current reference count of the CCW that represents the managed object <paramref name="managed"/>
+    ///     to native code - the counterpart of <see cref="Read"/> for objects implemented in C#.
+    ///     <para>
+    ///         Handing such an object back from native code unwraps to the original instance rather than an
+    ///         RCW, so <see cref="Read"/> has nothing to inspect. The generated marshalling still calls
+    ///         <c>Release</c> on the CCW, though, so its count is where an ownership bug shows.
+    ///     </para>
+    /// </summary>
+    public static unsafe int ReadManaged<T>(T managed) where T : class
+    {
+        var unknown = (nint)ComInterfaceMarshaller<T>.ConvertToUnmanaged(managed);
+
+        // ConvertToUnmanaged hands back an AddRef'd pointer, so discount it just like Read does.
+        try
+        {
+            Marshal.AddRef(unknown);
+            return Marshal.Release(unknown) - 1;
+        }
+        finally
+        {
+            Marshal.Release(unknown);
+        }
+    }
+
+    /// <summary>
+    ///     <see cref="RestoreTo"/> for the CCW of a managed object; see <see cref="ReadManaged"/>.
+    /// </summary>
+    public static unsafe void RestoreManagedTo<T>(T managed, int expected) where T : class
+    {
+        var actual = ReadManaged(managed);
+        if (actual >= expected)
+        {
+            return;
+        }
+
+        var unknown = (nint)ComInterfaceMarshaller<T>.ConvertToUnmanaged(managed);
+
+        try
+        {
+            for (var i = actual; i < expected; i++)
+            {
+                Marshal.AddRef(unknown);
+            }
         }
         finally
         {

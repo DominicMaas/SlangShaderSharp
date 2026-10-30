@@ -298,4 +298,61 @@ public class ComOwnershipTests
         ShouldNotMoveTheReferenceCount(writer, "GetWriter()",
             () => request.GetWriter(SlangWriterChannel.StandardOutput));
     }
+
+    /// <summary>
+    ///     <c>EndToEndCompileRequest::getCompileRequestResultAsFileSystem</c> builds the container file
+    ///     system once and hands back the request's own cached pointer on every call.
+    /// </summary>
+    [Fact]
+    public void GetCompileRequestResultAsFileSystemDoesNotMoveTheReferenceCount()
+    {
+        var session = CreateSession(CreateGlobalSession());
+
+#pragma warning disable CS0618 // ICompileRequest is deprecated upstream, but still bound and still leaks.
+        session.CreateCompileRequest(out var request).ShouldBe(SlangResult.SLANG_OK);
+#pragma warning restore CS0618
+
+        var translationUnit = request.AddTranslationUnit(SlangSourceLanguage.Slang, "MyShader");
+        request.AddTranslationUnitSourceString(translationUnit, "MyShader.slang", ShaderSource);
+        request.AddEntryPoint(translationUnit, "computeMain", SlangStage.Compute);
+        request.Compile().ShouldBe(SlangResult.SLANG_OK, request.GetDiagnosticOutput());
+
+        var fileSystem = request.GetCompileRequestResultAsFileSystem();
+        fileSystem.ShouldNotBeNull();
+
+        ShouldNotMoveTheReferenceCount(fileSystem, "GetCompileRequestResultAsFileSystem()",
+            request.GetCompileRequestResultAsFileSystem);
+    }
+
+    /// <summary>
+    ///     <c>Session::getSharedLibraryLoader</c> is <c>return m_sharedLibraryLoader.get();</c> - a borrowed
+    ///     pointer. The loader is a C# object, so the count that moves is that of its CCW; once it reaches
+    ///     zero the global session holds a pointer the GC is free to collect.
+    /// </summary>
+    [Fact]
+    public void GetSharedLibraryLoaderDoesNotMoveTheReferenceCount()
+    {
+        var globalSession = CreateGlobalSession();
+        var loader = new DummyLoader();
+
+        globalSession.SetSharedLibraryLoader(loader);
+
+        var expected = ComRefCount.ReadManaged<ISlangSharedLibraryLoader>(loader);
+
+        try
+        {
+            for (var call = 1; call <= 3; call++)
+            {
+                globalSession.GetSharedLibraryLoader().ShouldBeSameAs(loader);
+
+                ComRefCount.ReadManaged<ISlangSharedLibraryLoader>(loader).ShouldBe(expected,
+                    $"GetSharedLibraryLoader() call {call} released the loader. Slang returns a borrowed pointer " +
+                    "here, so the return value needs NoFreeComInterfaceMarshaller<ISlangSharedLibraryLoader>.");
+            }
+        }
+        finally
+        {
+            ComRefCount.RestoreManagedTo<ISlangSharedLibraryLoader>(loader, expected);
+        }
+    }
 }

@@ -390,6 +390,7 @@ public partial interface ICompileRequest
     ///     Get the compilation result as a file system.
     /// </summary>
     [PreserveSig]
+    [return: MarshalUsing(typeof(NoFreeComInterfaceMarshaller<ISlangMutableFileSystem>))]
     ISlangMutableFileSystem GetCompileRequestResultAsFileSystem();
 
     /// <summary>
