@@ -306,7 +306,12 @@ public class ComOwnershipTests
     [Fact]
     public void GetCompileRequestResultAsFileSystemDoesNotMoveTheReferenceCount()
     {
-        var session = CreateSession(CreateGlobalSession());
+        // This test really compiles, so target HLSL: SPIR-V needs the downstream spirv-opt, which is only
+        // present where the Vulkan SDK is installed.
+        CreateGlobalSession().CreateSession(new SessionDesc
+        {
+            Targets = [new TargetDesc { Format = SlangCompileTarget.Hlsl }]
+        }, out var session).Succeeded.ShouldBeTrue();
 
 #pragma warning disable CS0618 // ICompileRequest is deprecated upstream, but still bound and still leaks.
         session.CreateCompileRequest(out var request).ShouldBe(SlangResult.SLANG_OK);
