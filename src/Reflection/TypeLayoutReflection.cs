@@ -88,6 +88,15 @@ public readonly partial struct TypeLayoutReflection : IEquatable<TypeLayoutRefle
         }
     }
 
+    public VariableLayoutReflection ContentVarLayout
+    {
+        get
+        {
+            if (this == Null) return VariableLayoutReflection.Null;
+            return spReflectionTypeLayout_GetContentVarLayout(this);
+        }
+    }
+
     public SlangParameterCategory ParameterCategory
     {
         get
@@ -433,6 +442,10 @@ public readonly partial struct TypeLayoutReflection : IEquatable<TypeLayoutRefle
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
     private static partial VariableLayoutReflection spReflectionTypeLayout_getContainerVarLayout(TypeLayoutReflection type);
+
+    [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    private static partial VariableLayoutReflection spReflectionTypeLayout_GetContentVarLayout(TypeLayoutReflection type);
 
     [LibraryImport(Slang.LibraryName, StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = new Type[] { typeof(CallConvStdcall) })]

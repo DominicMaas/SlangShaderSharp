@@ -340,9 +340,10 @@ public enum CompilerOptionName
     DenormalModeFp32 = 126,
     DenormalModeFp64 = 127,
 
-    // Bitfield options
-
-    /// <summary> bool </summary>
+    /// <summary>
+    ///     bool. Deprecated. When no <see cref="BitfieldPackingRules"/> value is supplied, true selects
+    ///     MSB-first packing and starts new storage on underlying type-size changes.
+    /// </summary>
     UseMSVCStyleBitfieldPacking = 128,
 
     /// <summary> bool </summary>
@@ -523,6 +524,21 @@ public enum CompilerOptionName
     ///     command-line parser.
     /// </summary>
     GetCompilerPath = 159,
+
+    /// <summary> intValue0: <see cref="SlangShaderSharp.BitfieldPackingRules"/> </summary>
+    BitfieldPackingRules = 160,
+
+    /// <summary> stringValue0: comma-separated note codes or names. </summary>
+    DisableNotes = 161,
+
+    /// <summary> intValue0: <see cref="SlangShaderSharp.SlangDiagnosticFormat"/> (default, vs) </summary>
+    DiagnosticFormat = 162,
+
+    /// <summary>
+    ///     bool: Enables additional backwards-compatibility features for legacy HLSL inputs,
+    ///     such as using uniform parameters as mutable temporaries. Has no effect on other dialects.
+    /// </summary>
+    EnableExtendedHLSLBackwardsCompatibility = 163,
 
     // Do not assign an explicit value to CountOf. It must remain one past the last option,
     // which it derives implicitly from the preceding (highest-valued) enumerator.
