@@ -267,12 +267,79 @@ public partial interface IGlobalSession
 
     /// <summary>
     ///     Parse slangc command line options into a SessionDesc that can be used to create a session
-    ///     with all the compiler options specified in the command line.
+    ///     with the targets and compiler options specified in the command line.
     /// </summary>
+    /// <remarks>
+    ///     <para>The session description receives:</para>
+    ///     <list type="bullet">
+    ///         <item>
+    ///             One target per <c>-target</c>. With no <c>-target</c>, targets are inferred from the extensions of
+    ///             <c>-o</c> paths, or else from a <c>-profile</c> that implies a target.
+    ///         </item>
+    ///         <item>
+    ///             The target options given after a <c>-target</c>, in that target's <c>CompilerOptionEntries</c>.
+    ///             Target options are <c>-profile</c>, <c>-capability</c>, <c>-fp-mode</c>, <c>-whole-program</c>,
+    ///             <c>-embed-downstream-ir</c>, the layout options <c>-fvk-use-scalar-layout</c>, <c>-fvk-use-dx-layout</c>
+    ///             and <c>-fvk-use-c-layout</c>, and the <c>-emit-spirv-*</c> and <c>-emit-cpu-*</c> options. The
+    ///             profile's version is also stored in <see cref="TargetDesc.Profile"/>. A stage that the profile
+    ///             names (for example the compute stage of <c>cs_6_0</c>) is not kept, because entry points
+    ///             supply their own stages. Each target's <c>CompilerOptionEntries</c> also repeat the session
+    ///             options other than <c>-X...</c>.
+    ///         </item>
+    ///         <item>
+    ///             Target options given before the first <c>-target</c>. With a single target, declared or
+    ///             inferred, they apply to it. With no target, they become session options for the targets
+    ///             added to the session, except that a <c>-profile</c> fails the call. With several targets
+    ///             they are rejected.
+    ///         </item>
+    ///         <item>
+    ///             All other options, wherever they appear (for example <c>-I</c>, <c>-D</c>, <c>-O</c>, <c>-g</c>,
+    ///             <c>-matrix-layout-row-major</c>, <c>-r</c>, <c>-X...</c>), as session options.
+    ///         </item>
+    ///     </list>
+    ///     <para>
+    ///         Options that configure a compilation rather than a session are accepted and ignored, for
+    ///         example positional input paths (source files, <c>.slang-module</c> and <c>.slang-lib</c> files, and
+    ///         the stdin path <c>-</c> after <c>--</c>, none of which are read), <c>-entry</c>, <c>-stage</c>, <c>-specialize</c>,
+    ///         <c>-module-name</c> and <c>-depfile</c>. A module given with <c>-r</c> is instead loaded during the call
+    ///         and kept as a session option. Output paths are used only to infer a target from their
+    ///         extension when no <c>-target</c> is given, and are not retained, so <c>-target hlsl -o foo.spv</c>
+    ///         yields only the HLSL target. Only an explicit <c>-whole-program</c> selects whole-program code
+    ///         generation for a target. Neither an output path nor the implicit output that slangc gives
+    ///         a single target with no <c>-o</c> (for example <c>-target spirv</c>, <c>-target metal</c> or
+    ///         <c>-target cuda</c>) selects it. Because the session receives no entry points or output paths,
+    ///         the slangc checks on them, such as the error for a <c>-stage</c> with no <c>-entry</c>, are not
+    ///         made.
+    ///     </para>
+    ///     <para>
+    ///         Some options act on this global session during the call, for example
+    ///         <c>-load-core-module</c>, <c>-compile-core-module</c>, <c>-save-core-module</c>, <c>-spirv-core-grammar</c>,
+    ///         <c>-default-downstream-compiler</c> and the <c>-&lt;compiler&gt;-path</c> options. Their effects are not
+    ///         undone when the call fails.
+    ///     </para>
+    /// </remarks>
     /// <param name="argc">The number of command line arguments.</param>
     /// <param name="argv">An input array of command line arguments to parse.</param>
     /// <param name="sessionDesc">A pointer to a SessionDesc struct to receive parsed session desc.</param>
     /// <param name="auxAllocation">Auxiliary memory allocated to hold data used in the session desc.</param>
+    /// <returns>
+    ///     <c>SLANG_OK</c> on success. A failure result if the session desc's <c>structureSize</c> is too
+    ///     small, or if the parser reports an error, for example:
+    ///     <list type="bullet">
+    ///         <item>
+    ///             a malformed argument: an unknown option, a missing option value, an unknown target,
+    ///             profile, capability, stage or option value, or a <c>-r</c> module that cannot be loaded;
+    ///         </item>
+    ///         <item>
+    ///             conflicting settings: a target repeated after a different <c>-target</c>, conflicting
+    ///             profiles for a target, a <c>-profile</c> with no <c>-target</c> that implies no target, a profile
+    ///             or target option given before several targets, a capability that the profile cannot
+    ///             provide, or options that require or exclude each other.
+    ///         </item>
+    ///     </list>
+    ///     On any failure <paramref name="sessionDesc"/> is left unchanged and <paramref name="auxAllocation"/> is
+    ///     set to null. No diagnostic text is returned.
+    /// </returns>
     [PreserveSig]
     SlangResult ParseCommandLineArguments(
         int argc,

@@ -27,21 +27,38 @@ public struct TargetDesc
 
     /// <summary>
     ///     Default mode to use for floating-point operations on the target.
+    ///     <see cref="SlangFloatingPointMode.Default"/> keeps the mode set by the session's
+    ///     <c>CompilerOptionEntries</c> (<c>FloatingPointMode</c>), if any; any other value overrides it.
+    ///     To get the compiler's default mode on this target when the session sets another one, add
+    ///     a <c>FloatingPointMode</c> entry with value <see cref="SlangFloatingPointMode.Default"/> to this
+    ///     target's <see cref="CompilerOptionEntries"/>; that entry takes precedence over this field.
     /// </summary>
     public SlangFloatingPointMode FloatingPointMode = SlangFloatingPointMode.Default;
 
     /// <summary>
     ///     The line directive mode for output source code.
+    ///     <see cref="SlangLineDirectiveMode.Default"/> keeps the mode set by the session's
+    ///     <c>CompilerOptionEntries</c> (<c>LineDirectiveMode</c>), if any; any other value overrides it.
+    ///     To get the compiler's default mode on this target when the session sets another one, add
+    ///     a <c>LineDirectiveMode</c> entry with value <see cref="SlangLineDirectiveMode.Default"/> to this
+    ///     target's <see cref="CompilerOptionEntries"/>; that entry takes precedence over this field.
     /// </summary>
     public SlangLineDirectiveMode LineDirectiveMode = SlangLineDirectiveMode.Default;
 
     /// <summary>
     ///     Whether to force `scalar` layout for glsl shader storage buffers.
+    ///     <c>true</c> forces it, unless this target's <see cref="CompilerOptionEntries"/> set <c>GLSLForceScalarLayout</c>
+    ///     to 0. <c>false</c> keeps the session's <c>GLSLForceScalarLayout</c> option, if any; to turn scalar
+    ///     layout off for this target only when the session turns it on, add a
+    ///     <c>GLSLForceScalarLayout</c> entry with value 0 to this target's <see cref="CompilerOptionEntries"/>.
     /// </summary>
     public bool ForceGLSLScalarBufferLayout = false;
 
     /// <summary>
-    ///     Pointer to an array of compiler option entries
+    ///     Pointer to an array of compiler option entries.
+    ///     They are applied after <see cref="FloatingPointMode"/>, <see cref="LineDirectiveMode"/> and
+    ///     <see cref="ForceGLSLScalarBufferLayout"/>, so an entry for the same option takes precedence over the
+    ///     field.
     /// </summary>
     public CompilerOptionEntry[]? CompilerOptionEntries = null;
 
